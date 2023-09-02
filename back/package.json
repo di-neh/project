@@ -1,0 +1,23 @@
+{
+  "name": "tp_proj_2023_fiit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "db": "^4.0.1",
+    "express": "^4.18.2",
+    "path": "^0.12.7",
+    "pg": "^8.11.3",
+    "url": "^0.11.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

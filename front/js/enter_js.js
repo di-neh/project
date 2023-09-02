@@ -15,7 +15,7 @@ const sendData = async (url, data) => {
         throw new Error(`Ошибка по адресу ${url}, статус ошибки ${response}`);
     }
     
-    document.location.href = "http://localhost:4000/main";
+    document.location.href = "http://localhost:5432/main";
 
     return await response.json();
 };
@@ -31,7 +31,7 @@ enter.onclick = (e) => {
         password: formEnter.get('password'),   
     }
 
-    sendData('http://localhost:4000/api/login', data);  
+    sendData('http://localhost:5432/login', data);  
 }
 
 const enter_wind = document.getElementById('wind')

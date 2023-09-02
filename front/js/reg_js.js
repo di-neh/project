@@ -13,15 +13,12 @@ enter_link.onclick = () => {
         reg_wind.innerHTML = result;
         const result2 = await fetch('../js/enter_js.js').then(resp => resp.text());
         eval(result2)
-
-
-
     })()
 
 }
 
 const sendData = async (url, data) => {
-
+    console.log(data);
     const response = await fetch(url, {
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -34,7 +31,7 @@ const sendData = async (url, data) => {
         throw new Error(`Ошибка по адресу ${url}, статус ошибки ${response}`);
     }
 
-    document.location.href = "http://localhost:4000/main";
+    document.location.href = "http://localhost:5432/main";
 
     return await response.json();
 };
@@ -49,9 +46,7 @@ reg.onclick = (e) => {
         nickname: formReg.get('name'),
         password: formReg.get('password'),
         mail: formReg.get('email'),
-        
     }
     
-
-    sendData('http://localhost:4000/api/registration', data);
+    sendData('http://localhost:5432/registration', data);
 }
