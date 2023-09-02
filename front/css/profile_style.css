@@ -1,0 +1,35 @@
+.profile{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.user_content{
+    display: flex;
+    flex-direction: row;
+    height: 150px;
+}
+.avatar{
+    display: flex;
+    width: 20%;
+    justify-content: center;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.user_info{
+    display: flex;
+    flex-direction: column;
+    margin-top: 1%;
+    padding-left: 15px;
+}
+.user_raw{
+    padding-top: 10px;
+}
+r{
+    font-size: 30px;
+}
+.status{
+    border-radius: 10px; box-shadow: 0 0 10px #444;
+    height: 200px;
+    padding: 10px;
+}

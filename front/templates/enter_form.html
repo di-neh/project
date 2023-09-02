@@ -1,0 +1,36 @@
+
+    <div class="header1">
+        <h3 class="sign-in">Вход</h3>
+        <div class="button" id="reg_link">
+            Регистрация
+        </div>
+    </div>
+    <div class="clear"></div>
+    <form action="#" id="enter_form">
+        <div>
+            <label class="user" >
+                <img src="../static/profile.svg">
+            </label>
+            <input class="user-input-e" type="text" name="name" id="name-e" placeholder="Ваше имя" />
+        </div>
+        <div>
+            <label class="lock" for="password-e">
+                <img src="../static/lock.svg">
+            </label>
+            <input type="password" name="password" id="password-e" placeholder="Пароль" />
+        </div>
+        <div>
+            <input id="enter" type="submit" value="Вход" />
+        </div>
+        <div class="radio-check">
+            <input type="radio" class="radio-no" id="no" name="remember" value="no" checked>
+            <label for="no"><i class="fa fa-times"></i></label>
+            <input type="radio" class="radio-yes" id="yes" name="remember" value="yes">
+            <label for="yes"><i class="fa fa-check"></i></label>
+            <span class="switch-selection"></span>
+        </div>
+        <span class="check-label">Запомнить</span>
+        <span class="forgot-label">Забыли пароль?</span>
+        <div class="clear"></div>
+    </form>
+
