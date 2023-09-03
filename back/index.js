@@ -1,25 +1,29 @@
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import router from "./routes/user.routes.js";
+
+import router from "./router/user_router.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || 5432;
+const PORT = process.env.PORT || 5555;
 
+
+app.use(cookieParser());
 app.use(express.json());
-app.use(router);
 app.use(express.static('../front'));
+app.use(router);
 
 app.get('/registration', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../front/pages/enter_tm.html'));
+    res.status(404).send('resurs not found');
 });
 
 app.get('/main', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../front/pages/main.html'));
+    res.status(404).send('Penis');
 });
 
 app.all('*', (req, res) => {
@@ -27,5 +31,5 @@ app.all('*', (req, res) => {
 })
 
 app.listen(PORT, ()=> {
-    console.log('mamba out');
+    console.log('mamba out on', PORT);
 });
