@@ -1,3 +1,4 @@
+import { validationResult } from "express-validator";
 import pool from "../db/db.js";
 import bcrypt from "bcrypt";
 const db = pool;
@@ -30,6 +31,13 @@ export class UserController{
     }
 
     async registration(req, res){
+
+        const errors = validationResult(req);
+
+        if(!errors.isEmpty()){
+            return res.status(400).json({ errors: errors.array() });
+        }
+
         try{
             const {nickname, password, mail} = req.body;
 
@@ -43,7 +51,7 @@ export class UserController{
 
             const user_id = await db.query('INSERT INTO users (nickname, mail, password) values ($1, $2, $3) returning id', [nickname, mail, hashPassword]);
             
-            await db.query(`delete from users_tokens where time < current_timestamp + interval '1 hour'`);
+            await db.query(`delete from users_tokens where time > current_timestamp + interval '1 hour'`);
 
             const token = bcrypt.hashSync( nickname + password + mail, 6);
             res.cookie('token', token);
@@ -88,17 +96,19 @@ export class UserController{
 
     async getCookie(req, res){
         try{
+            
             () => {
                 res.send('Get Cookie');
                 res.end;
             }
-            
+
             const userId = await db.query('select user_id from users_tokens where token = $1', [req.cookies.token]);
-
+            
             if(userId.rowCount == 0){
-                res.status(401).json({message: 'not authorized'})
+               return res.status(401).json({message: 'not authorized'})
             }
-
+            
+            return res.status(200).json({message: 'good'})
         }catch(e){
             console.log(e);
             res.status(400).json({message:'bad request'});
