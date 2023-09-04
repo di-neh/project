@@ -13,9 +13,6 @@ enter_link.onclick = () => {
         reg_wind.innerHTML = result;
         const result2 = await fetch('../js/enter_js.js').then(resp => resp.text());
         eval(result2)
-
-
-
     })()
 
 }
