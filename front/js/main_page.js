@@ -12,11 +12,11 @@ reg_link.onclick = () => {
     })()
 }
 
-//  enter_link.onclick = () => {
-//
-//      (async () => {
-//          const result = await fetch('../templates/enter.HTML').then(resp => resp.text());
-//          enter_wind.innerHTML = result;
-//      })()
-//
-// }
+ enter_link.onclick = () => {
+
+     (async () => {
+         const result = await fetch('../templates/enter.HTML').then(resp => resp.text());
+         enter_wind.innerHTML = result;
+     })()
+
+}
