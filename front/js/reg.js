@@ -44,9 +44,7 @@ reg.onclick = (e) => {
         nickname: formReg.get('name'),
         password: formReg.get('password'),
         mail: formReg.get('email'),
-
     }
-
 
     sendData('http://localhost:5555/registration', data);
 }

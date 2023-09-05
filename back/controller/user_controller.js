@@ -108,7 +108,7 @@ export class UserController{
                return res.status(401).json({message: 'not authorized'})
             }
             
-            res.status(200).json({message: 'good'})
+            res.status(200).json({message:'ok'})();
         }catch(e){
             console.log(e);
             res.status(400).json({message:'bad request'});
