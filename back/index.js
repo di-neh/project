@@ -19,16 +19,12 @@ app.use(express.static('../front'));
 app.use(router);
 
 app.get('/registration', (req, res) => {
-    res.status(404).send('resurs not found');
+    res.sendFile(path.resolve(__dirname, '../front/pages/main_page.html'));
 });
 
 app.get('/main', (req, res) => {
-    res.status(404).send('Penis');
+    res.sendFile(path.resolve(__dirname, '../front/pages/main.html'));
 });
-
-app.all('*', (req, res) => {
-    res.status(404).send('resurs not found');
-})
 
 app.listen(PORT, ()=> {
     console.log('mamba out on', PORT);
