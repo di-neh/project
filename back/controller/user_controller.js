@@ -1,8 +1,14 @@
 import { validationResult } from "express-validator";
 import pool from "../db/db.js";
 import bcrypt from "bcrypt";
-const db = pool;
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const db = pool;
 export class UserController{
     async createUser(req, res){
         const {nickname, password, mail} = req.body;
@@ -32,7 +38,6 @@ export class UserController{
 
     async registration(req, res){
         const errors = validationResult(req);
-        console.log(req.body);
         if(!errors.isEmpty()){
             return res.status(400).json({ errors: errors.array() });
         }
@@ -86,8 +91,6 @@ export class UserController{
             res.send('Set Cookie');
             
             await db.query('insert into users_tokens (user_id, token) values ($1, $2)', [user.rows[0].id, token]);          
-
-            res.status(200).send('Успешно');
         }catch(e){
             console.log(e);
             res.status(403).json({message:'Login error'});
@@ -95,8 +98,7 @@ export class UserController{
     }
 
     async getCookie(req, res){
-        try{
-            
+        try{  
             () => {
                 res.send('Get Cookie');
                 res.end;
@@ -107,8 +109,8 @@ export class UserController{
             if(userId.rowCount == 0){
                return res.status(401).json({message: 'not authorized'})
             }
-            
-            res.status(200).json({message:'ok'})();
+
+            res.status(200).sendFile(path.resolve(__dirname, '../../front/pages/main.html'));
         }catch(e){
             console.log(e);
             res.status(400).json({message:'bad request'});

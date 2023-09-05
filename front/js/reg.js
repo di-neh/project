@@ -16,7 +16,6 @@ enter_link.onclick = (e) => {
 }
 
 const sendData = async (url, data) => {
-
     const response = await fetch(url, {
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -26,6 +25,7 @@ const sendData = async (url, data) => {
     });
 
     if(!response.ok){
+        const jsonData = await response.json(); // Ожидание разрешения промиса
         throw new Error(`Ошибка по адресу ${url}, статус ошибки ${response}`);
     }
 

@@ -10,6 +10,8 @@ const sendData = async (url, data) => {
         body: JSON.stringify(data),
     });
 
+    alert('penis');
+
     if(!response.ok){
         throw new Error(`Ошибка по адресу ${url}, статус ошибки ${response}`);
     }
@@ -30,7 +32,6 @@ enter.onclick = (e) => {
         password: formReg.get('password'),
 
     }
-
 
     sendData('http://localhost:5555/login', data);
 }
