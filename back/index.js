@@ -19,7 +19,7 @@ app.use(express.static('../front'));
 app.use(router);
 
 app.get('/registration', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../front/pages/main_page.html'));
+    res.sendFile(path.resolve(__dirname, '../front/pages/Auth_page.html'));
 });
 
 app.get('/main', (req, res) => {

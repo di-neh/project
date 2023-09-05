@@ -2,12 +2,14 @@ const enter_wind = document.getElementById('wind')
 
 const enter_link = document.getElementById('enter_link')
 
-enter_link.onclick = () => {
+const reg = document.getElementById('reg');
 
+enter_link.onclick = (e) => {
+    e.preventDefault();
     (async () => {
         const result = await fetch('../templates/enter.HTML').then(resp => resp.text());
         enter_wind.innerHTML = result;
-        const result2 = await fetch('../js/main_page.js').then(resp => resp.text());
+        const result2 = await fetch('../js/Enter.js').then(resp => resp.text());
         eval(result2)
     })()
 
@@ -35,7 +37,7 @@ const sendData = async (url, data) => {
 reg.onclick = (e) => {
     e.preventDefault();
 
-    const formElement2 = document.getElementById('register'); // извлекаем элемент формы
+    const formElement2 = document.getElementById('registration_form'); // извлекаем элемент формы
     const formReg = new FormData(formElement2);
 
     const data = {
@@ -46,5 +48,5 @@ reg.onclick = (e) => {
     }
 
 
-    sendData('http://localhost:5555/api/registration', data);
+    sendData('http://localhost:5555/registration', data);
 }
