@@ -24,6 +24,7 @@ body{
     justify-content: center;
     margin-bottom: 30px;
 }
+
 .registration{
     background-color: white;
     border-color: white;
@@ -31,3 +32,12 @@ body{
     left: 40%;
 
 }
+
+.error{
+    border-color: red;
+}
+
+.error_text{
+    color: red;
+}
+
