@@ -75,14 +75,6 @@ export class UserController{
             const {nickname, password} = req.body;
             const user =  await db.query('select * from users where nickname = $1', [nickname]);
 
-            if(user.rowCount == 0){
-                return res.status(400).json({message: `Пользователь ${nickname} не найден`});
-            }
-
-            if(!bcrypt.compareSync(password, user.rows[0].password)){
-                return res.status(400).json({message: 'Введен неверный пароль'});
-            }  
-
             await db.query(`delete from users_tokens where time < current_timestamp + interval '1 hour'`);
 
             const token = bcrypt.hashSync( user.rows[0].nickname + user.rows[0].password + user.rows[0].mail , 6);
@@ -107,7 +99,7 @@ export class UserController{
             const userId = await db.query('select user_id from users_tokens where token = $1', [req.cookies.token]);
             
             if(userId.rowCount == 0){
-               return res.status(401).json({message: 'not authorized'})
+               return res.status(403).json({message: 'not authorized'})
             }
 
             res.status(200).sendFile(path.resolve(__dirname, '../../front/pages/main.html'));
