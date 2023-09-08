@@ -2,7 +2,9 @@ const enter_wind = document.getElementById('wind')
 const enter_link = document.getElementById('enter_link')
 const reg = document.getElementById('reg');
 const reg_form = document.getElementsByName('registration_form')
-
+const error_mail = document.getElementById('error_mail')
+const error_password = document.getElementById('error_password')
+const error_name = document.getElementById('error_name')
 
 const nicknameInput = document.querySelector('#name');
 const passwordInput = document.querySelector('#password');
@@ -34,31 +36,42 @@ const sendData = async (url, data) => {
 
     if(!response.ok){
         const jsonData = await response.json(); // Ожидание разрешения промиса
-
+        
         nicknameInput.classList.remove('error');
         emailInput.classList.remove('error');
         passwordInput.classList.remove('error');
+        error_name.style.display = 'none';
+        error_password.style.display = 'none';
+        error_mail.style.display = 'none';
 
         await jsonData.errors.forEach(element => {
+            
             switch (element.path) {
                 case 'nickname':
                     nicknameInput.classList.add('error');
-                    
+                    error_name.innerText = (element.msg)
+                    error_name.style.display = 'block';
                     break;
                     
                 case 'mail':
-                    
                     emailInput.classList.add('error');
-
+                    error_mail.innerText = (element.msg)
+                    error_mail.style.display = 'block';
                     break;
+
                 case 'password':
-                    
                     passwordInput.classList.add('error');
-                   
-                   
+                    error_password.innerText = (element.msg)
+                    error_password.style.display = 'block';
                     break;
             }           
         })
+
+        // error_text.addEventListener('input',() => {
+        //     if(jsonData.errors.path =='nickname'){
+
+        //     }
+        // })
         
         throw new Error(`Ошибка по адресу ${url}, статус ошибки ${response}`);
         
