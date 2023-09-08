@@ -1,6 +1,10 @@
 import { Router } from "express";
 import {UserController} from "../controller/user_controller.js";
 import { body, validationResult } from 'express-validator';
+import penis from "../middleware/role_middleware.js";
+import loginMiddleware from "../middleware/auth_middleware.js";
+
+
 const router = new Router();
 const userController = new UserController();
 
@@ -18,7 +22,7 @@ router.post(
     ],
     userController.registration
 );  
-router.post('/login', userController.login);
+router.post('/login',loginMiddleware, penis(['admin']), userController.login);
 router.get('/main', userController.getCookie);
 
 export default router;
