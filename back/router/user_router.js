@@ -16,9 +16,9 @@ router.delete('/user/:id', userController.deleteUser);
 router.post(
     '/registration', 
     [
-        body('nickname').isLength({min:4}).withMessage('Имя пользователя должно содержать минимум 4 символа'),
-        body('mail').isEmail().withMessage('Введите действительный адресс электронной почты'),
-        body('password').isLength({ min: 6 }).withMessage('Пароль должен содержать минимум 6 символов'),
+        body('nickname').isLength({min:4}).matches(/^[A-Za-z0-9]+$/).withMessage('некорректное имя пользователя'),
+        body('mail').isEmail().matches(/^[A-Za-z0-9]+$/).withMessage('некорректный адрес электронной почты'),
+        body('password').isLength({ min: 6 }).matches(/^[A-Za-z0-9]+$/).withMessage('некорректный пароль'),
     ],
     userController.registration
 );  
