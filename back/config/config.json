@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "kalabass2299657",
+    "database": "BlackNYellowDb",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "postgres",
+    "password": "kalabass2299657",
+    "database": "BlackNYellowDb_Test",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "postgres",
+    "password": "kalabass2299657",
+    "database": "BlackNYellowDb",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}
