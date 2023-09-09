@@ -29,11 +29,22 @@ body{
     background-color: white;
     border-color: white;
     position: relative;
-    left: 40%;
+    left: 73%;
+    margin-top: 0px;
+    margin-bottom: 20px;
 
 }
 
-.error{
+.registration2 {
+    background-color: white;
+    border-color: white;
+    position: relative;
+    left: 81%;
+    margin-top: 0px;
+    margin-bottom: 20px;
+}
+
+    .error{
     border-color: red;
 }
 
