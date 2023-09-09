@@ -55,6 +55,9 @@ export class UserController{
             const hashPassword = bcrypt.hashSync(password, 6);
 
             const user_id = await db.query('INSERT INTO users (nickname, mail, password) values ($1, $2, $3) returning id', [nickname, mail, hashPassword]);
+            const user_roles_id = await db.query("select * from user_roles");
+
+            await db.query('INSERT INTO user_roles (id, user_id, role_id) values ($1, $2, $3) ', [user_roles_id.rows[user_roles_id.rows.length - 1].id + 1, user_id.rows[0].id, 1]);
             
             await db.query(`delete from users_tokens where time > current_timestamp + interval '1 hour'`);
 

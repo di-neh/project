@@ -1,7 +1,7 @@
 import pool from "../db/db.js";
 const db = pool;
 
-export default function penis(roles) {
+export default function role_middleware(roles) {
     return async function(req, res, next){
         if(req.method == 'OPTIONS'){
             next();
@@ -19,8 +19,6 @@ export default function penis(roles) {
                 user_roles_arr.push(role_name.rows[0].name);
             }
 
-            console.log(user_roles_arr);
-
             let hasRole = false;
 
             user_roles_arr.forEach(role => {
@@ -30,14 +28,14 @@ export default function penis(roles) {
             })
 
             if(!hasRole){
-                return res.status(400).json({message: 'Введен неверный пароль'});
+                return res.status(403).json({message: 'Доступ запрещен: Недостаточно прав доступа.'});
             }
             
             next();
         }
         catch(e){
             console.log(e);
-            return res.status(403).json({message: "Пользователь не авторизован"});
+            return res.status(403).json({message: ""});
         }
     }
 }

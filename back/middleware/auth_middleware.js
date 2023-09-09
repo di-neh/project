@@ -14,10 +14,11 @@ export default async function loginMiddleware(req, res, next) {
         if(!bcrypt.compareSync(password, user.rows[0].password)){
             return res.status(400).json({message: 'Введен неверный пароль'});
         }  
+
         next();
     }
     catch(e){
         console.log(e);
-        return res.status(403).json({message: "Пользователь не авторизован"});
+        return res.status(403).json({message: ""});
     }  
 }
