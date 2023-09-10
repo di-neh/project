@@ -1,7 +1,12 @@
 const enter_wind = document.getElementById('wind')
 const reg_link = document.getElementById('reg_link')
 const enter = document.getElementById('enter')
-
+const enter_login = document.getElementById('name');
+const enter_password = document.getElementById('password');
+const log_name = document.getElementById('log_name');
+const log_password = document.getElementById('log_password');
+const nickname_log = document.querySelector('#name');
+const password_log = document.querySelector('#password');
 
 const sendData = async (url, data) => {
     const response = await fetch(url, {
@@ -11,6 +16,44 @@ const sendData = async (url, data) => {
     });
 
     if(!response.ok){
+        const jsonData = await response.json();
+
+        nickname_log.classList.remove('error');
+        password_log.classList.remove('error');
+        log_name.style.display = 'none';
+        log_password.style.display= 'none';
+       
+        switch (jsonData.path){
+            case 'nickname':
+                
+                nickname_log.classList.add('error');
+                log_name.style.display = 'block';
+                log_name.innerText = (jsonData.message)
+                break;
+        }
+            
+        switch (jsonData.path){
+            case 'password':
+                password_log.classList.add('error');
+                log_password.style.display = 'block';
+                log_password.innerText = (jsonData.message)  
+        }
+    
+        // if(jsonData.path = 'nickname'){
+        //     nickname_log.classList.add('error');
+        //     log_name.style.display = 'block';
+        //     log_name.innerText = (jsonData.message)
+            
+        //     if(jsonData.path = 'password'){
+        //         password_log.classList.add('error');
+        //         log_password.style.display = 'block';
+        //         log_password.innerText = (jsonData.message)
+                
+        //     }
+        // }
+
+        
+        
         throw new Error(`Ошибка по адресу ${url}, статус ошибки ${response}`);
     }
 

@@ -2,6 +2,7 @@ body{
     background-color: #d3d0c8;
     font-family: Arial ;
 }
+
 .all{
     background-color: white;
     width: 450px;
@@ -16,8 +17,17 @@ body{
     width: 100%;
     height: 30px;
     justify-content: center;
-    margin-bottom: 30px;
+    /* margin-bottom: 30px; */
 }
+
+.container{
+    width: 450px;
+    justify-content: center;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
 .enter{
     width: 102%;
     height: 30px;
@@ -44,40 +54,14 @@ body{
     margin-bottom: 20px;
 }
 
-    .error{
+.error{
     border-color: red;
 }
 
-.foolproof_mail{
-    width: 80%;
+.foolproof{
+    width: 102%;
     background: #d70022;
-    border-radius: 2px;
     color: #fff;
-    padding: 2.5px 22px;
-    position: absolute;
-    top: 70px;
-    z-index: 5;
-    display: none;
-}
-
-.foolproof_name{
-    background: #d70022;
-    border-radius: 2px;
-    color: #fff;
-    padding: 2.5px 22px;
-    position: absolute;
-    top: 132px;
-    z-index: 5;
-    display: none;
-}
-
-.foolproof_password{
-    background: #d70022;
-    border-radius: 2px;
-    color: #fff;
-    padding: 2.5px 22px;
-    position: absolute;
-    top: 195px;
-    z-index: 5;
+    margin-top: 7px;
     display: none;
 }

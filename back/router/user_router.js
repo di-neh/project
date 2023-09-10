@@ -17,8 +17,9 @@ router.post(
     '/registration', 
     [
         body('nickname').isLength({min:4}).matches(/^[A-Za-z0-9]+$/).withMessage('некорректное имя пользователя'),
-        body('mail').isEmail().matches(/^[A-Za-z0-9]+$/).withMessage('некорректный адрес электронной почты'),
+        body('mail').isEmail().withMessage('некорректный адрес электронной почты'),
         body('password').isLength({ min: 6 }).matches(/^[A-Za-z0-9]+$/).withMessage('некорректный пароль'),
+        
     ],
     userController.registration
 );  

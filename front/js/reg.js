@@ -1,3 +1,5 @@
+
+
 const enter_wind = document.getElementById('wind')
 const enter_link = document.getElementById('enter_link')
 const reg = document.getElementById('reg');
@@ -33,16 +35,23 @@ const sendData = async (url, data) => {
         method: 'POST',
         body: JSON.stringify(data),
     });
-
+    
     if(!response.ok){
         const jsonData = await response.json(); // Ожидание разрешения промиса
-        
+
         nicknameInput.classList.remove('error');
         emailInput.classList.remove('error');
         passwordInput.classList.remove('error');
         error_name.style.display = 'none';
         error_password.style.display = 'none';
         error_mail.style.display = 'none';
+        
+        switch (jsonData.path) {
+            case 'already_name':
+                nicknameInput.classList.add('error');
+                error_name.innerText = (jsonData.message)
+                error_name.style.display = 'block'; 
+        }
 
         await jsonData.errors.forEach(element => {
             
@@ -66,13 +75,8 @@ const sendData = async (url, data) => {
                     break;
             }           
         })
-
-        // error_text.addEventListener('input',() => {
-        //     if(jsonData.errors.path =='nickname'){
-
-        //     }
-        // })
         
+
         throw new Error(`Ошибка по адресу ${url}, статус ошибки ${response}`);
         
     }

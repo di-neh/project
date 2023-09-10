@@ -9,6 +9,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const db = pool;
+console.log(db)
 export class UserController{
     async createUser(req, res){
         const {nickname, password, mail} = req.body;
@@ -43,15 +44,18 @@ export class UserController{
         }
         
         try{
-            
+  
             const {nickname, password, mail} = req.body;
+
+            const jija = await db.query('select * from users');
+            console.log(jija);
 
             const candidate = await db.query('select * from users where nickname = $1', [nickname]);
 
             if(candidate.rowCount > 0 ){
-                return res.status(400).json({message: "пользователь с таким именем уже существует"})
+                return res.status(400).json({message: "пользователь с таким именем уже существует", path: "already_name"})
             }
-
+   
             const hashPassword = bcrypt.hashSync(password, 6);
 
             const user_id = await db.query('INSERT INTO users (nickname, mail, password) values ($1, $2, $3) returning id', [nickname, mail, hashPassword]);
