@@ -1,0 +1,49 @@
+body{
+    background-color: #d3d0c8;
+    font-family: Arial ;
+}
+
+.cover{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header{
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #383434;
+    color: white;
+    align-items: center;
+    padding: 30px;
+}
+
+
+.content{
+    display: flex;
+    width: 80%;
+    flex-direction: row;
+    align-items: center;
+    padding: 5px;
+}
+.in1{
+    width: 10px;
+    margin-right: 5px;
+}
+.in2{
+    margin-right: 5px;
+}
+.in3{
+    margin-right: 5px;
+}
+.btn1{
+    height: 20px;
+    width: 100px;
+    margin-right: 5px;
+}
+.btn2{
+
+}

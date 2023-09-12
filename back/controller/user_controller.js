@@ -9,7 +9,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const db = pool;
-console.log(db)
+
 export class UserController{
     async createUser(req, res){
         const {nickname, password, mail} = req.body;
@@ -28,6 +28,7 @@ export class UserController{
     }
     async updateUser(req, res){
         const {id, nickname, mail, password} = req.body;
+        console.log(req.body)
         const user = await db.query('update users set nickname = $1, mail = $2, password = $3 where id = $4 returning *', [nickname, mail, password, id]);
         res.json(user.rows[0]);
     }
@@ -42,9 +43,9 @@ export class UserController{
         if(!errors.isEmpty()){
             return res.status(400).json({ errors: errors.array() });
         }
-        
+        console.log('1')
         try{
-  
+            console.log('2')
             const {nickname, password, mail} = req.body;
 
             const jija = await db.query('select * from users');
