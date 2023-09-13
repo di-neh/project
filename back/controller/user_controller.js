@@ -12,29 +12,59 @@ const db = pool;
 
 export class UserController{
     async createUser(req, res){
-        const {nickname, password, mail} = req.body;
-        const newPerson = await db.query('INSERT INTO users (nickname, mail, password) values ($1, $2, $3) returning *', [nickname, mail, password ]);
-        res.json(newPerson.rows[0]);
+        try{
+            const {nickname, password, mail} = req.body;
+            const hashPassword = bcrypt.hashSync(password, 6);
+            const newPerson = await db.query('INSERT INTO users (nickname, mail, password) values ($1, $2, $3) returning *', [nickname, mail, hashPassword ]);
+            res.json(newPerson.rows[0]);
+        }catch(e){
+            console.log(e);
+            res.status(400).json({message:'Error during creating user'});
+        }
     }
 
     async getUsers(req, res){
-        const users = await db.query('select * from users');
-        res.json(users.rows)
+        try{
+            const users = await db.query('select * from users');
+            res.json(users.rows);
+        }catch(e){
+            console.log(e);
+            res.status(400).json({message:'Error during getting all users'});
+        }
     }
+
     async getOneUser(req, res){
-        const nickname = req.params.nickname;
-        const user = await db.query('select * from users where nickname = $1', [nickname]);
-        res.json(user.rows[0]);
+        try{
+            const nickname = req.params.nickname;
+            const user = await db.query('select * from users where nickname = $1', [nickname]);
+            res.json(user.rows[0]);
+        }catch(e){
+            console.log(e);
+            res.status(400).json({message:'Error during getting user'});
+        }
     }
+
     async updateUser(req, res){
-        const {id, nickname, mail, password} = req.body;
-        const user = await db.query('update users set nickname = $1, mail = $2, password = $3 where id = $4 returning *', [nickname, mail, password, id]);
-        res.json(user.rows[0]);
+        try{
+            const {id, nickname, mail} = req.body;
+            const user = await db.query('update users set nickname = $1, mail = $2, password = $3 where id = $4 returning *', [nickname, mail, id]);
+            res.json(user.rows[0]);
+        }catch(e){
+            console.log(e);
+            res.status(400).json({message:'Error during update'});
+        }
+        
     }
+
     async deleteUser(req, res){
-        const id = req.params.id;
-        const user = await db.query('delete from users where id = $1', [id])
-        res.json(user.rows[0]);
+        try{
+            const id = req.params.id;
+            const user = await db.query('delete from users where id = $1', [id])
+            res.json(user.rows[0]);
+        }catch(e){
+            console.log(e);
+            res.status(400).json({message:'Error during delete'});
+        }
     }
 
     async registration(req, res){
@@ -46,9 +76,6 @@ export class UserController{
         try{
             console.log('2')
             const {nickname, password, mail} = req.body;
-
-            const jija = await db.query('select * from users');
-            console.log(jija);
 
             const candidate = await db.query('select * from users where nickname = $1', [nickname]);
 
