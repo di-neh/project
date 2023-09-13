@@ -92,18 +92,41 @@ addB.onclick = async () =>{
         mail: nm.value,
         password: np.value
     }
-    console.log(nn.value)
 
-    await fetch('http://localhost:5555/user', {
+    const response = await fetch('http://localhost:5555/user', {
     method: 'POST',
     headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json;charset=utf-8'
     },
     body: JSON.stringify(data),
     }).then(res => res.json());
 
+    if(response.status = 403){
+        alert('У вас нет доступа к созданию нового пользователя!')
+    }
 
+    nn.classList.remove('error')
+    nm.classList.remove('error')
+    np.classList.remove('error')
 
+    response.errors.forEach(element => {
+        switch (element.path) {
+            case 'nickname':
+                nn.classList.add('error')
+
+                break;
+
+            case 'password':
+                np.classList.add('error')
+                break;
+
+            case 'mail':
+                nm.classList.add('error')
+                break;
+        }
+    })
+
+    
 
 }
 
