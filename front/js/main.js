@@ -1,10 +1,21 @@
-(async () => {
-    const table = document.getElementById('table')
+const table = document.getElementById('table');
+const addB = document.getElementById('add')
+const nn = document.getElementById('n_name')
+const nm = document.getElementById('n_mail')
+const np = document.getElementById('n_pass')
+const checkBoxAdmin = document.getElementById('checkBoxAdmin')
+const checkBoxUser = document.getElementById('checkBoxUser')
 
-    const users = await fetch('http://localhost:5555/user', {
+window.onload = async () => {
+    tableFullFill();
+}
+
+async function tableFullFill(users){
+    table.innerHTML = "";
+
+    users = await fetch('http://localhost:5555/user', {
         method: 'GET',
     }).then(res => res.json());
-
     const objs = users;
 
     objs.forEach(user => {
@@ -19,7 +30,8 @@
         dbtn.onclick = async () => {
             await fetch(url, {
                 method: 'DELETE',
-            }).then(res => res.json());
+            }).then();
+            tableFullFill();
         }
 
         const in1 = document.createElement('input')
@@ -34,15 +46,46 @@
         in3.className =  "in3"
         in3.value = user.mail
 
+        const radio1 = document.createElement('input')
+        const text1 = document.createElement('div')
+        text1.className = "text"
+        text1.textContent = "Администратор"
+        radio1.className = "rd1"
+        radio1.type = 'checkbox'
+
+        if(user.roles.includes(0)){
+            radio1.checked = true;
+        }
+
+        const radio2 = document.createElement('input')
+        const text2 = document.createElement('div')
+        text2.className = "text"
+        text2.textContent = "Пользователь"
+        radio2.type = 'checkbox'
+        radio2.className = "rd2"
+
+        if(user.roles.includes(1)){
+            radio2.checked = true;
+        }
+
         const upbtn = document.createElement('button')
         upbtn.className =  "btn2"
         upbtn.textContent = "Обновить"
 
         upbtn.onclick = async () => {
+            let roles_arr = [];
+
+            if(radio1.checked){
+                roles_arr.push(0);
+            }
+            if(radio2.checked){
+                roles_arr.push(1);
+            }
             let data = {
                 id: in1.value,
                 nickname: in2.value,
-                mail: in3.value
+                mail: in3.value,
+                roles: roles_arr
             }
             await fetch('http://localhost:5555/user', {
                 method: 'PUT',
@@ -51,46 +94,40 @@
                 },
                 body: JSON.stringify(data),
             }).then(res => res.json());
+            tableFullFill();
         }
-
-        const radio1 = document.createElement('input')
-        const text1 = document.createElement('div')
-        text1.className = "text"
-        text1.textContent = "Администратор"
-        radio1.className = "rd1"
-        radio1.type = 'checkbox'
-        const radio2 = document.createElement('input')
-        const text2 = document.createElement('div')
-        text2.className = "text"
-        text2.textContent = "Пользователь"
-        radio2.type = 'checkbox'
-        radio2.className = "rd2"
 
         content.appendChild(in1)
         content.appendChild(in2)
         content.appendChild(in3)
-        content.appendChild(dbtn)
-        content.appendChild(upbtn)
         content.appendChild(radio1)
         content.appendChild(text1)
         content.appendChild(radio2)
         content.appendChild(text2)
+        content.appendChild(dbtn)
+        content.appendChild(upbtn)
         
         table.appendChild(content)
     })
-})();
-
-const addB = document.getElementById('add')
-const nn = document.getElementById('n_name')
-const nm = document.getElementById('n_mail')
-const np = document.getElementById('n_pass')
+}
 
 
 addB.onclick = async () =>{
+
+    let roles_arr = [];
+
+    if(checkBoxAdmin.checked){
+        roles_arr.push(0);
+    }
+    if(checkBoxUser.checked){
+        roles_arr.push(1);
+    }
+
     let data = {
         nickname: nn.value,
         mail: nm.value,
-        password: np.value
+        password: np.value,
+        roles: roles_arr
     }
 
     const response = await fetch('http://localhost:5555/user', {
@@ -101,32 +138,36 @@ addB.onclick = async () =>{
     body: JSON.stringify(data),
     }).then(res => res.json());
 
-    if(response.status = 403){
-        alert('У вас нет доступа к созданию нового пользователя!')
-    }
+    // if(response.status == 403){
+    //     alert('У вас нет доступа к созданию нового пользователя!')
+    // }
 
-    nn.classList.remove('error')
-    nm.classList.remove('error')
-    np.classList.remove('error')
+    // nn.classList.remove('error')
+    // nm.classList.remove('error')
+    // np.classList.remove('error')
 
-    response.errors.forEach(element => {
-        switch (element.path) {
-            case 'nickname':
-                nn.classList.add('error')
+    // response.errors.forEach(element => {
+    //     switch (element.path) {
+    //         case 'nickname':
+    //             nn.classList.add('error')
 
-                break;
+    //             break;
 
-            case 'password':
-                np.classList.add('error')
-                break;
+    //         case 'password':
+    //             np.classList.add('error')
+    //             break;
 
-            case 'mail':
-                nm.classList.add('error')
-                break;
-        }
-    })
+    //         case 'mail':
+    //             nm.classList.add('error')
+    //             break;
+    //     }
+    // })
 
-    
-
+    nn.value = "";
+    nm.value = "";
+    np.value = "";
+    checkBoxAdmin.checked = false;
+    checkBoxUser.checked = true;
+    tableFullFill();
 }
 

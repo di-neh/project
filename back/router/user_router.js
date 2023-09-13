@@ -26,7 +26,6 @@ router.put(
     [
         body('nickname').isLength({min:4}).withMessage('некорректное имя пользователя'),
         body('mail').isEmail().withMessage('некорректный адрес электронной почты'),
-        body('password').isLength({ min: 6 }).withMessage('некорректный пароль'),
     ],        
     userController.updateUser);
 router.delete('/user/:id', userController.deleteUser);

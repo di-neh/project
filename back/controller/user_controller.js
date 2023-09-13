@@ -38,7 +38,18 @@ export class UserController{
 
     async getUsers(req, res){
         try{
-            const users = await db.query('select * from users');
+            let users = await db.query('select * from users');
+
+            for(let user of users.rows){
+                const roles = await db.query('select role_id from user_roles where user_id = $1', [user.id]);
+                let roles_arr = [];
+                roles.rows.forEach(element => {
+                    roles_arr.push(element.role_id)
+                });
+                
+                user.roles =  roles_arr;
+            }
+
             res.status(200).json(users.rows);
         }catch(e){
             console.log(e);
@@ -64,9 +75,10 @@ export class UserController{
         }
         try{
             const {id, nickname, mail, roles} = req.body;
+            console.log(req.body);
             const user = await db.query('update users set nickname = $1, mail = $2 where id = $3 returning *', [nickname, mail, id]);
 
-            await db.query('delete from user_roles where id = $1',[id]);
+            await db.query('delete from user_roles where user_id = $1',[id]);
 
             for(let role_id of roles){
                 await db.query('insert into user_roles (user_id, role_id) values ($1, $2)',[id, role_id]);
