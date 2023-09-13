@@ -21,6 +21,12 @@ body{
     padding: 30px;
 }
 
+.table{
+    margin-left: 15%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
 
 .content{
     display: flex;
@@ -31,9 +37,9 @@ body{
 }
 .in1{
 
-    width: 15px;
+    width: 100%;
     margin-right: 5px;
-    
+    text-align: center;
 
 }
 .in2{

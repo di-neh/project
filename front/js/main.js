@@ -147,8 +147,28 @@ addB.onclick = async () =>{
     if(response.status == 403){
         alert('У вас нет доступа к созданию нового пользователя!')
     }
-    
-    
+
+    const users = await fetch('http://localhost:5555/user', {
+        method: 'GET',
+    }).then(res => res.json());
+
+    users.forEach(element =>{
+        const user_name = nn;
+        const user_mail = nm;
+        switch (element.nickname) {
+            case user_name.value:
+                alert('Пользователь с таким именем уже существует!')
+                break;
+            
+        }
+        switch(element.mail){
+            case user_mail.value:
+                alert('Пользователь с такой почтой уже существует!')
+                break;
+        }
+        
+    })
+
     nn.classList.remove('error')
     nm.classList.remove('error')
     np.classList.remove('error')
