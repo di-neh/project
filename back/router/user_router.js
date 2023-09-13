@@ -10,6 +10,7 @@ const userController = new UserController();
 
 router.post(
     '/user',
+    role_middleware(['admin']),
     [
         body('nickname').isLength({min:4}).withMessage('некорректное имя пользователя'),
         body('mail').isEmail().withMessage('некорректный адрес электронной почты'),
@@ -21,6 +22,7 @@ router.get('/user', userController.getUsers);
 router.get('/user/:id', userController.getOneUser);
 router.put(
     '/user',
+    role_middleware(['admin']),
     [
         body('nickname').isLength({min:4}).withMessage('некорректное имя пользователя'),
         body('mail').isEmail().withMessage('некорректный адрес электронной почты'),
@@ -38,7 +40,7 @@ router.post(
     ],
     userController.registration
 );  
-router.post('/login',loginMiddleware, role_middleware(['admin', 'user']), userController.login);
+router.post('/login',loginMiddleware, userController.login);
 router.get('/main', userController.getCookie);
 
 export default router;

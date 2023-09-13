@@ -12,15 +12,24 @@ const db = pool;
 
 export class UserController{
     async createUser(req, res){
+
         const errors = validationResult(req);
         if(!errors.isEmpty()){
             return res.status(400).json({ errors: errors.array() });
         }
+
         try{
-            const {nickname, password, mail} = req.body;
+            const {nickname, password, mail, roles} = req.body;
             const hashPassword = bcrypt.hashSync(password, 6);
             const newPerson = await db.query('INSERT INTO users (nickname, mail, password) values ($1, $2, $3) returning *', [nickname, mail, hashPassword ]);
-            res.json(newPerson.rows[0]);
+
+            await db.query('delete from user_roles where id = $1',[newPerson.rows[0].id]);
+
+            for(let role_id of roles){
+                await db.query('insert into user_roles (user_id, role_id) values ($1, $2)',[newPerson.rows[0].id, role_id]);
+            }
+
+            res.status(200).json(newPerson.rows[0]);
         }catch(e){
             console.log(e);
             res.status(400).json({message:'Error during creating user'});
@@ -30,7 +39,7 @@ export class UserController{
     async getUsers(req, res){
         try{
             const users = await db.query('select * from users');
-            res.json(users.rows);
+            res.status(200).json(users.rows);
         }catch(e){
             console.log(e);
             res.status(400).json({message:'Error during getting all users'});
@@ -41,7 +50,7 @@ export class UserController{
         try{
             const nickname = req.params.nickname;
             const user = await db.query('select * from users where nickname = $1', [nickname]);
-            res.json(user.rows[0]);
+            res.status(200).json(user.rows[0]);
         }catch(e){
             console.log(e);
             res.status(400).json({message:'Error during getting user'});
@@ -54,9 +63,16 @@ export class UserController{
             return res.status(400).json({ errors: errors.array() });
         }
         try{
-            const {id, nickname, mail} = req.body;
+            const {id, nickname, mail, roles} = req.body;
             const user = await db.query('update users set nickname = $1, mail = $2 where id = $3 returning *', [nickname, mail, id]);
-            res.json(user.rows[0]);
+
+            await db.query('delete from user_roles where id = $1',[id]);
+
+            for(let role_id of roles){
+                await db.query('insert into user_roles (user_id, role_id) values ($1, $2)',[id, role_id]);
+            }
+
+            res.status(200).json(user.rows[0]);
         }catch(e){
             console.log(e);
             res.status(400).json({message:'Error during update'});
@@ -66,8 +82,11 @@ export class UserController{
     async deleteUser(req, res){
         try{
             const id = req.params.id;
-            const user = await db.query('delete from users where id = $1', [id])
-            res.json(user.rows[0]);
+
+            await db.query('delete from user_roles where id = $1', [id]);
+            await db.query('delete from users_tokens where id = $1', [id]);
+            const user = await db.query('delete from users where id = $1', [id]);
+            res.status(200).json(user.rows[0]);
         }catch(e){
             console.log(e);
             res.status(400).json({message:'Error during delete'});
@@ -91,16 +110,15 @@ export class UserController{
             const hashPassword = bcrypt.hashSync(password, 6);
 
             const user_id = await db.query('INSERT INTO users (nickname, mail, password) values ($1, $2, $3) returning id', [nickname, mail, hashPassword]);
-            const user_roles_id = await db.query("select * from user_roles");
 
-            await db.query('INSERT INTO user_roles (id, user_id, role_id) values ($1, $2, $3) ', [user_roles_id.rows[user_roles_id.rows.length - 1].id + 1, user_id.rows[0].id, 1]);
+            await db.query('INSERT INTO user_roles (user_id, role_id) values ($1, $2) ', [user_id.rows[0].id, 1]);
             
             await db.query(`delete from users_tokens where time > current_timestamp + interval '1 hour'`);
-
+  
             const token = bcrypt.hashSync( nickname + password + mail, 6);
             res.cookie('token', token);
 
-            res.send('Set Cookie');
+            res.status(200).send('Set Cookie');
             
             await db.query('insert into users_tokens (user_id, token) values ($1, $2) returning *',[ user_id.rows[0].id, token]);  
         }catch(e){
@@ -119,7 +137,7 @@ export class UserController{
             const token = bcrypt.hashSync( user.rows[0].nickname + user.rows[0].password + user.rows[0].mail , 6);
             res.cookie('token', token);
 
-            res.send('Set Cookie');
+            res.status(200).send('Set Cookie');
             
             await db.query('insert into users_tokens (user_id, token) values ($1, $2)', [user.rows[0].id, token]);          
         }catch(e){
