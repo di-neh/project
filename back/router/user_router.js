@@ -8,17 +8,32 @@ import loginMiddleware from "../middleware/auth_middleware.js";
 const router = new Router();
 const userController = new UserController();
 
-router.post('/user', userController.createUser);
+router.post(
+    '/user',
+    [
+        body('nickname').isLength({min:4}).withMessage('некорректное имя пользователя'),
+        body('mail').isEmail().withMessage('некорректный адрес электронной почты'),
+        body('password').isLength({ min: 6 }).withMessage('некорректный пароль'),
+    ],
+    userController.createUser
+);
 router.get('/user', userController.getUsers);
 router.get('/user/:id', userController.getOneUser);
-router.put('/user', userController.updateUser);
+router.put(
+    '/user',
+    [
+        body('nickname').isLength({min:4}).withMessage('некорректное имя пользователя'),
+        body('mail').isEmail().withMessage('некорректный адрес электронной почты'),
+        body('password').isLength({ min: 6 }).withMessage('некорректный пароль'),
+    ],        
+    userController.updateUser);
 router.delete('/user/:id', userController.deleteUser);
 router.post(
     '/registration', 
     [
-        body('nickname').isLength({min:4}).matches(/^[A-Za-z0-9]+$/).withMessage('некорректное имя пользователя'),
+        body('nickname').isLength({min:4}).withMessage('некорректное имя пользователя'),
         body('mail').isEmail().withMessage('некорректный адрес электронной почты'),
-        body('password').isLength({ min: 6 }).matches(/^[A-Za-z0-9]+$/).withMessage('некорректный пароль'),
+        body('password').isLength({ min: 6 }).withMessage('некорректный пароль'),
         
     ],
     userController.registration

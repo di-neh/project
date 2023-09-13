@@ -12,6 +12,10 @@ const db = pool;
 
 export class UserController{
     async createUser(req, res){
+        const errors = validationResult(req);
+        if(!errors.isEmpty()){
+            return res.status(400).json({ errors: errors.array() });
+        }
         try{
             const {nickname, password, mail} = req.body;
             const hashPassword = bcrypt.hashSync(password, 6);
@@ -45,15 +49,18 @@ export class UserController{
     }
 
     async updateUser(req, res){
+        const errors = validationResult(req);
+        if(!errors.isEmpty()){
+            return res.status(400).json({ errors: errors.array() });
+        }
         try{
             const {id, nickname, mail} = req.body;
-            const user = await db.query('update users set nickname = $1, mail = $2, password = $3 where id = $4 returning *', [nickname, mail, id]);
+            const user = await db.query('update users set nickname = $1, mail = $2 where id = $3 returning *', [nickname, mail, id]);
             res.json(user.rows[0]);
         }catch(e){
             console.log(e);
             res.status(400).json({message:'Error during update'});
         }
-        
     }
 
     async deleteUser(req, res){
@@ -72,9 +79,7 @@ export class UserController{
         if(!errors.isEmpty()){
             return res.status(400).json({ errors: errors.array() });
         }
-        console.log('1')
         try{
-            console.log('2')
             const {nickname, password, mail} = req.body;
 
             const candidate = await db.query('select * from users where nickname = $1', [nickname]);
