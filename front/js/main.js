@@ -28,10 +28,13 @@ async function tableFullFill(users){
 
         let url = 'http://localhost:5555/user/'+ user.id
         dbtn.onclick = async () => {
-            await fetch(url, {
+            const response = await fetch(url, {
                 method: 'DELETE',
-            }).then();
-            tableFullFill();
+            }).then(res => res.json());
+            
+            if(response.status == 400){
+                alert('У вас нет доступа к удалению пользователя!')
+            }
         }
 
         const in1 = document.createElement('input')
@@ -87,14 +90,17 @@ async function tableFullFill(users){
                 mail: in3.value,
                 roles: roles_arr
             }
-            await fetch('http://localhost:5555/user', {
+            const response = await fetch('http://localhost:5555/user', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(data),
             }).then(res => res.json());
-            tableFullFill();
+
+            if(response.status == 400){
+                alert('У вас нет доступа к обновлению данных пользователя!')
+            }
         }
 
         content.appendChild(in1)
@@ -138,36 +144,33 @@ addB.onclick = async () =>{
     body: JSON.stringify(data),
     }).then(res => res.json());
 
-    // if(response.status == 403){
-    //     alert('У вас нет доступа к созданию нового пользователя!')
-    // }
+    if(response.status == 403){
+        alert('У вас нет доступа к созданию нового пользователя!')
+    }
+    
+    
+    nn.classList.remove('error')
+    nm.classList.remove('error')
+    np.classList.remove('error')
 
-    // nn.classList.remove('error')
-    // nm.classList.remove('error')
-    // np.classList.remove('error')
+    response.errors.forEach(element => {
+        switch (element.path) {
+            case 'nickname':
+                nn.classList.add('error')
 
-    // response.errors.forEach(element => {
-    //     switch (element.path) {
-    //         case 'nickname':
-    //             nn.classList.add('error')
+                break;
 
-    //             break;
+            case 'password':
+                np.classList.add('error')
+                break;
 
-    //         case 'password':
-    //             np.classList.add('error')
-    //             break;
+            case 'mail':
+                nm.classList.add('error')
+                break;
+        }
+    })
 
-    //         case 'mail':
-    //             nm.classList.add('error')
-    //             break;
-    //     }
-    // })
+    
 
-    nn.value = "";
-    nm.value = "";
-    np.value = "";
-    checkBoxAdmin.checked = false;
-    checkBoxUser.checked = true;
-    tableFullFill();
 }
 
