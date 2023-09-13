@@ -30,8 +30,11 @@ body{
     padding: 5px;
 }
 .in1{
-    width: 10px;
+
+    width: 15px;
     margin-right: 5px;
+    
+
 }
 .in2{
     margin-right: 5px;
@@ -46,4 +49,41 @@ body{
 }
 .btn2{
 
+}
+.rd1{
+
+
+
+
+
+}
+
+
+
+
+.rd2{
+
+}
+.add{
+    margin-top: 10px;
+    display: flex;
+    margin-right: 50px;
+    padding-right: 5px;
+
+}
+
+.n_name{
+    margin-left: 11px;
+}
+
+.n_mail{
+    margin-left: 5px;
+}
+.add_btn{
+    margin-left: 5px;
+}
+.text{
+    font-size: 8px;
+    justify-content: center;
+    margin-top: 5px;
 }

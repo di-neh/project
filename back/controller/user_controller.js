@@ -28,7 +28,6 @@ export class UserController{
     }
     async updateUser(req, res){
         const {id, nickname, mail, password} = req.body;
-        console.log(req.body)
         const user = await db.query('update users set nickname = $1, mail = $2, password = $3 where id = $4 returning *', [nickname, mail, password, id]);
         res.json(user.rows[0]);
     }

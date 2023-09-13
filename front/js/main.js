@@ -1,6 +1,3 @@
-
-
-
 (async () => {
     const table = document.getElementById('table')
 
@@ -25,14 +22,9 @@
             }).then(res => res.json());
         }
 
-
-
-
-
         const in1 = document.createElement('input')
         in1.className =  "in1"
         in1.value = user.id
-
 
         const in2 = document.createElement('input')
         in2.className =  "in2"
@@ -45,7 +37,6 @@
         const upbtn = document.createElement('button')
         upbtn.className =  "btn2"
         upbtn.textContent = "Обновить"
-
 
         upbtn.onclick = async () => {
             let data = {
@@ -63,10 +54,17 @@
         }
 
         const radio1 = document.createElement('input')
-        radio1.type = 'radio'
+        const text1 = document.createElement('div')
+        text1.className = "text"
+        text1.textContent = "Администратор"
+        radio1.className = "rd1"
+        radio1.type = 'checkbox'
         const radio2 = document.createElement('input')
-        radio2.type = 'radio'
-
+        const text2 = document.createElement('div')
+        text2.className = "text"
+        text2.textContent = "Пользователь"
+        radio2.type = 'checkbox'
+        radio2.className = "rd2"
 
         content.appendChild(in1)
         content.appendChild(in2)
@@ -74,45 +72,38 @@
         content.appendChild(dbtn)
         content.appendChild(upbtn)
         content.appendChild(radio1)
+        content.appendChild(text1)
         content.appendChild(radio2)
-
-
+        content.appendChild(text2)
+        
         table.appendChild(content)
-
-
-
-
     })
-    // for(let key in objs){
-    //
-    //     const obj = document.createElement('button');
-    //
-    //     obj.textContent = objs[key].name  objs[key].id;
-    //     obj.className = "btnUser"
-    //
-    //     switch (Object.keys(objs[key]).length) {
-    //         case 4:
-    //             obj.onclick = () => {ShowModal(objs[key], Modal);};
-    //             break;
-    //         case 5:
-    //             obj.onclick = () => {ShowModal(objs[key], ModalConsumption);};
-    //             break;
-    //         case 6:
-    //             obj.onclick = () => {ShowModal(objs[key], ModalProd);};
-    //             break;
-    //         default:
-    //             break;
-    //     }
-    //
-    //     obj.addEventListener('mouseenter', () => {
-    //         obj.textContent = objs[key].id;
-    //     });
-    //     obj.addEventListener('mouseleave', () => {
-    //         obj.textContent = objs[key].name  objs[key].id;
-    //     });
-    //
-    //     Wrapper.appendChild(obj);
-    // }
 })();
 
+const addB = document.getElementById('add')
+const nn = document.getElementById('n_name')
+const nm = document.getElementById('n_mail')
+const np = document.getElementById('n_pass')
+
+
+addB.onclick = async () =>{
+    let data = {
+        nickname: nn.value,
+        mail: nm.value,
+        password: np.value
+    }
+    console.log(nn.value)
+
+    await fetch('http://localhost:5555/user', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data),
+    }).then(res => res.json());
+
+
+
+
+}
 
