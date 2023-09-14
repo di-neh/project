@@ -30,11 +30,12 @@ async function tableFullFill(users){
         dbtn.onclick = async () => {
             const response = await fetch(url, {
                 method: 'DELETE',
-            }).then(res => res.json());
+            }).then();
             
-            if(response.status == 400){
-                alert('У вас нет доступа к удалению пользователя!')
-            }
+            // if(response.status == 403){
+            //     alert('У вас нет доступа к удалению пользователя!')
+            // }
+            tableFullFill();
         }
 
         const in1 = document.createElement('input')
@@ -96,11 +97,11 @@ async function tableFullFill(users){
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(data),
-            }).then(res => res.json());
-
-            if(response.status == 400){
-                alert('У вас нет доступа к обновлению данных пользователя!')
-            }
+            }).then();
+            tableFullFill();
+            // if(response.status == 400){
+            //     alert('У вас нет доступа к обновлению данных пользователя!')
+            // }
         }
 
         content.appendChild(in1)
@@ -144,30 +145,30 @@ addB.onclick = async () =>{
     body: JSON.stringify(data),
     }).then(res => res.json());
 
-    if(response.status == 403){
-        alert('У вас нет доступа к созданию нового пользователя!')
-    }
+    // if(response.status == 403){
+    //     alert('У вас нет доступа к созданию нового пользователя!')
+    // }
 
     const users = await fetch('http://localhost:5555/user', {
         method: 'GET',
     }).then(res => res.json());
 
-    users.forEach(element =>{
-        const user_name = nn;
-        const user_mail = nm;
-        switch (element.nickname) {
-            case user_name.value:
-                alert('Пользователь с таким именем уже существует!')
-                break;
+    // users.forEach(element =>{
+    //     const user_name = nn;
+    //     const user_mail = nm;
+    //     switch (element.nickname) {
+    //         case user_name.value:
+    //             alert('Пользователь с таким именем уже существует!')
+    //             break;
             
-        }
-        switch(element.mail){
-            case user_mail.value:
-                alert('Пользователь с такой почтой уже существует!')
-                break;
-        }
+    //     }
+    //     switch(element.mail){
+    //         case user_mail.value:
+    //             alert('Пользователь с такой почтой уже существует!')
+    //             break;
+    //     }
         
-    })
+    // })
 
     nn.classList.remove('error')
     nm.classList.remove('error')

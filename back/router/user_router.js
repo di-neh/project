@@ -18,8 +18,14 @@ router.post(
     ],
     userController.createUser
 );
-router.get('/user', userController.getUsers);
-router.get('/user/:id', userController.getOneUser);
+router.get(
+    '/user',
+    role_middleware(['admin']),
+    userController.getUsers);
+router.get(
+    '/user/:id',
+    role_middleware(['admin']),
+    userController.getOneUser);
 router.put(
     '/user',
     role_middleware(['admin']),
@@ -28,7 +34,10 @@ router.put(
         body('mail').isEmail().withMessage('некорректный адрес электронной почты'),
     ],        
     userController.updateUser);
-router.delete('/user/:id', userController.deleteUser);
+router.delete(
+    '/user/:id',
+    role_middleware(['admin']),
+    userController.deleteUser);
 router.post(
     '/registration', 
     [

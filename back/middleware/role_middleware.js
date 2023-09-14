@@ -15,7 +15,7 @@ export default function role_middleware(roles) {
             const userId = await db.query('select user_id from users_tokens where token = $1', [req.cookies.token]);
 
             const user_roles = await db.query('select role_id from user_roles where user_id = $1', [userId.rows[0].user_id]);
-            
+
             let user_roles_arr = [];
 
             for await (const element of user_roles.rows){
