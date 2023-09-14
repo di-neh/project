@@ -5,9 +5,16 @@ const nm = document.getElementById('n_mail')
 const np = document.getElementById('n_pass')
 const checkBoxAdmin = document.getElementById('checkBoxAdmin')
 const checkBoxUser = document.getElementById('checkBoxUser')
-
+const btnLogOut = document.getElementById('btnLogOut');
 window.onload = async () => {
     tableFullFill();
+}
+
+btnLogOut.onclick = async () => {
+    document.location.href = "http://localhost:5555/registration";
+    await fetch('http://localhost:5555/main', {
+        method: 'delete',
+    }).then(res => res.json()); 
 }
 
 async function tableFullFill(users){
@@ -35,7 +42,9 @@ async function tableFullFill(users){
             // if(response.status == 403){
             //     alert('У вас нет доступа к удалению пользователя!')
             // }
-            tableFullFill();
+            if(response.ok){
+                tableFullFill();
+            }  
         }
 
         const in1 = document.createElement('input')
@@ -98,7 +107,9 @@ async function tableFullFill(users){
                 },
                 body: JSON.stringify(data),
             }).then();
-            tableFullFill();
+            if(response.ok){
+                tableFullFill();
+            }
             // if(response.status == 400){
             //     alert('У вас нет доступа к обновлению данных пользователя!')
             // }
@@ -138,20 +149,19 @@ addB.onclick = async () =>{
     }
 
     const response = await fetch('http://localhost:5555/user', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json;charset=utf-8'
-    },
-    body: JSON.stringify(data),
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify(data),
     }).then(res => res.json());
 
+    if(response.ok){
+        tableFullFill();
+    }
     // if(response.status == 403){
     //     alert('У вас нет доступа к созданию нового пользователя!')
     // }
-
-    const users = await fetch('http://localhost:5555/user', {
-        method: 'GET',
-    }).then(res => res.json());
 
     // users.forEach(element =>{
     //     const user_name = nn;
@@ -170,26 +180,26 @@ addB.onclick = async () =>{
         
     // })
 
-    nn.classList.remove('error')
-    nm.classList.remove('error')
-    np.classList.remove('error')
+    // nn.classList.remove('error')
+    // nm.classList.remove('error')
+    // np.classList.remove('error')
 
-    response.errors.forEach(element => {
-        switch (element.path) {
-            case 'nickname':
-                nn.classList.add('error')
+    // response.errors.forEach(element => {
+    //     switch (element.path) {
+    //         case 'nickname':
+    //             nn.classList.add('error')
 
-                break;
+    //             break;
 
-            case 'password':
-                np.classList.add('error')
-                break;
+    //         case 'password':
+    //             np.classList.add('error')
+    //             break;
 
-            case 'mail':
-                nm.classList.add('error')
-                break;
-        }
-    })
+    //         case 'mail':
+    //             nm.classList.add('error')
+    //             break;
+    //     }
+    // })
 
     
 

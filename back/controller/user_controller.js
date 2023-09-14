@@ -12,7 +12,6 @@ const db = pool;
 
 export class UserController{
     async createUser(req, res){
-
         const errors = validationResult(req);
         if(!errors.isEmpty()){
             return res.status(400).json({ errors: errors.array() });
@@ -20,6 +19,10 @@ export class UserController{
 
         try{
             const {nickname, password, mail, roles} = req.body;
+            if(roles.length == 0){
+                return res.status(400).json({message: "no roles"})
+            }
+
             const hashPassword = bcrypt.hashSync(password, 6);
             const newPerson = await db.query('INSERT INTO users (nickname, mail, password) values ($1, $2, $3) returning *', [nickname, mail, hashPassword ]);
 
@@ -68,6 +71,21 @@ export class UserController{
         }
     }
 
+    async getUserProfile(req, res){
+        try {
+            () => {
+                res.send('Get Cookie');
+                res.end;
+            }
+            const userId = await db.query('select user_id from users_tokens where token = $1', [req.cookies.token]);
+            let user = await db.query('select * from users where id = $1', [userId.rows[0].user_id]);
+            res.status(200).json(user.rows[0]);
+        } catch (e) {
+            console.log(e);
+            res.status(400).json({message:'Error during getting profile'});
+        }
+    }
+
     async updateUser(req, res){
         const errors = validationResult(req);
         if(!errors.isEmpty()){
@@ -75,7 +93,11 @@ export class UserController{
         }
         try{
             const {id, nickname, mail, roles} = req.body;
-            console.log(req.body);
+
+            if(roles.length == 0){
+                return res.status(400).json({message: "no roles"})
+            }
+
             const user = await db.query('update users set nickname = $1, mail = $2 where id = $3 returning *', [nickname, mail, id]);
 
             await db.query('delete from user_roles where user_id = $1',[id]);
@@ -113,12 +135,6 @@ export class UserController{
         try{
             const {nickname, password, mail} = req.body;
 
-            const candidate = await db.query('select * from users where nickname = $1', [nickname]);
-
-            if(candidate.rowCount > 0 ){
-                return res.status(400).json({message: "пользователь с таким именем уже существует", path: "already_name"})
-            }
-   
             const hashPassword = bcrypt.hashSync(password, 6);
 
             const user_id = await db.query('INSERT INTO users (nickname, mail, password) values ($1, $2, $3) returning id', [nickname, mail, hashPassword]);
@@ -160,13 +176,14 @@ export class UserController{
 
     async getCookie(req, res){
         try{  
+
             () => {
                 res.send('Get Cookie');
                 res.end;
             }
 
             const userId = await db.query('select user_id from users_tokens where token = $1', [req.cookies.token]);
-            
+
             if(userId.rowCount == 0){
                return res.status(403).json({message: 'not authorized'})
             }
@@ -175,6 +192,49 @@ export class UserController{
         }catch(e){
             console.log(e);
             res.status(400).json({message:'bad request'});
+        }
+    }
+
+    async logOut(req, res){
+        try {
+            () => {
+                res.send('Get Cookie');
+                res.end;
+            }
+            await db.query('delete from users_tokens where token = $1', [req.cookies.token]);
+            res.status(200).json({message: "good"});
+        } catch (e) {
+            console.log(e);
+            res.status(400).json({message:'error during logging out'});
+        }
+    }
+
+    async changePassword(req, res){
+        try {
+            () => {
+                res.send('Get Cookie');
+                res.end;
+            }
+
+            const {passwordOld, passwordNew} = req.body;
+
+            const userId = await db.query('select user_id from users_tokens where token = $1', [req.cookies.token]);
+            const user = await db.query('select password from users where id = $1', [userId.rows[0].user_id]);
+
+            if(!bcrypt.compareSync(passwordOld, user.rows[0].password)){
+                return res.status(400).json({message: 'Введен неверный пароль', path: "password"});
+            }
+
+            const password = bcrypt.hashSync(passwordNew, 6);
+
+            const newUser = await db.query('update users set password = $1 where id = $2 returning *', [password, userId.rows[0].user_id]);
+
+            res.status(200).json(newUser.rows[0]);
+
+
+        } catch (e) {
+            console.log(e);
+            res.status(400).json({message:'Error during chanching password'});
         }
     }
 }
