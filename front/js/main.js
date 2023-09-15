@@ -222,6 +222,6 @@ async function profile(){
 
     name.textContent = ("Ваш логин: " + profile.nickname)
     mail.textContent = ("Ваша почта: " + profile.mail)
-    role.textContent = ("Ваша роль: " + profile.nickname)
+    role.textContent = ("Ваша роль: " + profile.role)
 
 }
