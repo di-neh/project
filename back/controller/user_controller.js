@@ -79,6 +79,16 @@ export class UserController{
             }
             const userId = await db.query('select user_id from users_tokens where token = $1', [req.cookies.token]);
             let user = await db.query('select * from users where id = $1', [userId.rows[0].user_id]);
+            const roles = await db.query('select role_id from user_roles where user_id = $1', [user.rows[0].id]);
+
+
+            let minRole = roles.rows[0].role_id;
+            roles.rows.forEach(element => {
+                if(minRole > element.role_id){
+                    minRole = element.role_id;
+                }
+            });
+            user.rows[0].role =  (await db.query('select name from roles where id = $1', [minRole])).rows[0].name;
             res.status(200).json(user.rows[0]);
         } catch (e) {
             console.log(e);
@@ -185,7 +195,7 @@ export class UserController{
             const userId = await db.query('select user_id from users_tokens where token = $1', [req.cookies.token]);
 
             if(userId.rowCount == 0){
-               return res.status(403).json({message: 'not authorized'})
+               return res.status(403).sendFile(path.resolve(__dirname, '../../front/pages/Auth_page.html'));
             }
 
             res.status(200).sendFile(path.resolve(__dirname, '../../front/pages/main.html'));
