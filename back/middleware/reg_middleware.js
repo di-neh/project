@@ -8,7 +8,8 @@ export default async function regMiddleware(req, res, next) {
         const candidate = await db.query('select * from users where nickname = $1', [nickname]);
 
         if(candidate.rowCount > 0 ){
-            return res.status(400).json({message: "пользователь с таким именем уже существует", path: "already_name"})
+            let errors = [{message: "пользователь с таким именем уже существует", path: "already_name"}];
+            return res.status(400).json({errors: errors});
         } 
 
         next();
