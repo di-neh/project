@@ -56,9 +56,9 @@ body{
 
 .add{
     margin-top: 10px;
-    display: flex;
     margin-right: 50px;
     padding-right: 5px;
+    display: none;
 
 }
 
@@ -80,4 +80,13 @@ body{
 
 .error{
     border-color: red;
+}
+.btnLogOut{
+    position: relative;
+    left: 48%;
+    bottom: 20px;
+}
+.head{
+    position: relative;
+    bottom: 10px;
 }

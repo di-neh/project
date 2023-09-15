@@ -8,6 +8,7 @@ const checkBoxUser = document.getElementById('checkBoxUser')
 const btnLogOut = document.getElementById('btnLogOut');
 window.onload = async () => {
     tableFullFill();
+    profile();
 }
 
 btnLogOut.onclick = async () => {
@@ -20,12 +21,18 @@ btnLogOut.onclick = async () => {
 async function tableFullFill(users){
     table.innerHTML = "";
 
+
     users = await fetch('http://localhost:5555/user', {
         method: 'GET',
     }).then(res => res.json());
     const objs = users;
 
+
+
     objs.forEach(user => {
+        const box = document.getElementById('add_block')
+        box.style.display = 'flex'
+
         const content = document.createElement('div')
         content.className =  "content"
 
@@ -201,7 +208,20 @@ addB.onclick = async () =>{
     //     }
     // })
 
-    
 
 }
+async function profile(){
+    const name = document.getElementById('p_name')
+    const mail = document.getElementById('p_mail')
+    const role = document.getElementById('p_role')
 
+    let profile= await fetch('http://localhost:5555/main/user', {
+        method: 'GET',
+    }).then(res => res.json());
+    const objs = profile;
+
+    name.textContent = ("Ваш логин: " + profile.nickname)
+    mail.textContent = ("Ваша почта: " + profile.mail)
+    role.textContent = ("Ваша роль: " + profile.nickname)
+
+}

@@ -11,10 +11,16 @@
 <body>
 <div class="cover">
     <div class="header">
-        <div>Список пользователей</div>
+        <button class="btnLogOut" id = "btnLogOut">Log out</button>
+        <div class="head">Список пользователей</div>
 
     </div>
-    <div class="add">
+    <div class="profile">
+        <div id="p_name">Ваш логин: </div>
+        <div id="p_mail">Ваша почта: </div>
+        <div id="p_role">Ваша роль: </div>
+    </div>
+    <div class="add" id="add_block">
         <input class="n_name" id="n_name" placeholder="Имя нового пользователя">
         <input class="n_mail" id="n_mail" placeholder="Почта нового пользователя">
         <input class="n_password" id="n_pass"  type="password" placeholder="Пароль нового пользователя">
@@ -25,7 +31,7 @@
         <button class="add_btn" id="add">Добавить пользователя</button>
 
     </div>
-    <button id = "btnLogOut">Log out</button>
+
     <div class="table" id="table">
 
     </div>
