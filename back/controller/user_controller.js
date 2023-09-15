@@ -20,7 +20,8 @@ export class UserController{
         try{
             const {nickname, password, mail, roles} = req.body;
             if(roles.length == 0){
-                return res.status(400).json({message: "no roles"})
+                let errors = [{message: "no roles", path: "roles"}];
+                return res.status(400).json({errors: errors});
             }
 
             const hashPassword = bcrypt.hashSync(password, 6);
@@ -31,7 +32,6 @@ export class UserController{
             for(let role_id of roles){
                 await db.query('insert into user_roles (user_id, role_id) values ($1, $2)',[newPerson.rows[0].id, role_id]);
             }
-
             res.status(200).json(newPerson.rows[0]);
         }catch(e){
             console.log(e);
@@ -105,7 +105,8 @@ export class UserController{
             const {id, nickname, mail, roles} = req.body;
 
             if(roles.length == 0){
-                return res.status(400).json({message: "no roles"})
+                let errors = [{message: "no roles", path: "roles"}];
+                return res.status(400).json({errors: errors});
             }
 
             const user = await db.query('update users set nickname = $1, mail = $2 where id = $3 returning *', [nickname, mail, id]);
@@ -220,6 +221,10 @@ export class UserController{
     }
 
     async changePassword(req, res){
+        const errors = validationResult(req);
+        if(!errors.isEmpty()){
+            return res.status(400).json({ errors: errors.array() });
+        }
         try {
             () => {
                 res.send('Get Cookie');
@@ -227,12 +232,14 @@ export class UserController{
             }
 
             const {passwordOld, passwordNew} = req.body;
+            console.log(req.body);
 
             const userId = await db.query('select user_id from users_tokens where token = $1', [req.cookies.token]);
             const user = await db.query('select password from users where id = $1', [userId.rows[0].user_id]);
 
             if(!bcrypt.compareSync(passwordOld, user.rows[0].password)){
-                return res.status(400).json({message: 'Введен неверный пароль', path: "password"});
+                let errors = [{message: 'Введен неверный пароль', path: "passwordOld"}];
+                return res.status(400).json({errors: errors});
             }
 
             const password = bcrypt.hashSync(passwordNew, 6);
