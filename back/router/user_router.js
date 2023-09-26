@@ -35,7 +35,12 @@ router.get(
     role_middleware(['admin', 'user']),
     userController.getUserProfile);
 
-    router.put('/main/password', userController.changePassword);
+    router.put(
+        '/main/password', 
+        [
+            body('passwordNew').isLength({min:4}).withMessage('некорректный пароль'),
+        ],      
+        userController.changePassword);
 
 router.put(
     '/user',

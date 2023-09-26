@@ -6,9 +6,54 @@ const np = document.getElementById('n_pass')
 const checkBoxAdmin = document.getElementById('checkBoxAdmin')
 const checkBoxUser = document.getElementById('checkBoxUser')
 const btnLogOut = document.getElementById('btnLogOut');
+const checkBoxContainer = document.getElementById('checkBoxContainer');
+
+const buttonPasswordChangeNew = document.getElementById('buttonPasswordChangeNew');
+const inputPasswordChangeNew = document.getElementById('inputPasswordChangeNew');
+const inputPasswordChangeOld = document.getElementById('inputPasswordChangeOld');
+
+
 window.onload = async () => {
     tableFullFill();
     profile();
+}
+
+buttonPasswordChangeNew.onclick = async () => {
+    inputPasswordChangeOld.classList.remove('error');
+    inputPasswordChangeNew.classList.remove('error');
+
+    let data = {
+        passwordOld: inputPasswordChangeOld.value,
+        passwordNew: inputPasswordChangeNew.value,
+    }
+
+    let response = await fetch('http://localhost:5555/main/password', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify(data),
+    }).then();
+    
+    if(!response.ok){
+        response = await response.json();
+        console.log(response);
+        response.errors.forEach(error => {
+            switch(error.path){
+                case 'passwordNew':
+                    inputPasswordChangeNew.classList.add('error');
+                break;
+                case 'passwordOld':
+                    inputPasswordChangeOld.classList.add('error');
+                break;
+            }
+        })   
+    }else{
+        inputPasswordChangeNew.value = "";
+        inputPasswordChangeOld.value = "";
+    }
+
+    
 }
 
 btnLogOut.onclick = async () => {
@@ -76,6 +121,9 @@ async function tableFullFill(users){
         if(user.roles.includes(0)){
             radio1.checked = true;
         }
+        const checkBoxContainerDinamic = document.createElement('div');
+        checkBoxContainerDinamic.classList.add('checkBoxContainer');
+
 
         const radio2 = document.createElement('input')
         const text2 = document.createElement('div')
@@ -87,6 +135,11 @@ async function tableFullFill(users){
         if(user.roles.includes(1)){
             radio2.checked = true;
         }
+        checkBoxContainerDinamic.appendChild(radio1);
+        checkBoxContainerDinamic.appendChild(text1);
+        checkBoxContainerDinamic.appendChild(radio2);
+        checkBoxContainerDinamic.appendChild(text2);
+  
 
         const upbtn = document.createElement('button')
         upbtn.className =  "btn2"
@@ -94,6 +147,11 @@ async function tableFullFill(users){
 
         upbtn.onclick = async () => {
             let roles_arr = [];
+
+            in2.classList.remove('error');
+            in3.classList.remove('error');
+            radio1.classList.remove('error');
+            radio2.classList.remove('error');
 
             if(radio1.checked){
                 roles_arr.push(0);
@@ -107,28 +165,41 @@ async function tableFullFill(users){
                 mail: in3.value,
                 roles: roles_arr
             }
-            const response = await fetch('http://localhost:5555/user', {
+            let response = await fetch('http://localhost:5555/user', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(data),
             }).then();
+
             if(response.ok){
                 tableFullFill();
+            }else{
+                response = await response.json();
+                response.errors.forEach(error => {
+                switch(error.path){
+                    case 'nickname':
+                    case'already_name':
+                        in2.classList.add('error');
+                    break;
+
+                    case 'mail':
+                        in3.classList.add('error');
+                    break;
+                    case 'roles':
+                        checkBoxContainerDinamic.classList.add('error');
+                    break;
+                }
+            })  
             }
-            // if(response.status == 400){
-            //     alert('У вас нет доступа к обновлению данных пользователя!')
-            // }
+            
         }
 
         content.appendChild(in1)
         content.appendChild(in2)
         content.appendChild(in3)
-        content.appendChild(radio1)
-        content.appendChild(text1)
-        content.appendChild(radio2)
-        content.appendChild(text2)
+        content.appendChild(checkBoxContainerDinamic)
         content.appendChild(dbtn)
         content.appendChild(upbtn)
         
@@ -155,61 +226,51 @@ addB.onclick = async () =>{
         roles: roles_arr
     }
 
-    const response = await fetch('http://localhost:5555/user', {
+    let response = await fetch('http://localhost:5555/user', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
         },
         body: JSON.stringify(data),
-    }).then(res => res.json());
+    }).then();
+
+    nn.classList.remove('error');
+    nm.classList.remove('error');
+    np.classList.remove('error');
+    checkBoxContainer.classList.remove('error');
 
     if(response.ok){
+        nn.value = nm.value = np.value = "";
+        checkBoxAdmin.checked = checkBoxUser.checked = false;
         tableFullFill();
+    }else{
+        response = await response.json();
+        response.errors.forEach(error => {
+            switch(error.path){
+                case 'nickname':
+                case'already_name':
+                    nn.classList.add('error');
+                break;
+
+                case 'mail':
+                    nm.classList.add('error');
+                break;
+                case 'password':
+                    np.classList.add('error');
+                break;
+                case 'roles':
+                    console.log('chzh');
+                    checkBoxContainer.classList.add('error');
+                break;
+            }
+        })  
     }
-    // if(response.status == 403){
-    //     alert('У вас нет доступа к созданию нового пользователя!')
-    // }
 
-    // users.forEach(element =>{
-    //     const user_name = nn;
-    //     const user_mail = nm;
-    //     switch (element.nickname) {
-    //         case user_name.value:
-    //             alert('Пользователь с таким именем уже существует!')
-    //             break;
-            
-    //     }
-    //     switch(element.mail){
-    //         case user_mail.value:
-    //             alert('Пользователь с такой почтой уже существует!')
-    //             break;
-    //     }
-        
-    // })
-
-    // nn.classList.remove('error')
-    // nm.classList.remove('error')
-    // np.classList.remove('error')
-
-    // response.errors.forEach(element => {
-    //     switch (element.path) {
-    //         case 'nickname':
-    //             nn.classList.add('error')
-
-    //             break;
-
-    //         case 'password':
-    //             np.classList.add('error')
-    //             break;
-
-    //         case 'mail':
-    //             nm.classList.add('error')
-    //             break;
-    //     }
-    // })
+    
 
 
 }
+
 async function profile(){
     const name = document.getElementById('p_name')
     const mail = document.getElementById('p_mail')
@@ -218,7 +279,6 @@ async function profile(){
     let profile= await fetch('http://localhost:5555/main/user', {
         method: 'GET',
     }).then(res => res.json());
-    const objs = profile;
 
     name.textContent = ("Ваш логин: " + profile.nickname)
     mail.textContent = ("Ваша почта: " + profile.mail)

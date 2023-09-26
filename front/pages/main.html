@@ -12,22 +12,29 @@
 <div class="cover">
     <div class="header">
         <button class="btnLogOut" id = "btnLogOut">Log out</button>
-        <div class="head">Список пользователей</div>
+        <div class="head"></div>
 
     </div>
     <div class="profile">
         <div id="p_name">Ваш логин: </div>
         <div id="p_mail">Ваша почта: </div>
         <div id="p_role">Ваша роль: </div>
+
+        <input id = "inputPasswordChangeOld" type = "password" placeholder="Старый пароль">
+        <input id = "inputPasswordChangeNew" placeholder="Новый пароль">
+        <button id = "buttonPasswordChangeNew">Сменить пароль</button>
     </div>
     <div class="add" id="add_block">
         <input class="n_name" id="n_name" placeholder="Имя нового пользователя">
         <input class="n_mail" id="n_mail" placeholder="Почта нового пользователя">
         <input class="n_password" id="n_pass"  type="password" placeholder="Пароль нового пользователя">
-        <div class="text">Администратор</div>
-        <input  type="checkbox" id = "checkBoxAdmin">
-        <div class="text">Пользователь</div>
-        <input type="checkbox" id = "checkBoxUser">
+        <div class = "checkBoxContainer" id = "checkBoxContainer">
+            <input  type="checkbox" id = "checkBoxAdmin">
+            <div class="text">Администратор</div>
+            <input type="checkbox" id = "checkBoxUser">
+            <div class="text">Пользователь</div>
+        </div>
+        
         <button class="add_btn" id="add">Добавить пользователя</button>
 
     </div>

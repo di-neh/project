@@ -90,3 +90,16 @@ body{
     position: relative;
     bottom: 10px;
 }
+
+.checkBoxContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-right: 5px;
+}
+
+.error{
+    border: 2px solid;
+    border-color: red;
+}
+
