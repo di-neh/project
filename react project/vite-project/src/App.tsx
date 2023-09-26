@@ -2,14 +2,15 @@
 
 
 import Enter from "./components/Enter.tsx";
+import Testicula from "./components/testicula.tsx";
 
 function App() {
 
   return (
     <>
       {/*<Registration></Registration>*/}
-        <Enter></Enter>
-
+      {/* <Enter></Enter> */}
+      <Testicula/>
 
     </>
   )

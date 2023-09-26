@@ -13,13 +13,18 @@ const EnterWindow = styled.div`
   margin-right: 35%;
   margin-top: 100px;
 `;
-const Enter = () => {
+
+interface IEnterProps{
+    onClick?: () => void; 
+} 
+
+const Enter: React.FC<IEnterProps> = ({onClick}) => {
     return (
         <EnterWindow>
-            <Button btnText={"У вас нет учетной записи?"} ></Button>
+            <Button btnText={"У вас нет учетной записи?"} onClick={onClick}></Button>
             <Input ph={"Логин"}></Input>
             <Input ph={"Пароль"}></Input>
-            <Button btnText = {"Опять же соси хуй быдло"}></Button>
+            <Button btnText = {"Опять же соси хуй быдло"} ></Button>
         </EnterWindow>
     );
 };

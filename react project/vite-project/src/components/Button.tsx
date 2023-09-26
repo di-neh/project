@@ -3,13 +3,14 @@ import * as React from "react";
 
 interface IButtonProps{
     btnText:string
+    onClick?: () => void;
 }
 const Butt = styled.button`
   background-color: white;
 `
-const Button:React.FC<IButtonProps> = ({btnText}) => {
+const Button:React.FC<IButtonProps> = ({btnText, onClick}) => {
     return (
-        <Butt>{btnText}</Butt>
+        <Butt onClick={onClick}>{btnText}</Butt>
 
     );
 };

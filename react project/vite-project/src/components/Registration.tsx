@@ -13,16 +13,19 @@ const Reg = styled.div`
   margin-right: 35%;
   margin-top: 100px;
 `;
-const Registration = () => {
+
+interface IRegProps{
+    onClick?: () => void; 
+} 
+
+const Registration:React.FC<IRegProps> = ({onClick}) => {
     return (
         <Reg>
-            <Button btnText={"У меня уже есть профиль"} ></Button>
+            <Button btnText={"У меня уже есть профиль"} onClick={onClick}></Button>
             <Input ph={"Логин"}></Input>
             <Input ph={"Пароль"}></Input>
             <Input ph={"Почта"}></Input>
-            <Button btnText = {"Соси хуй быдло"}></Button>
-
-
+            <Button btnText = {"Соси хуй быдло"} ></Button>
         </Reg>
     );
 };
