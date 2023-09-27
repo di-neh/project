@@ -11,7 +11,6 @@ const Butt = styled.button`
 const Button:React.FC<IButtonProps> = ({btnText, onClick}) => {
     return (
         <Butt onClick={onClick}>{btnText}</Butt>
-
     );
 };
 

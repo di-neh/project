@@ -1,17 +1,16 @@
-// import Registration from "./components/Registration.tsx";
+import BolvankaKrugTask from "./components/BolvankaKrugTask.tsx";
+import BolvankaKrugTitle from "./components/BolvankaKrugTitle.tsx";
 
 
-import Enter from "./components/Enter.tsx";
-import Testicula from "./components/testicula.tsx";
+//import Testicula from "./components/Testicula.tsx";
 
 function App() {
 
   return (
     <>
-      {/*<Registration></Registration>*/}
-      {/* <Enter></Enter> */}
-      <Testicula/>
-
+      {/* <Testicula/> */}
+      <BolvankaKrugTitle/>
+      <BolvankaKrugTask/>
     </>
   )
 }
