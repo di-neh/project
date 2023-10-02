@@ -1,17 +1,19 @@
-import BolvankaKrugTask from "./components/BolvankaKrugTask.tsx";
-import BolvankaKrugTitle from "./components/BolvankaKrugTitle.tsx";
 
+import ToDoConteiner from "./components/ToDoConteiner.tsx";
+import styled from "styled-components";
 
-//import Testicula from "./components/Testicula.tsx";
+const AppWrapper = styled.div`
+  width: 100%;
+  min-height: 100vh;
+  background: #9b9a9a;
+`
 
 function App() {
 
   return (
-    <>
-      {/* <Testicula/> */}
-      <BolvankaKrugTitle/>
-      <BolvankaKrugTask/>
-    </>
+    <AppWrapper>
+      <ToDoConteiner/>
+    </AppWrapper>
   )
 }
 

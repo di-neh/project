@@ -11,7 +11,7 @@ const Inputt = styled.input`
 `
 const Input:React.FC<IInputProps> = ({ph}) => {
     return (
-            <Inputt placeholder={ph}/>
+            <Inputt placeholder={ph} />
     );
 };
 

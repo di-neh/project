@@ -1,24 +1,34 @@
 import styled from "styled-components";
 
 const DivKrug = styled.div`
-    width: 300px;
+    width: 95%;
     border-radius: 5px;
     background: black;
-    color: white;
     padding: 5px;
-    margin-bottom: 10px;
+  margin-top: 2px;
+
+    
+  
 `
 
 const TextAreaStyled = styled.textarea`
     background: black;
-    border: solid 0px;
+    border: none;
+  color: white;
+  resize: none;
+  width: 100%;
+  text-align:center;
+  &:focus{
+    outline: none;
+  }
+  
 `
 
 const BolvankaKrugTask:React.FC = () => {
     return (
         <>
             <DivKrug>
-                <TextAreaStyled >
+                <TextAreaStyled placeholder="Добавить задачу">
 
                 </TextAreaStyled>
             </DivKrug>
