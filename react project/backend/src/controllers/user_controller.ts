@@ -5,18 +5,26 @@ import { AppDataSource } from "../db/data-source"
 import { EnumRoles } from "../common/enums";
 import * as bcrypt from "bcrypt";
 import { Role } from "../entities/Role";
-import { cos } from "mathjs";
+import { cos, number } from "mathjs";
 import { IUser } from "../common/interfaces";
 import { serializeWithBufferAndIndex } from "typeorm/driver/mongodb/bson.typings";
 import { Token } from "../entities/Token";
+import { DataSource } from "typeorm";
 
 export interface IRequestBody{
-    nickname: string,
-    password: string,
-    mail: string,
+    nickname?: string,
+    password?: string,
+    passwordOld?: string,
+    passwordNew?: string,
+    mail?: string,
     roles?: number[],
     id?: number
 }
+
+export interface IRequestCookies{
+    token?: string,
+}
+
 
 export interface IRequestParams{
     id:number
@@ -38,7 +46,7 @@ export class UserController{
         }
 
         try {
-            const {nickname, password, mail, roles} = req.body;
+            let {nickname, password, mail, roles} = req.body;
             const hashPassword = bcrypt.hashSync(password, 6);
 
             let newUser = new User(nickname, mail, hashPassword);
@@ -46,17 +54,20 @@ export class UserController{
 
             const userRoles:Role[] = [];
 
+            if(roles === undefined){
+                roles = [1];
+            }
+
             for(let roleItem of roles){
+                console.log(roleItem)
                 const role = await roleRepository.findOne({ where: { id:  roleItem} });
                 if(role){
                     userRoles.push(role);
                 }
             }
 
-            if (userRoles.length > 0) {
-                newUser.roles = userRoles;
-                await userRepository.save(newUser);
-            }
+            newUser.roles = userRoles;
+            await userRepository.save(newUser);
 
             res.status(200).json(newUser);
         } catch (error) {
@@ -151,6 +162,141 @@ export class UserController{
         } catch (error) {
             console.log(error);
             res.status(400).json({message:'Error during creating user'});
+        }
+    }
+
+    async registration(req:Request<{}, {}, IRequestBody>, res:Response){
+        const errors = validationResult(req);
+        if(!errors.isEmpty()){
+            return res.status(400).json({ errors: errors.array() });
+        }
+        try {
+            const {mail, nickname, password} = req.body;
+            
+            const hashPassword = bcrypt.hashSync(password, 6);
+
+            let newUser = new User(nickname, mail, hashPassword);
+            const role = await roleRepository.findOne({ where: { id: 1} });
+
+            newUser.roles = [role];
+
+            const token = bcrypt.hashSync(nickname + password + mail, 4);
+
+            res.cookie('token', token);
+
+            await userRepository.save(newUser);
+
+            const newToken = new Token(token, newUser);
+            await tokenRepository.save(newToken);
+
+            res.status(200).json({newUser: newUser, message: 'Set Cookie'});
+        } catch (error) {
+            console.log(error);
+            res.status(400).json({message:'Registration error'});
+        }
+    }
+
+    async login(req:Request<{}, {}, IRequestBody>, res:Response){
+        try {
+            const {nickname, password} = req.body;
+
+            const pretendent = await userRepository.findOne({where:{nickname: nickname}});
+
+            if(!pretendent){
+                return res.status(400).json({message: 'No nickname'})
+            }
+
+            if(!bcrypt.compareSync(password, pretendent.password)){
+                return res.status(400).json({message: 'Wrong Password'})
+            }
+
+            const token = bcrypt.hashSync(nickname + password + Date.now(), 4);
+
+            res.cookie('token', token);
+            const newToken = new Token(token, pretendent);
+            await tokenRepository.save(newToken);
+
+            return res.status(200).json({message: 'Set Cookie'});
+
+        } catch (error) {
+            console.log(error);
+            res.status(400).json({message:'Registration error'});
+        }
+    }
+
+    async getCookie(req:Request<{}, {}, {}, IRequestCookies>, res:Response){
+        try {
+            () => {
+                res.send('Get Cookie');
+                res.end;
+            }
+
+            const cookies: IRequestCookies = req.cookies;
+
+            const token = await tokenRepository.findOne({where:{token: cookies.token}});
+
+            if(!token){
+                return res.status(403).json({message: 'pizda'})
+            }
+
+            return res.status(200).json({message: 'good'})
+
+        } catch (error) {
+            
+        }
+    }
+
+    async logOut(req:Request<{}, {}, {}, IRequestCookies>, res:Response){
+        try {
+            () => {
+                res.send('Get Cookie');
+                res.end;
+            }
+
+            const cookies: IRequestCookies = req.cookies;
+
+            const token = await tokenRepository.findOne({where:{token: cookies.token}});
+            await tokenRepository.remove(token);
+
+            return res.status(200).json({message: 'good'})
+
+        } catch (error) {
+            
+        }
+    }
+
+    async changePaaword(req:Request<{}, {}, IRequestBody>, res:Response){
+        try {
+            () => {
+                res.send('Get Cookie');
+                res.end;
+            }
+
+            const {passwordNew, passwordOld } = req.body
+
+            const cookies: IRequestCookies = req.cookies;
+
+            const token = await tokenRepository.findOne({where:{token: cookies.token}});
+
+            const user = token.user;
+
+            if(!bcrypt.compareSync(passwordOld, user.password)){
+                let errors = [{message: 'Введен неверный пароль', path: "passwordOld"}];
+                return res.status(400).json({errors: errors});
+            }
+
+            const password = bcrypt.hashSync(passwordNew, 6);
+
+            user.password = password;
+
+            await userRepository.save(user);
+
+            res.status(200).json(user);
+
+            
+        } catch (error) {
+            console.log(error);
+            res.status(400).json({message:'Error during chanching password'});
         }
     }
 }

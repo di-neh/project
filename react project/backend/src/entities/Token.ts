@@ -10,6 +10,11 @@ import { User } from "./User";
 @Entity("tokens")
 export class Token {
 
+    constructor(token:string, user:User){
+        this.token = token,
+        this.user = user;
+    }
+
     @PrimaryGeneratedColumn()
     id: number
 
