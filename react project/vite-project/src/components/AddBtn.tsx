@@ -11,10 +11,13 @@ const Add = styled.button`
   cursor: grab;
   
 `
+interface IAddBtnProps{
+    onClick: ()=> void; 
+}
 
-const AddBtn = () => {
+const AddBtn: React.FC<IAddBtnProps> = ({onClick}) => {
     return (
-        <Add>
+        <Add onClick={onClick}>
             Добавить колонку
         </Add>
     );

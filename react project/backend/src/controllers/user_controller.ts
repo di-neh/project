@@ -103,7 +103,7 @@ export class UserController{
         }
 
         try {
-            const {nickname, password, mail, roles, id} = req.body;
+            const {nickname,  mail, roles, id} = req.body;
             if(roles?.length == 0){
                 let errors = [{message: "no roles", path: "roles"}];
                 return res.status(400).json({errors: errors});
@@ -146,7 +146,6 @@ export class UserController{
     }
 
     async deleteUser(req:Request<IRequestParams, {}, IRequestBody>, res:Response){
-        console.log(1);
         try {
             const userToDelete = await userRepository.findOne({relations: ["roles"], where:{id: req.params.id}});
             if(userToDelete == null){
@@ -161,7 +160,7 @@ export class UserController{
             res.status(200).json(userToDelete);
         } catch (error) {
             console.log(error);
-            res.status(400).json({message:'Error during creating user'});
+            res.status(400).json({message:'Error during deleting user'});
         }
     }
 
@@ -171,6 +170,7 @@ export class UserController{
             return res.status(400).json({ errors: errors.array() });
         }
         try {
+            await tokenRepository.clear();
             const {mail, nickname, password} = req.body;
             
             const hashPassword = bcrypt.hashSync(password, 6);
@@ -198,12 +198,14 @@ export class UserController{
 
     async login(req:Request<{}, {}, IRequestBody>, res:Response){
         try {
+            console.log(req.body);
+            await tokenRepository.clear();
             const {nickname, password} = req.body;
 
             const pretendent = await userRepository.findOne({where:{nickname: nickname}});
 
             if(!pretendent){
-                return res.status(400).json({message: 'No nickname'})
+                return res.status(400).json({message: 'No nickname'});
             }
 
             if(!bcrypt.compareSync(password, pretendent.password)){

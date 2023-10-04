@@ -18,26 +18,23 @@ const Input = styled.input`
     outline: none;
   }
 `
-// interface Input {
-//     inputValue: string; // Тип значения из поля ввода
-// }
-const BolvankaKrugTitle:React.FC = () => {
-    // constructor(props: {}) {
-    //     super(props);
-    //     this.state = {
-    //         inputValue: '' // Исходное значение поля ввода
-    //     };
-    // }
-    //
-    // handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    //     this.setState({
-    //         inputValue: event.target.value // Обновляем значение поля ввода при изменении
-    //     });
-    // }
+
+interface IBolvankaKrugTitleProps{
+    onInputChange : (value: string) => void;
+    title?: string
+}
+
+const BolvankaKrugTitle:React.FC<IBolvankaKrugTitleProps> = ({ onInputChange, title})  => {
+
+    const handleInputChange = (event : React.ChangeEvent<HTMLInputElement>)  =>{
+        const inputValue = event.target.value;
+        onInputChange(inputValue);
+    }
+
     return (
         <>
             <DivKrug>
-                <Input placeholder="Название задачи">
+                <Input onChange={handleInputChange} placeholder="Без названия" value = {title}>
 
                 </Input>
             </DivKrug>

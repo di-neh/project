@@ -25,7 +25,7 @@ const Registration:React.FC<IRegProps> = ({onClick}) => {
             <Input ph={"Логин"}></Input>
             <Input ph={"Пароль"}></Input>
             <Input ph={"Почта"}></Input>
-            <Button btnText = {"Соси хуй быдло"} ></Button>
+            <Button btnText = {"Регистрация"} ></Button>
         </Reg>
     );
 };
