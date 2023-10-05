@@ -65,8 +65,11 @@ export class GroupController{
                 res.send('Get Cookie');
                 res.end;
             }
-
-            const token = await tokenRepository.findOne({where:{token: req.cookies.token}});
+            const token = await tokenRepository.findOne({
+                where:{token: req.cookies.token},
+                relations: ['user']
+            });
+            console.log( token);
             const groups = await GroupRepository.find({where:{userId: token.user.id}});
             res.status(200).json(groups);
         } catch (e) {

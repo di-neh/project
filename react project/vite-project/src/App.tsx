@@ -1,13 +1,13 @@
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import ToDoConteiner from "./components/ToDoConteiner.tsx";
-import styled from "styled-components";
-import Testicula from "./components/Testicula.tsx";
+import ToDoConteiner from "./components/ToDo/ToDoConteiner.tsx";
+// import styled from "styled-components";
+import Testicula from "./components/auth/Testicula.tsx";
 
-const AppWrapper = styled.div`
-  min-height: 100vh;
-  background: #9b9a9a;
-`
+// const AppWrapper = styled.div`
+//   min-height: 100vh;
+//   background: #9b9a9a;
+// `
 
 function App() {
 

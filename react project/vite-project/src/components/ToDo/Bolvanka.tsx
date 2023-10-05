@@ -14,10 +14,9 @@ const Bulova = styled.div`
 
 interface IBolvankaProps{
     title: string,
-    task: string
 }
 
-const Bolvanka: React.FC<IBolvankaProps> = ({title, task}) => {
+const Bolvanka: React.FC<IBolvankaProps> = ({title}) => {
 
     const ToDoAdd = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (event.key === 'Enter' && !event.shiftKey) {
@@ -27,7 +26,7 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title, task}) => {
     } 
 
     const [inputTitleValue, setInputTitleValue] = useState<string>(title);
-    const [testAreaTaskValue, setTestAreaTaskValue] = useState<string>(task);
+    const [testAreaTaskValue, setTestAreaTaskValue] = useState<string>("");
     const [toDoArr, setToDoArr] = useState<string[]>([]);
 
     const HandleBolvankaTitleChange = (value: string) => {

@@ -3,6 +3,7 @@ import Button from "./Button.tsx";
 
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const EnterWindow = styled.div`
   background-color: grey;
@@ -42,6 +43,8 @@ interface IRequestData{
 
 const Enter: React.FC<IEnterProps> = ({onClick}) => {
 
+    const navigate = useNavigate();
+
     const [inputLoginVal, setInputLoginVal] = useState<string>('');
 
     const HandlerInputLoginValue = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,13 +58,16 @@ const Enter: React.FC<IEnterProps> = ({onClick}) => {
     }
 
     const logIn = async () => { 
-        const reqData:IRequestData = {nickname: inputLoginVal, password: inputPasswordnVal}
-       
-            const response = await axios.post('http://localhost:5661/login', reqData, {
+        try {  
+            const reqData:IRequestData = {nickname: inputLoginVal, password: inputPasswordnVal}
+            await axios.post('http://localhost:5661/login', reqData, {
                 headers : {'Content-Type': 'application/json'},
                 withCredentials: true
             });
-            console.log('Ответ от сервера:', response.data);
+            navigate('/main');
+        } catch (e) {
+            console.log(e);
+        }
         
     }
 
