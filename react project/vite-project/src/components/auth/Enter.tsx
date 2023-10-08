@@ -75,7 +75,7 @@ const Enter: React.FC<IEnterProps> = ({onClick}) => {
         <EnterWindow>
             <Button btnText={"У вас нет учетной записи?"} onClick={onClick}></Button>
             <Input placeholder={"Логин"}  onChange = {HandlerInputLoginValue} value={inputLoginVal}></Input>
-            <Input placeholder={"Пароль"} onChange = {HandlerInputPasswordValue} value={inputPasswordnVal}></Input>
+            <Input type = "password"  placeholder={"Пароль"} onChange = {HandlerInputPasswordValue} value={inputPasswordnVal}></Input>
             <Button btnText = {"Vhod"} onClick={logIn} ></Button>
         </EnterWindow>
     );

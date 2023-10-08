@@ -1,5 +1,6 @@
 import styled from "styled-components";
 
+
 const DivKrug = styled.div`
     width: 95%;
     border-radius: 5px;
@@ -21,22 +22,22 @@ const Input = styled.input`
 
 interface IBolvankaKrugTitleProps{
     onInputChange : (value: string) => void;
-    title?: string
+    updateHandler : () => void;
+    title: string
 }
 
-const BolvankaKrugTitle:React.FC<IBolvankaKrugTitleProps> = ({ onInputChange, title})  => {
+const BolvankaKrugTitle:React.FC<IBolvankaKrugTitleProps> = ({ onInputChange, title, updateHandler})  => {
 
     const handleInputChange = (event : React.ChangeEvent<HTMLInputElement>)  =>{
         const inputValue = event.target.value;
         onInputChange(inputValue);
+        updateHandler();
     }
 
     return (
         <>
             <DivKrug>
-                <Input onChange={handleInputChange} placeholder="Без названия" value = {title}>
-
-                </Input>
+                <Input  onChange={handleInputChange} placeholder="Без названия" value = {title}></Input>
             </DivKrug>
         </>
         

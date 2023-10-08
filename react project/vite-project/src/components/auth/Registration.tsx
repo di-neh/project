@@ -39,7 +39,6 @@ interface IREquestData{
     mail:string,
 }
 
-
 const Registration:React.FC<IRegProps> = ({onClick}) => {
     const navigate = useNavigate();
 
@@ -67,7 +66,7 @@ const Registration:React.FC<IRegProps> = ({onClick}) => {
                 withCredentials: true
             });
             navigate('/main');
-             
+        
         } catch (e) {
             console.log(e);
         }   
@@ -77,7 +76,7 @@ const Registration:React.FC<IRegProps> = ({onClick}) => {
         <Reg>
             <Button btnText={"У меня уже есть профиль"} onClick={onClick}></Button>
             <Input placeholder={"Логин"} onChange={HandleInputNicknameValue} value={inputNicknameValue} ></Input>
-            <Input placeholder={"Пароль"} onChange = {HandleInputPasswordValue} value={inputPasswordValue}></Input>
+            <Input type = "password" placeholder={"Пароль"} onChange = {HandleInputPasswordValue} value={inputPasswordValue}></Input>
             <Input placeholder={"Почта"} onChange = {HandleInputMailValue} value={inputMailValue}></Input>
             <Button btnText = {"Регистрация"} onClick={HandlleButtonClick} ></Button>
         </Reg>

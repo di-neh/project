@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-
 const Conteiner = styled.div`
   display: flex;
   flex-direction: row;
@@ -14,7 +13,19 @@ const Conteiner = styled.div`
 interface IBolvankaData{
     id: number,
     title: string,
+}
 
+interface IGroupData{
+    id: number,
+    name: string,
+}
+
+interface IResponseData{
+    data: IGroupData[];
+}
+
+interface IResponseData2{
+    data: IGroupData;
 }
 
 const ToDoConteiner:React.FC = () => {
@@ -26,27 +37,15 @@ const ToDoConteiner:React.FC = () => {
     }, []); 
 
     const FetchGroups = async () => {
-        // const response = await axios.get('http://localhost:5661/groups', {
-        //     headers : {'Content-Type': 'application/json'},
-        //     withCredentials: true
-        // });
-
-        // response.data.forEach(element => {
-        //     setBolvankaData([...bolvankaData, {id: element.id, title: element.name}])
-        // });
-
-        // console.log(response.data);
-        // console.log(bolvankaData);
         try {
-            const response = await axios.get('http://localhost:5661/groups', {
+                const response:IResponseData = await axios.get('http://localhost:5661/groups', {
                 headers: {'Content-Type': 'application/json'},
                 withCredentials: true
             });
     
-            setBolvankaData(prevData => [
-                ...prevData,
-                ...response.data.map(element => ({ id: element.id, title: element.name }))
-            ]);
+            setBolvankaData(
+                response.data.map(element => ({ id: element.id, title: element.name }))
+            );
     
             console.log('Response data:', response.data);
         } catch (error) {
@@ -54,14 +53,50 @@ const ToDoConteiner:React.FC = () => {
         }
     };
 
-    const AddBracket = () => {
-        setBolvankaData([...bolvankaData, {id: 14, title: ''}])
+    const AddBracket = async () => {
+        try {
+            const response:IResponseData2 = await axios.post('http://localhost:5661/groups', {
+                headers: {'Content-Type' : 'application/json'},
+                withCredentials: true
+            });
+            
+            setBolvankaData(prevData => [
+                ...prevData,
+                {id: response.data.id, title: response.data.name}
+            ]);
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const DelteComponent = (id:number) => {
+        try {
+            setBolvankaData(prevData => {
+                const updatedData = prevData.filter((_, index) => index !== id);
+                return updatedData;
+            });
+            FetchGroups();
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    const UpdateComponent = (id:number) => {
+        try {
+            setBolvankaData(prevData => {
+                const updatedData = prevData.filter((_, index) => index !== id);
+                return updatedData;
+            });
+            FetchGroups();
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     return (
         <Conteiner>
             {bolvankaData.map((item) => 
-                <Bolvanka key = {item.id} title={item.title}  />
+                <Bolvanka key = {item.id} title={item.title}  id = {item.id} DelteComponent={DelteComponent} UpdateComponent={UpdateComponent}/>
             )}
             <AddBtn onClick={AddBracket} />
         </Conteiner>

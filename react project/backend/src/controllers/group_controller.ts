@@ -8,11 +8,15 @@ import { Token } from "../entities/Token";
 interface IRequestBody{
     id?:number,
     name?:string, 
-    userId?:number
+    userId?:number,
 }
 
 export interface IRequestParams{
     id:number
+}
+
+export interface IRequestCookies{
+    token?: string,
 }
 
 const GroupRepository = AppDataSource.getRepository(Group);
@@ -24,11 +28,22 @@ export class GroupController{
 
     async CreateGroup(req:Request<{}, {}, IRequestBody>, res:Response){
         try {
+
+            () => {
+                res.send('Get Cookie');
+                res.end;
+            }
+
+            const token = await tokenRepository.findOne({
+                where:{token: req.cookies.token},
+                relations: ['user']
+            });
+            
             const {id, name, userId} = req.body;
-            const group = new Group(name, userId, id);
+            const group = new Group(name, token.user.id);
 
             await GroupRepository.save(group);
-            res.status(200).json(group);
+            return res.status(200).json(group);
         } catch (e) {
             console.log(e);
             res.status(400).json({message: "error during creating group"});
@@ -69,12 +84,25 @@ export class GroupController{
                 where:{token: req.cookies.token},
                 relations: ['user']
             });
-            console.log( token);
+            
             const groups = await GroupRepository.find({where:{userId: token.user.id}});
-            res.status(200).json(groups);
+            return res.status(200).json(groups);
         } catch (e) {
             console.log(e);
             res.status(400).json({message: "error deleting getting group"});
+        }
+    }
+
+    async UpdateGroup(req:Request<IRequestParams, {}, IRequestBody>, res:Response){
+        try {
+            const {name} = req.body;   
+            const group = await GroupRepository.findOne({where:{id: req.params.id}});
+            group.name = name;
+            await GroupRepository.save(group);
+            return res.status(200).json(group);
+        } catch (e) {
+            console.log(e);
+            res.status(400).json({message: "error during updating group"});
         }
     }
 

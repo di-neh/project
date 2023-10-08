@@ -11,6 +11,8 @@ router.post('/groups', controller.CreateGroup);
 
 router.delete('/groups/:id', controller.DeleteGroup);
 
+router.put('/groups/:id', controller.UpdateGroup)
+
 export {
     router as GroupRouter
 }

@@ -1,14 +1,33 @@
 import * as express from "express";
-import { body, validationResult } from 'express-validator';
+import { body} from 'express-validator';
 import { UserController } from "../controllers/user_controller";
 
 const userController = new UserController();
 
 const router =  express.Router();
 
-router.post('/user', userController.createUser);
-router.post('/registration', userController.registration);
-router.post('/login', userController.login);
+router.post(
+    '/user', 
+    [
+        body('nickname').isLength({min:4}).withMessage('некорректное имя пользователя'),
+        body('mail').isEmail().withMessage('некорректный адрес электронной почты'),
+        body('password').isLength({ min: 6 }).withMessage('некорректный пароль'),
+    ],
+    userController.createUser
+);
+router.post(
+    '/registration',
+    [
+        body('nickname').isLength({min:4}).withMessage('некорректное имя пользователя'),
+        body('mail').isEmail().withMessage('некорректный адрес электронной почты'),
+        body('password').isLength({ min: 6 }).withMessage('некорректный пароль'),
+    ], 
+    userController.registration
+);
+router.post(
+    '/login',
+    userController.login
+);
 
 router.get('/users', userController.getUsers);
 router.get('/users/:id', userController.getOneUser);
