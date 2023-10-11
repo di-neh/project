@@ -3,11 +3,17 @@ import AddBtn from "./AddBtn.tsx";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Header from "./Header.tsx";
 
 const Conteiner = styled.div`
   display: flex;
   flex-direction: row;
   
+`
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
 `
 
 interface IBolvankaData{
@@ -94,12 +100,17 @@ const ToDoConteiner:React.FC = () => {
     }
 
     return (
-        <Conteiner>
-            {bolvankaData.map((item) => 
-                <Bolvanka key = {item.id} title={item.title}  id = {item.id} DelteComponent={DelteComponent} UpdateComponent={UpdateComponent}/>
-            )}
-            <AddBtn onClick={AddBracket} />
-        </Conteiner>
+        <Wrapper>
+            <Header></Header>
+            <Conteiner>
+
+                {bolvankaData.map((item) =>
+                    <Bolvanka key = {item.id} title={item.title}  id = {item.id} DelteComponent={DelteComponent} UpdateComponent={UpdateComponent}/>
+                )}
+                <AddBtn onClick={AddBracket} />
+            </Conteiner>
+        </Wrapper>
+
     );
 };
 
