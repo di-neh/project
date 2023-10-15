@@ -99,7 +99,7 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DelteComponent, UpdateC
                 <Button onClick={DeleteHandler}>delete</Button>
                 <Button onClick={UpdateHandler}>update</Button>
             </ButtonsContainer>
-            <BolvankaKrugTitle  onInputChange={HandleBolvankaTitleChange} title={inputTitleValue} updateHandler={UpdateHandler}/>
+            <BolvankaKrugTitle  onInputChange={HandleBolvankaTitleChange} title={inputTitleValue} />
             <BolvankaKrugTask   onTextAreaChange={HandleBolvankaTaskChange}  onKeyDown={ToDoAdd} task={textAreaTaskValue}/>
             {toDoArr.map((todo) => 
                 <BolvankaKrugItem textContent={todo}/>

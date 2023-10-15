@@ -22,16 +22,14 @@ const Input = styled.input`
 
 interface IBolvankaKrugTitleProps{
     onInputChange : (value: string) => void;
-    updateHandler : () => void;
     title: string
 }
 
-const BolvankaKrugTitle:React.FC<IBolvankaKrugTitleProps> = ({ onInputChange, title, updateHandler})  => {
+const BolvankaKrugTitle:React.FC<IBolvankaKrugTitleProps> = ({ onInputChange, title})  => {
 
     const handleInputChange = (event : React.ChangeEvent<HTMLInputElement>)  =>{
         const inputValue = event.target.value;
         onInputChange(inputValue);
-        updateHandler();
     }
 
     return (
@@ -40,7 +38,6 @@ const BolvankaKrugTitle:React.FC<IBolvankaKrugTitleProps> = ({ onInputChange, ti
                 <Input  onChange={handleInputChange} placeholder="Без названия" value = {title}></Input>
             </DivKrug>
         </>
-        
     );
 };
 

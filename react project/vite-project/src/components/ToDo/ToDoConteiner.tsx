@@ -103,7 +103,6 @@ const ToDoConteiner:React.FC = () => {
         <Wrapper>
             <Header></Header>
             <Conteiner>
-
                 {bolvankaData.map((item) =>
                     <Bolvanka key = {item.id} title={item.title}  id = {item.id} DelteComponent={DelteComponent} UpdateComponent={UpdateComponent}/>
                 )}
