@@ -32,6 +32,7 @@ router.post(
 router.get('/users', userController.getUsers);
 router.get('/users/:id', userController.getOneUser);
 router.get('/main', userController.getCookie);
+router.get('/userProfile', userController.GetUserProfile);
 
 router.put('/users', userController.updateUser);
 

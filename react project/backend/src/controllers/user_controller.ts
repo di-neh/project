@@ -301,4 +301,19 @@ export class UserController{
             res.status(400).json({message:'Error during chanching password'});
         }
     }
+    async GetUserProfile(req:Request<{}, {}, IRequestBody>, res:Response){
+        try {
+            () => {
+                res.send('Get Cookie');
+                res.end;
+            }
+            const cookies: IRequestCookies = req.cookies;
+            const token = await tokenRepository.findOne({where:{token: cookies.token}, relations: ['user']});
+            console.log(token.user);
+            res.status(200).json(token.user);
+        } catch (error) {
+            console.log(error);
+            res.status(400).json({message:'Error during getting profile'}); 
+        }
+    }
 }
