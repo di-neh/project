@@ -52,8 +52,6 @@ const ToDoConteiner:React.FC = () => {
             setBolvankaData(
                 response.data.map(element => ({ id: element.id, title: element.name }))
             );
-    
-            console.log('Response data:', response.data);
         } catch (error) {
             console.error('Error fetching groups:', error);
         }
