@@ -1,5 +1,7 @@
 import styled from "styled-components";
+
 import logo from  "../ToDo/statics/копик.jpg";
+
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -28,7 +30,7 @@ const AvatarImg = styled.img`
   
 `
 
-const Avatar = styled.div`
+const Avatar = styled.button`
   margin-left: 5px;
   display: inline-block;
   width: 45px;
@@ -36,8 +38,42 @@ const Avatar = styled.div`
   border-radius: 50%;
   overflow: hidden;
 `
+const Menu = styled.nav`
+  position: absolute;
+  top: 47px;
+  right: 5px;
+  width: 170px;
+  padding: 15px;
+  background: white;
+  border: 1px solid black;
+  border-radius: 7px;
+  color: black;
+  opacity: ${(props) => (props.active ? '1' : '0')};;
+  transform: translateY(${(props) => (props.active ? '0' : '-10px')};);
+  visibility: ${(props) => (props.active ? 'visible' : 'hidden')};;
+  transition: 0.1s;
+  //&:active{
+  //  opacity: 1;
+  //  transform: translateY(0);
+  //  visibility: visible;
+  //}
+`
+const Menu_list = styled.ul`
+  margin: 0;
+  width: 100%;
+  padding: 0;
+  list-style-type: none;
+
+`
+const Menu_item = styled.li`
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  cursor: pointer;
+`
 
 const Header = () => {
+
 
   interface IUserProfile{
     mail: string,
@@ -69,6 +105,12 @@ const Header = () => {
     }
   }
 
+
+    const [active, setActive] = useState(false);
+    const offBtn = () =>{
+        setActive(!active);
+    }
+
     return (
         <Wrapper>
             <Box1>Хуй</Box1>
@@ -77,9 +119,19 @@ const Header = () => {
                     <div style={{fontSize:10}}> {userProfile.mail} </div>
                     <div>{userProfile.nickname}</div>
                 </div>
-                <Avatar>
+                <Avatar onClick={offBtn} active={active}>
+
                     <AvatarImg src={logo}></AvatarImg>
                 </Avatar>
+                <Menu active={active}>
+                    <Menu_list>
+                        <Menu_item>Профиль</Menu_item>
+                        <Menu_item>Настройки</Menu_item>
+                        <Menu_item>Ночной режим</Menu_item>
+                        <Menu_item>Выход</Menu_item>
+
+                    </Menu_list>
+                </Menu>
 
 
             </Box2>
