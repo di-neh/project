@@ -8,7 +8,7 @@ import axios from "axios";
 const Wrapper = styled.div`
   width: 100%;
   height: 45px;
-  background: black;
+  background: #383a3f;
   color: white;
   display: flex;
   justify-content: space-between;

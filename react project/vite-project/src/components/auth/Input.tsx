@@ -6,6 +6,7 @@ interface IInputProps{
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     value: string;
     type?: string;
+    backgroundColor?: string;
 }
 
 const Inputt = styled.input`
@@ -21,9 +22,13 @@ const Inputt = styled.input`
     outline: none;
   }
 `
-const Input:React.FC<IInputProps> = ({ph, type, value, onChange}) => {
+const Input:React.FC<IInputProps> = ({ph, type, value, onChange, backgroundColor}) => {
+    const componentStyle = {
+        backgroundColor: backgroundColor,
+        // Другие стили компонента
+    };
     return (
-      <Inputt placeholder={ph} type={type} value={value} onChange={onChange}/>
+      <Inputt placeholder={ph} type={type} value={value} onChange={onChange} style={componentStyle}/>
     );
 };
 

@@ -4,14 +4,15 @@ interface IBolvankaKrugItem{
 }
 
 const Item = styled.div`
-  width: 95%;
+  width: 250px;
   border-radius: 5px;
   color: white;
-  background: black;
+  background: #383a3f;
   padding: 5px;
   margin-top: 2px;
   display: flex;
   justify-content: space-between;
+  word-break: break-all;
 `
 
 const CheckBox = styled.input`
@@ -21,7 +22,7 @@ const CheckBox = styled.input`
 const BolvankaKrugItem:React.FC<IBolvankaKrugItem> = ( {textContent} ) => {
     return (
         <Item>
-            {textContent}
+            <div style={{padding:"7px"}}>{textContent}</div>
             <CheckBox type={"checkbox"}></CheckBox>
         </Item>
     );

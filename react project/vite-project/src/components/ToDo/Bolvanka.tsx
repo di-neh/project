@@ -4,6 +4,7 @@ import BolvankaKrugTask from "./BolvankaKrugTask.tsx";
 import { useState } from "react";
 import BolvankaKrugItem from "./BolvankaKrugItem.tsx";
 import axios from "axios";
+import Button from "../auth/Button.tsx";
 
 
 const Bulova = styled.div`
@@ -13,17 +14,20 @@ const Bulova = styled.div`
   flex-direction: column; 
 `
 
-const Button = styled.button`
-    border-radius: 5px;
-    background: black;
-    color: white;
-    padding: 3px;
-    margin:2px;
-    width: 48%;
-`
+// const Button = styled.button`
+//     border-radius: 5px;
+//     background: black;
+//     color: white;
+//     padding: 3px;
+//     margin:2px;
+//     width: 48%;
+// `
 
 const ButtonsContainer = styled.div`
-    width: 95%;
+  margin-top: 10px;
+    display: flex;
+  justify-content: space-between;
+  width: 200px;
 `
 
 interface IBolvankaProps{
@@ -96,8 +100,8 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DelteComponent, UpdateC
     return (
         <Bulova>
             <ButtonsContainer>
-                <Button onClick={DeleteHandler}>delete</Button>
-                <Button onClick={UpdateHandler}>update</Button>
+                <Button btnText = {"Удалить"}  onClick={DeleteHandler}></Button>
+                <Button btnText = {"Обновить"}  onClick={UpdateHandler}></Button>
             </ButtonsContainer>
             <BolvankaKrugTitle  onInputChange={HandleBolvankaTitleChange} title={inputTitleValue} />
             <BolvankaKrugTask   onTextAreaChange={HandleBolvankaTaskChange}  onKeyDown={ToDoAdd} task={textAreaTaskValue}/>

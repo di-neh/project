@@ -4,10 +4,11 @@ import Button from "./Button.tsx";
 import { useNavigate  } from 'react-router-dom';
 import { useState } from "react";
 import axios from "axios";
+import Input from "./Input.tsx";
 
 
 const Reg = styled.div`
-  background-color: grey;
+  background: #383a3f;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -18,16 +19,7 @@ const Reg = styled.div`
   margin-top: 100px;
 `;
 
-const Input = styled.input`
-  background-color: white;
-  width: 100%;
-  border: 0px;
-  text-align:center;
-  color: black;
-  &:focus{
-    outline: none;
-  }
-`
+
 
 interface IRegProps{
     onClick?: () => void; 
@@ -75,9 +67,9 @@ const Registration:React.FC<IRegProps> = ({onClick}) => {
     return (
         <Reg>
             <Button btnText={"У меня уже есть профиль"} onClick={onClick}></Button>
-            <Input placeholder={"Логин"} onChange={HandleInputNicknameValue} value={inputNicknameValue} ></Input>
-            <Input type = "password" placeholder={"Пароль"} onChange = {HandleInputPasswordValue} value={inputPasswordValue}></Input>
-            <Input placeholder={"Почта"} onChange = {HandleInputMailValue} value={inputMailValue}></Input>
+            <Input ph={"Логин"} onChange={HandleInputNicknameValue} value={inputNicknameValue} ></Input>
+            <Input type = "password" ph={"Пароль"} onChange = {HandleInputPasswordValue} value={inputPasswordValue}></Input>
+            <Input ph={"Почта"} onChange = {HandleInputMailValue} value={inputMailValue}></Input>
             <Button btnText = {"Регистрация"} onClick={HandlleButtonClick} ></Button>
         </Reg>
     );

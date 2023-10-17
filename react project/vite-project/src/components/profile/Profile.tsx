@@ -9,7 +9,6 @@ const Box = styled.div`
   background: #383a3f;
   border-radius: 10px;
   padding: 25px;
-  font-family: Trebuchet MS;
   color: #ddd;
 `
 const Profile = () => {
@@ -18,11 +17,11 @@ const Profile = () => {
             <Box>
                 <h1>Профиль</h1>
                 <h2>Имя</h2>
-                <Input ph={"Арсений Головатч"}></Input>
+                <Input value={""} ph={"Арсений Головатч"}></Input>
                 <h2>Фамилия</h2>
-                <Input ph={""}></Input>
+                <Input value={""} ph={""}></Input>
                 <h2>Почта</h2>
-                <Input ph={""}></Input>
+                <Input value={""} ph={""}></Input>
             </Box>
         </div>
     );

@@ -5,18 +5,20 @@ import styled from "styled-components";
 const DivKrug = styled.div`
     width: 95%;
     border-radius: 5px;
-    background: black;
+    background: none;
     padding: 5px;
     margin-top: 2px;
 `
 
 const TextAreaStyled = styled.textarea`
-    background: black;
+  background: #383a3f;
     border: none;
   color: white;
   resize: none;
   width: 100%;
-  text-align:center;
+  border-radius: 7px;
+  padding-left: 15px;
+  padding-top: 10px;
   &:focus{
     outline: none;
   }

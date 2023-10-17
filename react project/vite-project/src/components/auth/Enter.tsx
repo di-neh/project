@@ -19,16 +19,7 @@ const EnterWindow = styled.div`
   margin-top: 100px;
 `;
 
-// const Input = styled.input`
-//   background-color: white;
-//   width: 100%;
-//   border: 0px;
-//   text-align:center;
-//   color: black;
-//   &:focus{
-//     outline: none;
-//   }
-// `
+
 
 interface IEnterProps{
     onClick?: () => void; 
@@ -79,7 +70,7 @@ const Enter: React.FC<IEnterProps> = ({onClick}) => {
             <Button btnText={"У вас нет учетной записи?"} onClick={onClick}></Button>
             <Input ph={"Логин"}  onChange = {HandlerInputLoginValue} value={inputLoginVal}></Input>
             <Input type={"password"}  ph={"Пароль"} onChange = {HandlerInputPasswordValue} value={inputPasswordnVal}></Input>
-            <Button btnText = {"Vhod"} onClick={logIn} ></Button>
+            <Button btnText = {"Вход"} onClick={logIn} ></Button>
         </EnterWindow>
     );
 };
