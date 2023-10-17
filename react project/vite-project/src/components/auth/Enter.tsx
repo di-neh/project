@@ -4,9 +4,11 @@ import Button from "./Button.tsx";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Input from "./Input.tsx";
+
 
 const EnterWindow = styled.div`
-  background-color: grey;
+  background: #383a3f;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -17,16 +19,16 @@ const EnterWindow = styled.div`
   margin-top: 100px;
 `;
 
-const Input = styled.input`
-  background-color: white;
-  width: 100%;
-  border: 0px;
-  text-align:center;
-  color: black;
-  &:focus{
-    outline: none;
-  }
-`
+// const Input = styled.input`
+//   background-color: white;
+//   width: 100%;
+//   border: 0px;
+//   text-align:center;
+//   color: black;
+//   &:focus{
+//     outline: none;
+//   }
+// `
 
 interface IEnterProps{
     onClick?: () => void; 
@@ -72,10 +74,11 @@ const Enter: React.FC<IEnterProps> = ({onClick}) => {
     }
 
     return (
+
         <EnterWindow>
             <Button btnText={"У вас нет учетной записи?"} onClick={onClick}></Button>
-            <Input placeholder={"Логин"}  onChange = {HandlerInputLoginValue} value={inputLoginVal}></Input>
-            <Input type = "password"  placeholder={"Пароль"} onChange = {HandlerInputPasswordValue} value={inputPasswordnVal}></Input>
+            <Input ph={"Логин"}  onChange = {HandlerInputLoginValue} value={inputLoginVal}></Input>
+            <Input type={"password"}  ph={"Пароль"} onChange = {HandlerInputPasswordValue} value={inputPasswordnVal}></Input>
             <Button btnText = {"Vhod"} onClick={logIn} ></Button>
         </EnterWindow>
     );
