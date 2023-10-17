@@ -3,8 +3,8 @@ import styled from "styled-components";
 
 interface IInputProps{
     ph:string;
-    onChange?: (newValue: string) => void;
-    value?: string;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    value: string;
     type?: string;
 }
 
@@ -21,9 +21,9 @@ const Inputt = styled.input`
     outline: none;
   }
 `
-const Input:React.FC<IInputProps> = ({ph}) => {
+const Input:React.FC<IInputProps> = ({ph, type, value, onChange}) => {
     return (
-            <Inputt placeholder={ph} />
+      <Inputt placeholder={ph} type={type} value={value} onChange={onChange}/>
     );
 };
 
