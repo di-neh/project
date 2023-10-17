@@ -9,8 +9,11 @@ import Global from "./components/auth/Global.tsx";
 //   min-height: 100vh;
 //   background: #9b9a9a;
 // `
+<<<<<<< Updated upstream
 
 
+=======
+>>>>>>> Stashed changes
 function App() {
 
   return (

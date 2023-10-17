@@ -1,9 +1,10 @@
 import styled from "styled-components";
-
+// @ts-ignore
 import logo from  "../ToDo/statics/копик.jpg";
 
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -30,7 +31,11 @@ const AvatarImg = styled.img`
   
 `
 
-const Avatar = styled.button`
+interface AvatarProps {
+  active: boolean;
+}
+
+const Avatar = styled.button<AvatarProps>`
   margin-left: 5px;
   display: inline-block;
   width: 45px;
@@ -38,7 +43,12 @@ const Avatar = styled.button`
   border-radius: 50%;
   overflow: hidden;
 `
-const Menu = styled.nav`
+
+interface MenuProps {
+  active: boolean;
+}
+
+const Menu = styled.nav<MenuProps>`
   position: absolute;
   top: 47px;
   right: 5px;
@@ -85,6 +95,8 @@ const Header = () => {
 }
 
   const [userProfile, setUserProfile] = useState<IUserProfile>({mail: '',nickname: ''});
+  
+  const navigate = useNavigate();
 
   useEffect(()=> {
     FetchProfile();
@@ -105,15 +117,23 @@ const Header = () => {
     }
   }
 
+  const HandlleButtonClick = async () => {
+    try {
+                navigate('/auth');
+    
+    } catch (e) {
+        console.log(e);
+    }   
+}
 
     const [active, setActive] = useState(false);
     const offBtn = () =>{
         setActive(!active);
     }
-
+    
     return (
         <Wrapper>
-            <Box1>Хуй</Box1>
+            <Box1>Brain</Box1>
             <Box2>
                 <div>
                     <div style={{fontSize:10}}> {userProfile.mail} </div>
@@ -128,7 +148,7 @@ const Header = () => {
                         <Menu_item>Профиль</Menu_item>
                         <Menu_item>Настройки</Menu_item>
                         <Menu_item>Ночной режим</Menu_item>
-                        <Menu_item>Выход</Menu_item>
+                        <Menu_item onClick={HandlleButtonClick}>Выход</Menu_item>
 
                     </Menu_list>
                 </Menu>

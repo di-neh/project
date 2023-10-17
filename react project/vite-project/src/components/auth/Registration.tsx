@@ -50,6 +50,11 @@ const Registration:React.FC<IRegProps> = ({onClick}) => {
         setInputPasswordValue(e.target.value);
     }
 
+    function HandleKeyPress (event: React.KeyboardEvent<HTMLInputElement>){
+        event.preventDefault();
+        HandlleButtonClick();
+    }
+
     const HandlleButtonClick = async () => {
         try {
             const reqData:IREquestData= {nickname: inputNicknameValue, mail: inputMailValue, password: inputPasswordValue};
@@ -67,9 +72,15 @@ const Registration:React.FC<IRegProps> = ({onClick}) => {
     return (
         <Reg>
             <Button btnText={"У меня уже есть профиль"} onClick={onClick}></Button>
+<<<<<<< Updated upstream
             <Input ph={"Логин"} onChange={HandleInputNicknameValue} value={inputNicknameValue} ></Input>
             <Input type = "password" ph={"Пароль"} onChange = {HandleInputPasswordValue} value={inputPasswordValue}></Input>
             <Input ph={"Почта"} onChange = {HandleInputMailValue} value={inputMailValue}></Input>
+=======
+            <Input onKeyDown={HandleKeyPress} placeholder={"Логин"} onChange={HandleInputNicknameValue} value={inputNicknameValue} ></Input>
+            <Input onKeyDown={HandleKeyPress} type = "password" placeholder={"Пароль"} onChange = {HandleInputPasswordValue} value={inputPasswordValue}></Input>
+            <Input onKeyDown={HandleKeyPress} placeholder={"Почта"} onChange = {HandleInputMailValue} value={inputMailValue}></Input>
+>>>>>>> Stashed changes
             <Button btnText = {"Регистрация"} onClick={HandlleButtonClick} ></Button>
         </Reg>
     );

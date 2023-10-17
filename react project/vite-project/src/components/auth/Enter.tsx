@@ -49,6 +49,16 @@ const Enter: React.FC<IEnterProps> = ({onClick}) => {
     const HandlerInputPasswordValue = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInputPasswordnVal(e.target.value);
     }
+    
+
+
+    function handleKeyPress(event: React.KeyboardEvent<HTMLInputElement>) {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          logIn();
+          // Выполняйте дополнительные действия, но не отправляйте форму
+        }
+      }
 
     const logIn = async () => { 
         try {  
@@ -68,9 +78,15 @@ const Enter: React.FC<IEnterProps> = ({onClick}) => {
 
         <EnterWindow>
             <Button btnText={"У вас нет учетной записи?"} onClick={onClick}></Button>
+<<<<<<< Updated upstream
             <Input ph={"Логин"}  onChange = {HandlerInputLoginValue} value={inputLoginVal}></Input>
             <Input type={"password"}  ph={"Пароль"} onChange = {HandlerInputPasswordValue} value={inputPasswordnVal}></Input>
             <Button btnText = {"Вход"} onClick={logIn} ></Button>
+=======
+            <Input onKeyDown={handleKeyPress} placeholder={"Логин"}  onChange = {HandlerInputLoginValue} value={inputLoginVal}></Input>
+            <Input onKeyDown={handleKeyPress} type = "password"  placeholder={"Пароль"} onChange = {HandlerInputPasswordValue} value={inputPasswordnVal}></Input>
+            <Button btnText = {"Vhod"} onClick={logIn} ></Button>
+>>>>>>> Stashed changes
         </EnterWindow>
     );
 };
