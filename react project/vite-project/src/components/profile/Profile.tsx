@@ -17,9 +17,9 @@ const Profile = () => {
             <Box>
                 <h1>Профиль</h1>
                 <h2>Имя</h2>
-                <Input value={""} ph={"Арсений Головатч"}></Input>
+                <Input value={""} ph={"Арсений"}></Input>
                 <h2>Фамилия</h2>
-                <Input value={""} ph={""}></Input>
+                <Input value={""} ph={"Головатч"}></Input>
                 <h2>Почта</h2>
                 <Input value={""} ph={""}></Input>
             </Box>

@@ -197,6 +197,11 @@ export class UserController{
     }
 
     async login(req:Request<{}, {}, IRequestBody>, res:Response){
+        const errors = validationResult(req);
+        if(!errors.isEmpty()){
+            console.log('PENIS');
+            return res.status(400).json({ errors: errors.array() });
+        }
         try {
             console.log(req.body);
             await tokenRepository.clear();
@@ -205,11 +210,13 @@ export class UserController{
             const pretendent = await userRepository.findOne({where:{nickname: nickname}});
 
             if(!pretendent){
-                return res.status(400).json({message: 'No nickname'});
+                let errors = [{message: "Wrong nickname", path: "nickname"},{message: "Wrong password", path: "password"}];
+                return res.status(400).json({errors: errors});
             }
 
             if(!bcrypt.compareSync(password, pretendent.password)){
-                return res.status(400).json({message: 'Wrong Password'})
+                let errors = [{message: "Wrong password", path: "password"}];
+                return res.status(400).json({errors: errors});
             }
 
             const token = bcrypt.hashSync(nickname + password + Date.now(), 4);

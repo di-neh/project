@@ -1,5 +1,5 @@
 import styled from "styled-components";
-
+import MySVG from "../ToDo/MySVG.tsx";
 import Button from "./Button.tsx";
 import { useNavigate  } from 'react-router-dom';
 import { useState } from "react";
@@ -31,12 +31,22 @@ interface IREquestData{
     mail:string,
 }
 
+interface ErrorResponse {
+    forEach: any;
+    errors: {message: 'string', path: 'string'}[];
+    // Другие поля, если они есть
+}
+
+
 const Registration:React.FC<IRegProps> = ({onClick}) => {
     const navigate = useNavigate();
 
     const [inputNicknameValue, setInputNicknameValue] = useState('');
     const [inputMailValue, setInputMailValue] = useState('');
     const [inputPasswordValue, setInputPasswordValue] = useState('');
+    const [inputNameDisp, setInputNameDisp] = useState<string>('none');
+    const [inputPassDisp, setInputPassDisp] = useState<string>('none');
+    const [inputMailDisp, setInputMailDisp] = useState<string>('none');
 
     const HandleInputNicknameValue = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInputNicknameValue(e.target.value);
@@ -50,8 +60,7 @@ const Registration:React.FC<IRegProps> = ({onClick}) => {
         setInputPasswordValue(e.target.value);
     }
 
-    function HandleKeyPress (event: React.KeyboardEvent<HTMLInputElement>){
-        event.preventDefault();
+    function HandleKeyPress (){
         HandlleButtonClick();
     }
 
@@ -65,22 +74,49 @@ const Registration:React.FC<IRegProps> = ({onClick}) => {
             navigate('/main');
         
         } catch (e) {
-            console.log(e);
+            
+            setInputNameDisp('none');
+            setInputPassDisp('none');
+            setInputMailDisp('none');
+            // @ts-ignore
+            const errors: ErrorResponse =  e.response.data.errors;
+            console.log(errors);
+            errors.forEach((element: { path: string; }) => {
+                switch(element.path) {
+                    case 'nickname':
+                        setInputNameDisp('flex');
+
+                        break  ;
+                    case 'password':
+                        setInputPassDisp('flex');
+                        break;
+                    case 'mail':
+                        setInputMailDisp('flex');
+                        break;
+                }
+                
+            });
+
+            
         }   
     }
 
     return (
         <Reg>
             <Button btnText={"У меня уже есть профиль"} onClick={onClick}></Button>
-<<<<<<< Updated upstream
-            <Input ph={"Логин"} onChange={HandleInputNicknameValue} value={inputNicknameValue} ></Input>
-            <Input type = "password" ph={"Пароль"} onChange = {HandleInputPasswordValue} value={inputPasswordValue}></Input>
-            <Input ph={"Почта"} onChange = {HandleInputMailValue} value={inputMailValue}></Input>
-=======
-            <Input onKeyDown={HandleKeyPress} placeholder={"Логин"} onChange={HandleInputNicknameValue} value={inputNicknameValue} ></Input>
-            <Input onKeyDown={HandleKeyPress} type = "password" placeholder={"Пароль"} onChange = {HandleInputPasswordValue} value={inputPasswordValue}></Input>
-            <Input onKeyDown={HandleKeyPress} placeholder={"Почта"} onChange = {HandleInputMailValue} value={inputMailValue}></Input>
->>>>>>> Stashed changes
+            <div style={{display:"flex", width:'100%', alignItems:'center'}}>
+                <Input onKeyDown={HandleKeyPress} ph={"Логин"} onChange={HandleInputNicknameValue} value={inputNicknameValue} ></Input>
+                <MySVG display={inputNameDisp}/>
+            </div>
+           <div style={{display:"flex", width:'100%', alignItems:'center'}}>
+                <Input onKeyDown={HandleKeyPress} type = "password" ph={"Пароль"} onChange = {HandleInputPasswordValue} value={inputPasswordValue}></Input>
+                <MySVG display={inputPassDisp}/>
+           </div>
+            <div style={{display:"flex", width:'100%', alignItems:'center'}}>
+                <Input onKeyDown={HandleKeyPress} ph={"Почта"} onChange = {HandleInputMailValue} value={inputMailValue}></Input>
+                <MySVG display={inputMailDisp}/>
+            </div>
+            
             <Button btnText = {"Регистрация"} onClick={HandlleButtonClick} ></Button>
         </Reg>
     );

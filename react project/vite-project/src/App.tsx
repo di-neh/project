@@ -9,11 +9,6 @@ import Global from "./components/auth/Global.tsx";
 //   min-height: 100vh;
 //   background: #9b9a9a;
 // `
-<<<<<<< Updated upstream
-
-
-=======
->>>>>>> Stashed changes
 function App() {
 
   return (
@@ -23,7 +18,6 @@ function App() {
         <Route  path="/main" Component={ToDoConteiner} />
         <Route  path="/auth" Component={Testicula} />
           <Route  path="/profile" Component={Profile} />
-
       </Routes>
         <Global></Global>
     </BrowserRouter>
