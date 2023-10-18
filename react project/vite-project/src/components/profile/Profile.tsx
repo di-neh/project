@@ -97,6 +97,7 @@ const Profile = () => {
         <div>
             <Header></Header>
             <Box>
+
                 <h1 style={{textAlign:"center"}}>Профиль</h1>
                 <H2>Имя</H2>
                 <Input value={inputValue} ph={"Имя"} onKeyDown={UpdateNameChange} onChange={InputNameChange}></Input>
@@ -104,6 +105,7 @@ const Profile = () => {
                 <Input value={inputValue2} ph={"каво"} onChange={InputFirstNameChange}></Input>
                 <H2>Почта</H2>
                 <Input value={inputValue3} ph={"Почта"} onChange={InputMailChange}></Input>
+
             </Box>
         </div>
     );

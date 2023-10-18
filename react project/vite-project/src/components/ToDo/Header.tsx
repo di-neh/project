@@ -1,10 +1,12 @@
 import styled from "styled-components";
-
+// @ts-ignore
 import logo from  "../ToDo/statics/копик.jpg";
 
 import { useEffect, useState } from "react";
 import axios from "axios";
+
 import {useNavigate} from "react-router-dom";
+
 
 const Wrapper = styled.div`
   width: 100%;
@@ -32,7 +34,11 @@ const AvatarImg = styled.img`
   
 `
 
-const Avatar = styled.button`
+interface AvatarProps {
+  active: boolean;
+}
+
+const Avatar = styled.button<AvatarProps>`
   margin-left: 5px;
   display: inline-block;
   width: 45px;
@@ -40,7 +46,12 @@ const Avatar = styled.button`
   border-radius: 50%;
   overflow: hidden;
 `
-const Menu = styled.nav`
+
+interface MenuProps {
+  active: boolean;
+}
+
+const Menu = styled.nav<MenuProps>`
   position: absolute;
   top: 47px;
   right: 5px;
@@ -87,6 +98,8 @@ const Header = () => {
 }
 
   const [userProfile, setUserProfile] = useState<IUserProfile>({mail: '',nickname: ''});
+  
+  const navigate = useNavigate();
 
   useEffect(()=> {
     FetchProfile();
@@ -106,6 +119,7 @@ const Header = () => {
       console.error('Error fetching profile:', e);
     }
   }
+
     const MainLink = async () =>{
         try {
             navigate('/main')
@@ -115,10 +129,22 @@ const Header = () => {
         }
     }
 
+
+  const HandlleButtonClick = async () => {
+    try {
+                navigate('/auth');
+    
+    } catch (e) {
+        console.log(e);
+    }   
+}
+
+
     const [active, setActive] = useState(false);
     const offBtn = () =>{
         setActive(!active);
     }
+
     const navigate = useNavigate();
     const HandlleButtonClick = async () =>{
         try {
@@ -140,6 +166,11 @@ const Header = () => {
     return (
         <Wrapper>
             <Box1 onClick={MainLink}>Shlyapiki</Box1>
+
+    return (
+        <Wrapper>
+            <Box1>Brain</Box1>
+
             <Box2>
                 <div>
                     <div style={{fontSize:10}}> {userProfile.mail} </div>

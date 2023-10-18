@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import Button from "./Button.tsx";
-
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Input from "./Input.tsx";
+import MySVG from "../ToDo/MySVG.tsx";
 
 
 const EnterWindow = styled.div`
@@ -32,25 +32,32 @@ interface IRequestData{
 
 
 
-
-
 const Enter: React.FC<IEnterProps> = ({onClick}) => {
 
     const navigate = useNavigate();
 
     const [inputLoginVal, setInputLoginVal] = useState<string>('');
-
+    const [inputPasswordnVal, setInputPasswordnVal] = useState<string>('');
+    const [inputNameDisp, setInputNameDisp] = useState<string>('none');
+    const [inputPassDisp, setInputPassDisp] = useState<string>('none');
     const HandlerInputLoginValue = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInputLoginVal(e.target.value);
     }
 
-    const [inputPasswordnVal, setInputPasswordnVal] = useState<string>('');
-
     const HandlerInputPasswordValue = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInputPasswordnVal(e.target.value);
     }
-
+    
+    function handleKeyPress(event: React.KeyboardEvent<HTMLInputElement>) {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          logIn();
+          // Выполняйте дополнительные действия, но не отправляйте форму
+        }
+      }
+    
     const logIn = async () => { 
+
         try {  
             const reqData:IRequestData = {nickname: inputLoginVal, password: inputPasswordnVal}
             await axios.post('http://localhost:5661/login', reqData, {
@@ -58,8 +65,26 @@ const Enter: React.FC<IEnterProps> = ({onClick}) => {
                 withCredentials: true
             });
             navigate('/main');
+
         } catch (e) {
-            console.log(e);
+            setInputNameDisp('none');
+            setInputPassDisp('none')
+
+            //@ts-ignore
+            e.response.data.errors.forEach((element: { path: any; }) => {
+                switch(element.path) {
+                    case 'nickname':
+                        setInputNameDisp('flex');
+                        break  ;
+
+                    case 'password':
+                        setInputPassDisp('flex');
+                        break;
+                    
+                }
+                
+            });
+            
         }
         
     }
@@ -68,9 +93,17 @@ const Enter: React.FC<IEnterProps> = ({onClick}) => {
 
         <EnterWindow>
             <Button btnText={"У вас нет учетной записи?"} onClick={onClick}></Button>
-            <Input ph={"Логин"}  onChange = {HandlerInputLoginValue} value={inputLoginVal}></Input>
-            <Input type={"password"}  ph={"Пароль"} onChange = {HandlerInputPasswordValue} value={inputPasswordnVal}></Input>
-            <Button btnText = {"Вход"} onClick={logIn} ></Button>
+            <div style={{display:"flex", width:'100%', alignItems:'center'}}>
+                <Input onKeyDown={handleKeyPress} ph={"Логин"}  onChange={HandlerInputLoginValue} value={inputLoginVal}></Input>
+                <MySVG display={inputNameDisp}/>
+            </div>
+            <div style={{display:"flex", width:'100%', alignItems:'center'}}>
+                <Input onKeyDown={handleKeyPress} type = "password"  ph={"Пароль"} onChange={HandlerInputPasswordValue} value={inputPasswordnVal}></Input>
+                <MySVG display={inputPassDisp}/>
+            </div>
+            
+            <Button btnText = {"Vhod"} onClick={logIn} ></Button>
+        
         </EnterWindow>
     );
 };

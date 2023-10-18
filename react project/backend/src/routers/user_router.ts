@@ -24,8 +24,13 @@ router.post(
     ], 
     userController.registration
 );
+
 router.post(
     '/login',
+    [
+        body('nickname').isLength({min:4}).withMessage('некорректное имя пользователя'),
+        body('password').isLength({ min: 6 }).withMessage('некорректный пароль'),
+    ],
     userController.login
 );
 

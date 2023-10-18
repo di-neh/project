@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 interface IInputProps{
     ph:string;
+    onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     value: string;
     type?: string;
@@ -23,13 +24,17 @@ const Inputt = styled.input`
     outline: none;
   }
 `
+
 const Input:React.FC<IInputProps> = ({ph, type, value, onKeyDown, onChange, backgroundColor}) => {
+
     const componentStyle = {
         backgroundColor: backgroundColor,
         // Другие стили компонента
     };
     return (
+
       <Inputt placeholder={ph} onKeyDown={onKeyDown} type={type} value={value} onChange={onChange} style={componentStyle}/>
+
     );
 };
 
