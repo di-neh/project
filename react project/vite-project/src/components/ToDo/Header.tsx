@@ -99,7 +99,7 @@ const Header = () => {
 
   const [userProfile, setUserProfile] = useState<IUserProfile>({mail: '',nickname: ''});
   
-  const navigate = useNavigate();
+
 
   useEffect(()=> {
     FetchProfile();
@@ -130,14 +130,7 @@ const Header = () => {
     }
 
 
-  const HandlleButtonClick = async () => {
-    try {
-                navigate('/auth');
-    
-    } catch (e) {
-        console.log(e);
-    }   
-}
+
 
 
     const [active, setActive] = useState(false);
@@ -163,13 +156,12 @@ const Header = () => {
         }
     }
 
-    return (
-        <Wrapper>
-            <Box1 onClick={MainLink}>Shlyapiki</Box1>
+
+
 
     return (
         <Wrapper>
-            <Box1>Brain</Box1>
+            <Box1 onClick={MainLink}>Shlyapiki</Box1>
 
             <Box2>
                 <div>
