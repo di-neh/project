@@ -7,6 +7,7 @@ interface IInputProps{
     value: string;
     type?: string;
     backgroundColor?: string;
+    onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 const Inputt = styled.input`
@@ -22,13 +23,13 @@ const Inputt = styled.input`
     outline: none;
   }
 `
-const Input:React.FC<IInputProps> = ({ph, type, value, onChange, backgroundColor}) => {
+const Input:React.FC<IInputProps> = ({ph, type, value, onKeyDown, onChange, backgroundColor}) => {
     const componentStyle = {
         backgroundColor: backgroundColor,
         // Другие стили компонента
     };
     return (
-      <Inputt placeholder={ph} type={type} value={value} onChange={onChange} style={componentStyle}/>
+      <Inputt placeholder={ph} onKeyDown={onKeyDown} type={type} value={value} onChange={onChange} style={componentStyle}/>
     );
 };
 
