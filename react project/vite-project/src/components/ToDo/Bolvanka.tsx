@@ -134,7 +134,7 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DelteComponent, UpdateC
             <BolvankaKrugTitle  onInputChange={HandleBolvankaTitleChange} title={inputTitleValue} />
             <BolvankaKrugTask   onTextAreaChange={HandleBolvankaTaskChange}  onKeyDown={ToDoAddHandler} task={textAreaTaskValue}/>
             {toDoArr.map((todo) => 
-                <BolvankaKrugItem textContent={todo.title} id={todo.id? todo.id: 0} isCheck = {todo.isCompleted}/>
+                <BolvankaKrugItem key = {todo.id} textContent={todo.title} id={todo.id? todo.id: 0} isCheck = {todo.isCompleted}/>
             )}
         </Bulova>
     );
