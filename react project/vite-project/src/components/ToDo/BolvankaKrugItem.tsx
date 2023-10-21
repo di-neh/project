@@ -36,14 +36,15 @@ const CheckBox = styled.input`
 
 
 
-const BolvankaKrugItem:React.FC<IBolvankaKrugItem> = ( {textContent, id, isCheck} ) => {
+const BolvankaKrugItem: React.FC<IBolvankaKrugItem> = ( {textContent, id, isCheck} ) => {
   const [isChecked, setIsChecked] = useState(isCheck);
   const [inputValue, setInputValue] = useState(textContent);
   const [isPopUpOpen, setPopUpOpen] = useState(false);
   
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(e.target.value);
-    
+  };
+
   const UpdateTask = async() => {
     const url = `http://localhost:5661/tasks/${id}`;
     //const response = 
@@ -75,5 +76,4 @@ const BolvankaKrugItem:React.FC<IBolvankaKrugItem> = ( {textContent, id, isCheck
     </div>
   );
 };
-
 export default BolvankaKrugItem;

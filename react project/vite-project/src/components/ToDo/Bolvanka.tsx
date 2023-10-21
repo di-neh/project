@@ -63,7 +63,7 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DelteComponent, UpdateC
             const data : IToDoData = {
                 description: "",
                 title: textAreaTaskValue,
-                iscompleted: false,
+                isCompleted: false,
                 group_id: id,
             }
 
@@ -74,7 +74,7 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DelteComponent, UpdateC
             const todo:IToDoData = responce.data;
             setToDoArr(prevData => [
                 ...prevData,
-                {description:todo.description, iscompleted:todo.iscompleted, title:todo.title, id: todo.id}
+                {description:todo.description, isCompleted:todo.isCompleted , title:todo.title, id: todo.id}
             ])
             setTestAreaTaskValue("");
         } catch (e) {
