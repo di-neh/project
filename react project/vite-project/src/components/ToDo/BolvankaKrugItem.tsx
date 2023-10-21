@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { useState } from "react";
+import PopUp from "./PopUp";
 import axios from "axios";
+
 interface IBolvankaKrugItem{
     textContent:string;
     id: number;
@@ -26,13 +28,22 @@ const Item = styled.div<ItemProps>`
 `
 
 const CheckBox = styled.input`
+  position: relative;
   border-radius: 5px;
+  top: 0%;
+  right: 1%;
 `
+
 
 
 const BolvankaKrugItem:React.FC<IBolvankaKrugItem> = ( {textContent, id, isCheck} ) => {
   const [isChecked, setIsChecked] = useState(isCheck);
+  const [inputValue, setInputValue] = useState(textContent);
+  const [isPopUpOpen, setPopUpOpen] = useState(false);
   
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInputValue(e.target.value);
+    
   const UpdateTask = async() => {
     const url = `http://localhost:5661/tasks/${id}`;
     //const response = 
@@ -42,17 +53,26 @@ const BolvankaKrugItem:React.FC<IBolvankaKrugItem> = ( {textContent, id, isCheck
     });
 
   }
-
+  
+  const openPopUp = () => {
+    setPopUpOpen(!isPopUpOpen);
+  };
+  
   const handleCheck = async () => {
     setIsChecked(!isChecked);
     UpdateTask();
+
   };
 
   return (
-      <Item isChecked={isChecked}>
-          <div style={{padding:"7px"}}>{textContent}</div>
+    <div>
+      {/* {isPopUpOpen && <PopUp value={inputValue} onChange={handleInputChange}/>} */}
+      <Item isChecked={isChecked} onClick={openPopUp}>
+          <div style={{padding:"7px"}} >{inputValue} </div>
           <CheckBox type={"checkbox"} checked={isChecked} onChange={handleCheck}></CheckBox>
       </Item>
+      
+    </div>
   );
 };
 

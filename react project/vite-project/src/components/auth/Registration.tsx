@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import MySVG from "./MySVG.tsx";
+import MySVG from "../ToDo/SVG/MySVG.tsx";
 import Button from "./Button.tsx";
 import { useNavigate  } from 'react-router-dom';
 import { useState } from "react";

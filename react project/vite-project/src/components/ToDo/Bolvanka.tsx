@@ -5,6 +5,7 @@ import { useState } from "react";
 import BolvankaKrugItem from "./BolvankaKrugItem.tsx";
 import axios from "axios";
 import Button from "../auth/Button.tsx";
+import { Reorder } from "framer-motion";
 import { IToDoData } from "../../../types/ToDo.ts";
 
 
@@ -37,6 +38,7 @@ interface IBolvankaProps{
     tasks: IToDoData[];
     DelteComponent: (id:number) => void;
     UpdateComponent: (id:number) => void;
+    onPopUpOpen?: () => void;
 }
 
 
@@ -85,6 +87,7 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DelteComponent, UpdateC
     }
 
     const HandleBolvankaTaskChange = (value: string) => {
+        console.log(value)
         setTestAreaTaskValue(value); 
     }
 
@@ -96,6 +99,7 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DelteComponent, UpdateC
         UpdateBracket(id);
     }
 
+    
 
     const UpdateBracket = async (id:number) => {
         try {
@@ -125,6 +129,7 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DelteComponent, UpdateC
         }
     }
 
+    
     return (
         <Bulova>
             <ButtonsContainer>
@@ -132,6 +137,7 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DelteComponent, UpdateC
                 <Button btnText = {"Обновить"}  onClick={UpdateHandler}></Button>
             </ButtonsContainer>
             <BolvankaKrugTitle  onInputChange={HandleBolvankaTitleChange} title={inputTitleValue} />
+
             <BolvankaKrugTask   onTextAreaChange={HandleBolvankaTaskChange}  onKeyDown={ToDoAddHandler} task={textAreaTaskValue}/>
             {toDoArr.map((todo) => 
                 <BolvankaKrugItem key = {todo.id} textContent={todo.title} id={todo.id? todo.id: 0} isCheck = {todo.isCompleted}/>

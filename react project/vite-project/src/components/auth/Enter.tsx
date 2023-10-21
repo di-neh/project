@@ -4,7 +4,8 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Input from "./Input.tsx";
-import MySVG from "./MySVG.tsx";
+import MySVG from "../ToDo/SVG/MySVG.tsx";
+
 
 
 const EnterWindow = styled.div`
