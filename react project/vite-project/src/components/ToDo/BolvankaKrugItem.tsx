@@ -2,11 +2,14 @@ import styled from "styled-components";
 import { useState } from "react";
 import PopUp from "./PopUp";
 import axios from "axios";
+import { IToDoData } from "../../../types/ToDo";
 
 interface IBolvankaKrugItem{
     textContent:string;
     id: number;
     isCheck: boolean;
+    DeleteItem: (id:number) => void;
+    tasks: IToDoData[];
 }
 
 interface ItemProps {
@@ -36,7 +39,7 @@ const CheckBox = styled.input`
 
 
 
-const BolvankaKrugItem: React.FC<IBolvankaKrugItem> = ( {textContent, id, isCheck} ) => {
+const BolvankaKrugItem: React.FC<IBolvankaKrugItem> = ( {textContent, id, isCheck, DeleteItem} ) => {
   const [isChecked, setIsChecked] = useState(isCheck);
   const [inputValue, setInputValue] = useState(textContent);
   const [isPopUpOpen, setPopUpOpen] = useState(false);
@@ -52,7 +55,7 @@ const BolvankaKrugItem: React.FC<IBolvankaKrugItem> = ( {textContent, id, isChec
       headers: {'Content-Type' : 'application/json'},
       withCredentials: true
     });
-
+    console.log(id);
   }
   
   const openPopUp = () => {
@@ -65,15 +68,39 @@ const BolvankaKrugItem: React.FC<IBolvankaKrugItem> = ( {textContent, id, isChec
 
   };
 
+  const HandleDeleteItem = () => {
+    DeleteToDo(id);
+    DeleteItem(id);
+  }
+
+  
+
+  const DeleteToDo = async (id:number) => {
+      try{
+          const url: string = `http://localhost:5661/tasks/${id}`;
+
+          await axios.delete(url, {
+              headers: {'Content-Type' : 'application/json'},
+              withCredentials: true
+          });
+          
+          console.log('DELETED');
+      } catch (e){
+          console.log(e)
+          
+      }
+  }
+
   return (
     <div>
-      {/* {isPopUpOpen && <PopUp value={inputValue} onChange={handleInputChange}/>} */}
+     
       <Item isChecked={isChecked} onClick={openPopUp}>
           <div style={{padding:"7px"}} >{inputValue} </div>
           <CheckBox type={"checkbox"} checked={isChecked} onChange={handleCheck}></CheckBox>
       </Item>
-      
+      {isPopUpOpen && <PopUp value={inputValue} onChange={handleInputChange} onClick={HandleDeleteItem}/>}
     </div>
   );
 };
+
 export default BolvankaKrugItem;

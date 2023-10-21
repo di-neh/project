@@ -5,9 +5,8 @@ import { useState } from "react";
 import BolvankaKrugItem from "./BolvankaKrugItem.tsx";
 import axios from "axios";
 import Button from "../auth/Button.tsx";
-import { Reorder } from "framer-motion";
 import { IToDoData } from "../../../types/ToDo.ts";
-
+import {Reorder} from "framer-motion";
 
 const Bulova = styled.div`
   width: 275px;
@@ -38,6 +37,7 @@ interface IBolvankaProps{
     tasks: IToDoData[];
     DelteComponent: (id:number) => void;
     UpdateComponent: (id:number) => void;
+    DeleteItem: (id:number) => void;
     onPopUpOpen?: () => void;
 }
 
@@ -129,8 +129,12 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DelteComponent, UpdateC
         }
     }
 
-    
+    const deleteTask = (id: number) => {
+        setToDoArr((prevData) => prevData.filter((todo) => todo.id !== id));
+    };
+
     return (
+        
         <Bulova>
             <ButtonsContainer>
                 <Button btnText = {"Удалить"}  onClick={DeleteHandler}></Button>
@@ -139,10 +143,16 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DelteComponent, UpdateC
             <BolvankaKrugTitle  onInputChange={HandleBolvankaTitleChange} title={inputTitleValue} />
 
             <BolvankaKrugTask   onTextAreaChange={HandleBolvankaTaskChange}  onKeyDown={ToDoAddHandler} task={textAreaTaskValue}/>
+            <Reorder.Group axis="y" values={tasks} onReorder={setToDoArr}>
             {toDoArr.map((todo) => 
-                <BolvankaKrugItem key = {todo.id} textContent={todo.title} id={todo.id? todo.id: 0} isCheck = {todo.isCompleted}/>
+                <Reorder.Item value={todo}>
+                    <BolvankaKrugItem DeleteItem={deleteTask} tasks={toDoArr}  key = {todo.id} textContent={todo.title} id={todo.id? todo.id: 0} isCheck = {todo.isCompleted}/>
+                </Reorder.Item>
             )}
+            </Reorder.Group>
         </Bulova>
+        
+        
     );
 };
 

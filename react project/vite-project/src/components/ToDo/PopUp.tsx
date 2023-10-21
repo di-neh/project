@@ -4,7 +4,6 @@ import Trash from './SVG/Trash';
 
 interface MenuProps {
     active?: boolean;
-    onClick?: () => void;
     complete?: boolean;
 }
 
@@ -80,7 +79,7 @@ const ItemValue = styled.textarea<MenuProps>`
     overflow: hidden; 
 `
 
-const PopUp = ({ value, onChange }: { value: string; onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void }) => {
+const PopUp = ({ value, onChange, onClick }: { value: string; onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void, onClick?: () => void }) => {
 
     const [active, setActive] = useState(true);
     const [itemText, setItemText] = useState('Выполнить');
@@ -89,7 +88,6 @@ const PopUp = ({ value, onChange }: { value: string; onChange: (e: React.ChangeE
     const offBtn = () =>{
         setActive(!active);
     }
-
 
     const ChangeComplete = () =>{
         setComplete(!complete);
@@ -101,11 +99,11 @@ const PopUp = ({ value, onChange }: { value: string; onChange: (e: React.ChangeE
         }
     }
     
-
+    
     return (
         <Wrapper active={active}>
             <Header>
-                <Trash/>
+                <Trash onClick={onClick}/>
                 <Butt onClick={offBtn}>✖</Butt>
             </Header>   
 
