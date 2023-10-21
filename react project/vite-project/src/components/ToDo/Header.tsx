@@ -4,7 +4,9 @@ import logo from  "../ToDo/statics/копик.jpg";
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+
+import {useNavigate} from "react-router-dom";
+
 
 const Wrapper = styled.div`
   width: 100%;
@@ -21,8 +23,9 @@ const Box2 = styled.div`
 `
 const Box1 = styled.div`
   margin-top: 8px;
-  margin-left: 400px;
+  margin-left: 700px;
   font-size: 24px;
+  cursor: pointer;
 `
 const AvatarImg = styled.img`
   width: 100%;
@@ -96,7 +99,7 @@ const Header = () => {
 
   const [userProfile, setUserProfile] = useState<IUserProfile>({mail: '',nickname: ''});
   
-  const navigate = useNavigate();
+
 
   useEffect(()=> {
     FetchProfile();
@@ -117,23 +120,49 @@ const Header = () => {
     }
   }
 
-  const HandlleButtonClick = async () => {
-    try {
-                navigate('/auth');
-    
-    } catch (e) {
-        console.log(e);
-    }   
-}
+    const MainLink = async () =>{
+        try {
+            navigate('/main')
+        }
+        catch (e){
+            console.log(e)
+        }
+    }
+
+
+
+
 
     const [active, setActive] = useState(false);
     const offBtn = () =>{
         setActive(!active);
     }
-    
+
+    const navigate = useNavigate();
+    const HandlleButtonClick = async () =>{
+        try {
+            navigate('/auth')
+        }
+        catch (e){
+            console.log(e)
+        }
+    }
+    const ProfileLink = async () =>{
+        try {
+            navigate('/profile')
+        }
+        catch (e){
+            console.log(e)
+        }
+    }
+
+
+
+
     return (
         <Wrapper>
-            <Box1>Brain</Box1>
+            <Box1 onClick={MainLink}>Shlyapiki</Box1>
+
             <Box2>
                 <div>
                     <div style={{fontSize:10}}> {userProfile.mail} </div>
@@ -145,7 +174,7 @@ const Header = () => {
                 </Avatar>
                 <Menu active={active}>
                     <Menu_list>
-                        <Menu_item>Профиль</Menu_item>
+                        <Menu_item onClick={ProfileLink}>Профиль</Menu_item>
                         <Menu_item>Настройки</Menu_item>
                         <Menu_item>Ночной режим</Menu_item>
                         <Menu_item onClick={HandlleButtonClick}>Выход</Menu_item>

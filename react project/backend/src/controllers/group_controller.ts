@@ -52,19 +52,13 @@ export class GroupController{
 
     async DeleteGroup(req:Request<IRequestParams>, res:Response){
         try {
-            const groupForDelete = await GroupRepository.findOne({where: {id: req.params.id}});
+            const groupForDelete = await GroupRepository.findOne({relations:['todos'], where: {id: req.params.id}});
 
             if(groupForDelete == null){
                 res.status(400).json({message: "no group given"});
             }
-
+            await TaskRepository.remove(groupForDelete.todos);
             await GroupRepository.remove(groupForDelete);
-
-            const groupTasks = await TaskRepository.find({where:{group_id: groupForDelete.id}});
-
-            for (const task of groupTasks) {
-                await TaskRepository.remove(task);
-              }
 
             res.status(200).json(groupForDelete);
 
@@ -85,7 +79,7 @@ export class GroupController{
                 relations: ['user']
             });
             
-            const groups = await GroupRepository.find({where:{userId: token.user.id}});
+            const groups = await GroupRepository.find({where:{userId: token.user.id}, relations:['todos']});
             return res.status(200).json(groups);
         } catch (e) {
             console.log(e);

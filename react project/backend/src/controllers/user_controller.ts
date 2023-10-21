@@ -59,7 +59,6 @@ export class UserController{
             }
 
             for(let roleItem of roles){
-                console.log(roleItem)
                 const role = await roleRepository.findOne({ where: { id:  roleItem} });
                 if(role){
                     userRoles.push(role);
@@ -153,7 +152,6 @@ export class UserController{
             }
             const token = await tokenRepository.findOne({where: {user: {id: userToDelete.id}}});
             if(token){
-                console.log(1);
                 await tokenRepository.remove(token);
             }
             await userRepository.remove(userToDelete);
@@ -169,10 +167,13 @@ export class UserController{
         if(!errors.isEmpty()){
             return res.status(400).json({ errors: errors.array() });
         }
-        try {
+        try {   
             await tokenRepository.clear();
             const {mail, nickname, password} = req.body;
-            
+            const testUserNickName = await userRepository.findOne({where:{nickname: nickname}});
+            if(testUserNickName != null){
+                return res.status(400).json({errors: [{message: "Nickname already exists", path: "nickname"}]});
+            }
             const hashPassword = bcrypt.hashSync(password, 6);
 
             let newUser = new User(nickname, mail, hashPassword);
@@ -199,7 +200,6 @@ export class UserController{
     async login(req:Request<{}, {}, IRequestBody>, res:Response){
         const errors = validationResult(req);
         if(!errors.isEmpty()){
-            console.log('PENIS');
             return res.status(400).json({ errors: errors.array() });
         }
         try {

@@ -11,7 +11,7 @@ router.get('/tasks', taskController.GetTasks);
 router.get('/tasks/:id', taskController.GetOneTask);
 router.get('/tasks/id', taskController.GetTasksByGroupId);
 
-router.put('/tasks', taskController.UpdateTask);
+router.put('/tasks/:id', taskController.UpdateTask);
 
 router.delete('/tasks/:id', taskController.DeleteTask);
 

@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import { useState } from "react";
 import PopUp from "./PopUp";
-
+import axios from "axios";
 
 interface IBolvankaKrugItem{
     textContent:string;
-    ChangeComplete?: () => void;
+    id: number;
+    isCheck: boolean;
 }
 
 interface ItemProps {
@@ -34,23 +35,33 @@ const CheckBox = styled.input`
 `
 
 
-const BolvankaKrugItem:React.FC<IBolvankaKrugItem> = ( {textContent } ) => {
-  const [isChecked, setIsChecked] = useState(false);
+
+const BolvankaKrugItem:React.FC<IBolvankaKrugItem> = ( {textContent, id, isCheck} ) => {
+  const [isChecked, setIsChecked] = useState(isCheck);
   const [inputValue, setInputValue] = useState(textContent);
   const [isPopUpOpen, setPopUpOpen] = useState(false);
-
-  const handleCheck = () => {
-    setIsChecked(!isChecked); 
-  };  
-
+  
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInputValue(e.target.value);
     
+  const UpdateTask = async() => {
+    const url = `http://localhost:5661/tasks/${id}`;
+    //const response = 
+    await axios.put(url, {isCompleted: !isChecked}, {
+      headers: {'Content-Type' : 'application/json'},
+      withCredentials: true
+    });
 
+  }
+  
   const openPopUp = () => {
     setPopUpOpen(!isPopUpOpen);
   };
+  
+  const handleCheck = async () => {
+    setIsChecked(!isChecked);
+    UpdateTask();
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInputValue(e.target.value);
   };
 
   return (

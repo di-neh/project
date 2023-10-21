@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Header from "./Header.tsx";
-
+import {IToDoData} from "../../../types/ToDo.ts"
 const Conteiner = styled.div`
   display: flex;
   flex-direction: row;
@@ -19,11 +19,13 @@ const Wrapper = styled.div`
 interface IBolvankaData{
     id: number,
     title: string,
+    tasks: IToDoData[]
 }
 
 interface IGroupData{
     id: number,
     name: string,
+    todos: IToDoData[]
 }
 
 interface IResponseData{
@@ -48,9 +50,9 @@ const ToDoConteiner:React.FC = () => {
                 headers: {'Content-Type': 'application/json'},
                 withCredentials: true
             });
-                
+          
             setBolvankaData(
-                response.data.map(element => ({ id: element.id, title: element.name }))
+                response.data.map(element => ({ id: element.id, title: element.name, tasks: element.todos }))
             );
         } catch (error) {
             console.error('Error fetching groups:', error);
@@ -66,7 +68,7 @@ const ToDoConteiner:React.FC = () => {
 
             setBolvankaData(prevData => [
                 ...prevData,
-                {id: response.data.id, title: response.data.name}
+                {id: response.data.id, title: response.data.name, tasks: []}
             ]);
         } catch (e) {
             console.log(e)
@@ -103,10 +105,12 @@ const ToDoConteiner:React.FC = () => {
     return (
         <Wrapper>
             <Header></Header>
-       
-            <Conteiner >
-                {bolvankaData.map((item) =>  
-                <Bolvanka key = {item.id} title={item.title}  id = {item.id} DelteComponent={DelteComponent} UpdateComponent={UpdateComponent}/>)}
+
+            <Conteiner>
+                {bolvankaData.map((item) =>
+                    <Bolvanka key = {item.id} title={item.title}  id = {item.id} DelteComponent={DelteComponent} UpdateComponent={UpdateComponent} tasks={item.tasks}/>
+                )}
+
                 <AddBtn onClick={AddBracket} />
                 
             </Conteiner>

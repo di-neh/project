@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, OneToMany } from "typeorm"
+import { ToDo } from "./ToDo";
 
 @Entity("groups")
 export class Group {
@@ -20,5 +21,6 @@ export class Group {
     @Column()
     userId: number
 
-    
+    @OneToMany(() => ToDo, (todo) => todo.group) // Отношение One-to-Many с ToDo
+    todos: ToDo[]; // Связь с задачами
 }
