@@ -5,7 +5,7 @@ import { useState } from "react";
 import BolvankaKrugItem from "./BolvankaKrugItem.tsx";
 import axios from "axios";
 import Button from "../auth/Button.tsx";
-
+import { Reorder } from "framer-motion";
 
 const Bulova = styled.div`
   width: 275px;
@@ -35,6 +35,7 @@ interface IBolvankaProps{
     id: number;
     DelteComponent: (id:number) => void;
     UpdateComponent: (id:number) => void;
+    onPopUpOpen?: () => void;
 }
 
 const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DelteComponent, UpdateComponent}) => {
@@ -57,6 +58,7 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DelteComponent, UpdateC
     }
 
     const HandleBolvankaTaskChange = (value: string) => {
+        console.log(value)
         setTestAreaTaskValue(value); 
     }
 
@@ -68,6 +70,7 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DelteComponent, UpdateC
         UpdateBracket(id);
     }
 
+    
 
     const UpdateBracket = async (id:number) => {
         try {
@@ -97,6 +100,7 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DelteComponent, UpdateC
         }
     }
 
+    
     return (
         <Bulova>
             <ButtonsContainer>
@@ -105,9 +109,17 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DelteComponent, UpdateC
             </ButtonsContainer>
             <BolvankaKrugTitle  onInputChange={HandleBolvankaTitleChange} title={inputTitleValue} />
             <BolvankaKrugTask   onTextAreaChange={HandleBolvankaTaskChange}  onKeyDown={ToDoAdd} task={textAreaTaskValue}/>
-            {toDoArr.map((todo) => 
-                <BolvankaKrugItem textContent={todo}/>
-            )}
+
+            <Reorder.Group axis="y" values={toDoArr} onReorder={setToDoArr}>
+                {toDoArr.map((todo) => (
+                <Reorder.Item key={todo} value={todo} whileDrag={{scale:1.1}}>
+                    
+                        <BolvankaKrugItem textContent={todo} />
+                
+                </Reorder.Item>
+                ))}
+            </Reorder.Group>
+          
         </Bulova>
     );
 };

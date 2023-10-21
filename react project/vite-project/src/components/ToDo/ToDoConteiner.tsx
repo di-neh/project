@@ -48,7 +48,7 @@ const ToDoConteiner:React.FC = () => {
                 headers: {'Content-Type': 'application/json'},
                 withCredentials: true
             });
-    
+                
             setBolvankaData(
                 response.data.map(element => ({ id: element.id, title: element.name }))
             );
@@ -63,7 +63,7 @@ const ToDoConteiner:React.FC = () => {
                 headers: {'Content-Type' : 'application/json'},
                 withCredentials: true
             });
-            
+
             setBolvankaData(prevData => [
                 ...prevData,
                 {id: response.data.id, title: response.data.name}
@@ -80,6 +80,7 @@ const ToDoConteiner:React.FC = () => {
                 return updatedData;
             });
             FetchGroups();
+            
         } catch (e) {
             console.log(e);
         }
@@ -97,14 +98,17 @@ const ToDoConteiner:React.FC = () => {
         }
     }
 
+   
+
     return (
         <Wrapper>
             <Header></Header>
-            <Conteiner>
-                {bolvankaData.map((item) =>
-                    <Bolvanka key = {item.id} title={item.title}  id = {item.id} DelteComponent={DelteComponent} UpdateComponent={UpdateComponent}/>
-                )}
+       
+            <Conteiner >
+                {bolvankaData.map((item) =>  
+                <Bolvanka key = {item.id} title={item.title}  id = {item.id} DelteComponent={DelteComponent} UpdateComponent={UpdateComponent}/>)}
                 <AddBtn onClick={AddBracket} />
+                
             </Conteiner>
         </Wrapper>
 

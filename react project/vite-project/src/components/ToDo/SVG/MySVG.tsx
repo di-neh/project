@@ -1,11 +1,11 @@
 import React from 'react';
 
-interface MySVGDisplay {
+interface IMySVGDisplay {
     display?: string;
 }
 
 
-const MySVG: React.FC<MySVGDisplay> = ({display}) => {
+const MySVG: React.FC<IMySVGDisplay> = ({display}) => {
    
     return(
         <svg display={display} style={{marginBottom:'10px'}} width={'30px'} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">

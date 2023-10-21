@@ -1,7 +1,11 @@
 import styled from "styled-components";
 import { useState } from "react";
+import PopUp from "./PopUp";
+
+
 interface IBolvankaKrugItem{
     textContent:string;
+    ChangeComplete?: () => void;
 }
 
 interface ItemProps {
@@ -23,22 +27,41 @@ const Item = styled.div<ItemProps>`
 `
 
 const CheckBox = styled.input`
+  position: relative;
   border-radius: 5px;
+  top: 0%;
+  right: 1%;
 `
 
 
-const BolvankaKrugItem:React.FC<IBolvankaKrugItem> = ( {textContent} ) => {
+const BolvankaKrugItem:React.FC<IBolvankaKrugItem> = ( {textContent } ) => {
   const [isChecked, setIsChecked] = useState(false);
-  
+  const [inputValue, setInputValue] = useState(textContent);
+  const [isPopUpOpen, setPopUpOpen] = useState(false);
+
   const handleCheck = () => {
-    setIsChecked(!isChecked); // Инвертируйте значение isChecked при каждом клике
+    setIsChecked(!isChecked); 
+  };  
+
+    
+
+  const openPopUp = () => {
+    setPopUpOpen(!isPopUpOpen);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInputValue(e.target.value);
   };
 
   return (
-      <Item isChecked={isChecked}>
-          <div style={{padding:"7px"}}>{textContent}</div>
+    <div>
+      {/* {isPopUpOpen && <PopUp value={inputValue} onChange={handleInputChange}/>} */}
+      <Item isChecked={isChecked} onClick={openPopUp}>
+          <div style={{padding:"7px"}} >{inputValue} </div>
           <CheckBox type={"checkbox"} checked={isChecked} onChange={handleCheck}></CheckBox>
       </Item>
+      
+    </div>
   );
 };
 
