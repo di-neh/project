@@ -1,7 +1,10 @@
 import styled from "styled-components";
 import { useState } from "react";
+import axios from "axios";
 interface IBolvankaKrugItem{
     textContent:string;
+    id: number;
+    isCheck: boolean;
 }
 
 interface ItemProps {
@@ -27,11 +30,22 @@ const CheckBox = styled.input`
 `
 
 
-const BolvankaKrugItem:React.FC<IBolvankaKrugItem> = ( {textContent} ) => {
-  const [isChecked, setIsChecked] = useState(false);
+const BolvankaKrugItem:React.FC<IBolvankaKrugItem> = ( {textContent, id, isCheck} ) => {
+  const [isChecked, setIsChecked] = useState(isCheck);
   
-  const handleCheck = () => {
-    setIsChecked(!isChecked); // Инвертируйте значение isChecked при каждом клике
+  const UpdateTask = async() => {
+    const url = `http://localhost:5661/tasks/${id}`;
+    //const response = 
+    await axios.put(url, {isCompleted: !isChecked}, {
+      headers: {'Content-Type' : 'application/json'},
+      withCredentials: true
+    });
+
+  }
+
+  const handleCheck = async () => {
+    setIsChecked(!isChecked);
+    UpdateTask();
   };
 
   return (

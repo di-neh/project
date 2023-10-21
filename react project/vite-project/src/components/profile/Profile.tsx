@@ -59,7 +59,8 @@ const Profile = () => {
 
     const updateProfile = async () => {
         try {
-            const response:IResponseData  = await axios.put('http://localhost:5661/users', {
+            //const response:IResponseData  =
+            await axios.put('http://localhost:5661/users', {
                 id: 7,
                 nickname: inputValue,
             }, {
@@ -67,7 +68,6 @@ const Profile = () => {
                 withCredentials: true,
             });
 
-            console.log(response)
         } catch (e) {
             console.error('Error updating profile:', e);
         }

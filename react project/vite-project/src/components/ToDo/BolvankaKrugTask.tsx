@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+// import { useState } from "react";
 import styled from "styled-components";
 
 const DivKrug = styled.div`
@@ -32,18 +32,14 @@ interface IBolvankaKrugTaskProps{
 }
 
 const BolvankaKrugTask:React.FC<IBolvankaKrugTaskProps> = ({onKeyDown, onTextAreaChange, task}) => {
-  
-  const[textAreaValue, setTextAreaValue] = useState<string>(task === undefined ? "" : task);
-
   const handleTextAreaChange = (event : React.ChangeEvent<HTMLTextAreaElement>)  =>{
-  setTextAreaValue(event.target.value);
   onTextAreaChange(event.target.value);
 }
 
   return (
     <>
       <DivKrug>
-          <TextAreaStyled onChange={handleTextAreaChange} onKeyDown={onKeyDown}  placeholder="Добавить задачу" value={textAreaValue}>
+          <TextAreaStyled onChange={handleTextAreaChange} onKeyDown={onKeyDown}  placeholder="Добавить задачу" value={task}>
           </TextAreaStyled>
       </DivKrug>
     </>

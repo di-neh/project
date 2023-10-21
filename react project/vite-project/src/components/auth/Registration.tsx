@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import MySVG from "../ToDo/MySVG.tsx";
+import MySVG from "./MySVG.tsx";
 import Button from "./Button.tsx";
 import { useNavigate  } from 'react-router-dom';
 import { useState } from "react";
@@ -32,9 +32,7 @@ interface IREquestData{
 }
 
 interface ErrorResponse {
-    forEach: any;
     errors: {message: 'string', path: 'string'}[];
-    // Другие поля, если они есть
 }
 
 
@@ -60,9 +58,9 @@ const Registration:React.FC<IRegProps> = ({onClick}) => {
         setInputPasswordValue(e.target.value);
     }
 
-    function HandleKeyPress (){
-        HandlleButtonClick();
-    }
+    // function HandleKeyPress (){
+    //     HandlleButtonClick();
+    // }
 
     const HandlleButtonClick = async () => {
         try {
@@ -72,16 +70,12 @@ const Registration:React.FC<IRegProps> = ({onClick}) => {
                 withCredentials: true
             });
             navigate('/main');
-        
-        } catch (e) {
-            
+        } catch (e) { 
             setInputNameDisp('none');
             setInputPassDisp('none');
             setInputMailDisp('none');
-            // @ts-ignore
-            const errors: ErrorResponse =  e.response.data.errors;
-            console.log(errors);
-            errors.forEach((element: { path: string; }) => {
+            const responseData: ErrorResponse =  e.response.data;
+            responseData.errors.forEach((element: { path: string; }) => {
                 switch(element.path) {
                     case 'nickname':
                         setInputNameDisp('flex');
@@ -94,10 +88,7 @@ const Registration:React.FC<IRegProps> = ({onClick}) => {
                         setInputMailDisp('flex');
                         break;
                 }
-                
-            });
-
-            
+            });  
         }   
     }
 
@@ -105,15 +96,15 @@ const Registration:React.FC<IRegProps> = ({onClick}) => {
         <Reg>
             <Button btnText={"У меня уже есть профиль"} onClick={onClick}></Button>
             <div style={{display:"flex", width:'100%', alignItems:'center'}}>
-                <Input onKeyDown={HandleKeyPress} ph={"Логин"} onChange={HandleInputNicknameValue} value={inputNicknameValue} ></Input>
+                <Input  ph={"Логин"} onChange={HandleInputNicknameValue} value={inputNicknameValue} ></Input>
                 <MySVG display={inputNameDisp}/>
             </div>
            <div style={{display:"flex", width:'100%', alignItems:'center'}}>
-                <Input onKeyDown={HandleKeyPress} type = "password" ph={"Пароль"} onChange = {HandleInputPasswordValue} value={inputPasswordValue}></Input>
+                <Input  type = "password" ph={"Пароль"} onChange = {HandleInputPasswordValue} value={inputPasswordValue}></Input>
                 <MySVG display={inputPassDisp}/>
            </div>
             <div style={{display:"flex", width:'100%', alignItems:'center'}}>
-                <Input onKeyDown={HandleKeyPress} ph={"Почта"} onChange = {HandleInputMailValue} value={inputMailValue}></Input>
+                <Input  ph={"Почта"} onChange = {HandleInputMailValue} value={inputMailValue}></Input>
                 <MySVG display={inputMailDisp}/>
             </div>
             
