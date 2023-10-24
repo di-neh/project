@@ -79,7 +79,14 @@ export class GroupController{
                 relations: ['user']
             });
             
-            const groups = await GroupRepository.find({where:{userId: token.user.id}, relations:['todos']});
+            //const groups = await GroupRepository.find({where:{userId: token.user.id}, relations:['todos']});
+            const groups = await GroupRepository.createQueryBuilder("group")
+                .where("group.userId = :userId", { userId: token.user.id })
+                .leftJoinAndSelect("group.todos", "todos")
+                .orderBy("group.id", "ASC") 
+                .addOrderBy("todos.id", "ASC") 
+                .getMany(   );
+                
             return res.status(200).json(groups);
         } catch (e) {
             console.log(e);
