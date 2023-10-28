@@ -8,7 +8,6 @@ interface IInputProps{
     value: string;
     type?: string;
     backgroundColor?: string;
-    onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 const Inputt = styled.input`

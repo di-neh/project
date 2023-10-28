@@ -11,6 +11,10 @@ import { serializeWithBufferAndIndex } from "typeorm/driver/mongodb/bson.typings
 import { Token } from "../entities/Token";
 import { DataSource } from "typeorm";
 
+import * as fs from 'fs';
+import FormData = require("form-data");
+import path = require("path");
+
 export interface IRequestBody{
     nickname?: string,
     password?: string,
@@ -203,7 +207,6 @@ export class UserController{
             return res.status(400).json({ errors: errors.array() });
         }
         try {
-            console.log(req.body);
             await tokenRepository.clear();
             const {nickname, password} = req.body;
 
@@ -308,6 +311,7 @@ export class UserController{
             res.status(400).json({message:'Error during chanching password'});
         }
     }
+
     async GetUserProfile(req:Request<{}, {}, IRequestBody>, res:Response){
         try {
             () => {
@@ -316,11 +320,74 @@ export class UserController{
             }
             const cookies: IRequestCookies = req.cookies;
             const token = await tokenRepository.findOne({where:{token: cookies.token}, relations: ['user']});
-            console.log(token.user);
+            
             res.status(200).json(token.user);
         } catch (error) {
             console.log(error);
             res.status(400).json({message:'Error during getting profile'}); 
+        }
+    }
+    async GetUserProfileImage(req:Request<{}, {}, IRequestBody>, res:Response){
+        try {
+            () => {
+                res.send('Get Cookie');
+                res.end;
+            }
+            const cookies: IRequestCookies = req.cookies;
+            const token = await tokenRepository.findOne({where:{token: cookies.token}, relations: ['user']});
+            res.status(200).sendFile(token.user.profileImagePath);
+        } catch (error) {
+            console.log(error);
+            res.status(400).json({message:'Error during getting profile'}); 
+        }
+    }
+
+    async UploadUserProfileImage(req: Request, res: Response){
+        try {
+            const file = req.files[0];
+            const username = req.body.username;
+
+            const folderPath = path.join(__dirname, '..', '/images/', username);
+            const filePath = folderPath + `/${file.originalname}`;
+
+            if(!file){
+                return res.status(400).send('No file uploaded.');
+            }
+
+            fs.readdir(folderPath, (err, files) => {
+                if (err) {
+                    console.error('Ошибка чтения содержимого папки:', err);
+                    return;
+                }
+
+                files.forEach((file) => {
+                    const filePath = path.join(folderPath, file);
+                    fs.unlink(filePath, (err) => {
+                        if (err) {
+                            console.error('Ошибка удаления файла', filePath, err);
+                        } else {
+                            console.log('Файл удален:', filePath);
+                        }
+                    });
+                });
+            })
+
+            fs.mkdir(folderPath, { recursive: true }, (err) => {
+                if (err){
+                    res.status(400).json({message:`Ошибка при создании папки: ${err}`});
+                }
+              });
+            
+            fs.writeFileSync(filePath, file.buffer);
+           
+            const user = await userRepository.findOne({where:{nickname:username}});
+            user.profileImagePath =  `C:/Users/Kalabass/Desktop/duba_projects/project/react project/backend/src/images/${username}/${file.originalname}`;
+            userRepository.save(user);
+
+            return res.status(200).send('File uploaded.');
+        } catch (e) {
+            console.log(e);
+            res.status(400).json({message:'Error during uploading user profile'}); 
         }
     }
 }

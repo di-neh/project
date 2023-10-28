@@ -33,6 +33,11 @@ export class User {
     @Column()
     password: string
 
+    @Column({
+        default: null
+    })
+    profileImagePath: string
+
     @ManyToMany(
         () => Role
     )

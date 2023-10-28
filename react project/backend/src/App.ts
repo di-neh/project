@@ -15,6 +15,7 @@ app.use(cors({
     credentials: true
 }));
 
+app.use('/upload', express.static('/backend/src/images'));
 app.use(morgan('tiny'));
 app.use(bodyParser.json());
 app.use(UserRouter, TaskRouter, GroupRouter);
@@ -26,6 +27,7 @@ app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.header('Access-Control-Allow-Credentials', 'true');
     next();
 });
 

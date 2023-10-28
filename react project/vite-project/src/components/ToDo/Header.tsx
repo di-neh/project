@@ -2,7 +2,7 @@ import styled from "styled-components";
 // @ts-ignore
 import logo from  "../ToDo/statics/копик.jpg";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 import {useNavigate} from "react-router-dom";
@@ -85,7 +85,9 @@ const Menu_item = styled.li`
   cursor: pointer;
 `
 
-const Header = () => {
+
+
+const Header:React.FC = () => {
 
 
   interface IUserProfile{
@@ -98,13 +100,22 @@ const Header = () => {
 }
 
   const [userProfile, setUserProfile] = useState<IUserProfile>({mail: '',nickname: ''});
-  
+  const [userProfileImage, setUserProfileImage] = useState<string>(logo);
 
 
   useEffect(()=> {
     FetchProfile();
-
+    FetchProfileImage();
   }, []);
+
+  const FetchProfileImage = async () => {
+    const response = await axios.get('http://localhost:5661/userProfileImage', {
+        responseType: 'blob'
+    });
+    const fileBlob = new Blob([response.data]);
+    const imageUrl = URL.createObjectURL(fileBlob);
+    setUserProfileImage(imageUrl);
+}
 
   const FetchProfile = async () => {
     try {
@@ -170,7 +181,7 @@ const Header = () => {
                 </div>
                 <Avatar onClick={offBtn} active={active}>
 
-                    <AvatarImg src={logo}></AvatarImg>
+                    <AvatarImg src={userProfileImage}></AvatarImg>
                 </Avatar>
                 <Menu active={active}>
                     <Menu_list>
