@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Input from "./Input.tsx";
 import MySVG from "../ToDo/SVG/MySVG.tsx";
+import { ICustomError, IRequestData } from "../../types/Types.ts";
 
 
 
@@ -20,18 +21,9 @@ const EnterWindow = styled.div`
   margin-top: 100px;
 `;
 
-
-
 interface IEnterProps{
     onClick?: () => void; 
 } 
-
-interface IRequestData{
-    nickname: string,
-    password: string,
-}
-
-
 
 const Enter: React.FC<IEnterProps> = ({onClick}) => {
 
@@ -53,12 +45,10 @@ const Enter: React.FC<IEnterProps> = ({onClick}) => {
         if (event.key === 'Enter') {
           event.preventDefault();
           logIn();
-          // Выполняйте дополнительные действия, но не отправляйте форму
         }
       }
     
     const logIn = async () => { 
-
         try {  
             const reqData:IRequestData = {nickname: inputLoginVal, password: inputPasswordnVal}
             await axios.post('http://localhost:5661/login', reqData, {
@@ -67,12 +57,12 @@ const Enter: React.FC<IEnterProps> = ({onClick}) => {
             });
             navigate('/main');
 
-        } catch (e) {
+        } catch (err) {
+            const e = err as ICustomError;
             setInputNameDisp('none');
             setInputPassDisp('none')
 
-            //@ts-ignore
-            e.response.data.errors.forEach((element: { path: any; }) => {
+            e.response.data.errors.forEach((element: { path: string; }) => {
                 switch(element.path) {
                     case 'nickname':
                         setInputNameDisp('flex');
@@ -80,14 +70,10 @@ const Enter: React.FC<IEnterProps> = ({onClick}) => {
 
                     case 'password':
                         setInputPassDisp('flex');
-                        break;
-                    
+                        break; 
                 }
-                
             });
-            
         }
-        
     }
 
     return (

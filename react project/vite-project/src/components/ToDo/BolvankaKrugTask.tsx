@@ -1,6 +1,5 @@
-
-// import { useState } from "react";
 import styled from "styled-components";
+import { IBolvankaKrugTaskProps } from "../../types/Types";
 
 const DivKrug = styled.div`
     width: 95%;
@@ -24,12 +23,6 @@ const TextAreaStyled = styled.textarea`
   }
   
 `
-
-interface IBolvankaKrugTaskProps{
-  onKeyDown: (event: React.KeyboardEvent<HTMLTextAreaElement>) => void; 
-  onTextAreaChange: (value: string) => void;
-  task?: string;
-}
 
 const BolvankaKrugTask:React.FC<IBolvankaKrugTaskProps> = ({onKeyDown, onTextAreaChange, task}) => {
   const handleTextAreaChange = (event : React.ChangeEvent<HTMLTextAreaElement>)  =>{

@@ -5,7 +5,7 @@ import { useState } from "react";
 import BolvankaKrugItem from "./BolvankaKrugItem.tsx";
 import axios from "axios";
 import Button from "../auth/Button.tsx";
-import { IToDoData } from "../../../types/ToDo.ts";
+import { IBolvankaProps, IToDoData } from "../../types/Types.ts";
 import {Reorder} from "framer-motion";
 
 const Bulova = styled.div`
@@ -15,15 +15,6 @@ const Bulova = styled.div`
   flex-direction: column; 
 `
 
-// const Button = styled.button`
-//     border-radius: 5px;
-//     background: black;
-//     color: white;
-//     padding: 3px;
-//     margin:2px;
-//     width: 48%;
-// `
-
 const ButtonsContainer = styled.div`
   margin-top: 10px;
     display: flex;
@@ -31,19 +22,9 @@ const ButtonsContainer = styled.div`
   width: 200px;
 `
 
-interface IBolvankaProps{
-    title: string,
-    id: number;
-    tasks: IToDoData[];
-    DelteComponent: (id:number) => void;
-    UpdateComponent: (id:number) => void;
-    DeleteItem: (id:number) => void;
-    onPopUpOpen?: () => void;
-}
 
 
-
-const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DelteComponent, UpdateComponent, tasks}) => {
+const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DeleteComponent, UpdateComponent, tasks}) => {
 
     const [inputTitleValue, setInputTitleValue] = useState<string>(title);
     const [textAreaTaskValue, setTestAreaTaskValue] = useState<string>("");
@@ -78,7 +59,7 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DelteComponent, UpdateC
             ])
             setTestAreaTaskValue("");
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     }
 
@@ -87,7 +68,6 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DelteComponent, UpdateC
     }
 
     const HandleBolvankaTaskChange = (value: string) => {
-        console.log(value)
         setTestAreaTaskValue(value); 
     }
 
@@ -99,8 +79,6 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DelteComponent, UpdateC
         UpdateBracket(id);
     }
 
-    
-
     const UpdateBracket = async (id:number) => {
         try {
             const url:string = 'http://localhost:5661/groups/' + id;
@@ -111,7 +89,7 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DelteComponent, UpdateC
             });
             UpdateComponent(id);
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     }
 
@@ -123,9 +101,9 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DelteComponent, UpdateC
                 headers: {'Content-Type' : 'application/json'},
                 withCredentials: true
             });
-            DelteComponent(id);
+            DeleteComponent(id);
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     }
 

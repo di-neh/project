@@ -2,17 +2,10 @@ import { validationResult, Result } from "express-validator";
 import { Request, Response } from "express";
 import { User } from "../entities/User";
 import { AppDataSource } from "../db/data-source"
-import { EnumRoles } from "../common/enums";
 import * as bcrypt from "bcrypt";
 import { Role } from "../entities/Role";
-import { cos, number } from "mathjs";
-import { IUser } from "../common/interfaces";
-import { serializeWithBufferAndIndex } from "typeorm/driver/mongodb/bson.typings";
 import { Token } from "../entities/Token";
-import { DataSource } from "typeorm";
-
 import * as fs from 'fs';
-import FormData = require("form-data");
 import path = require("path");
 
 export interface IRequestBody{
@@ -32,10 +25,6 @@ export interface IRequestCookies{
 
 export interface IRequestParams{
     id:number
-}
-
-export interface IUserswithRoles{
-    
 }
 
 const userRepository = AppDataSource.getRepository(User);
@@ -335,6 +324,9 @@ export class UserController{
             }
             const cookies: IRequestCookies = req.cookies;
             const token = await tokenRepository.findOne({where:{token: cookies.token}, relations: ['user']});
+            if(token.user.profileImagePath === null){
+                return res.status(200);
+            }
             res.status(200).sendFile(token.user.profileImagePath);
         } catch (error) {
             console.log(error);
@@ -345,6 +337,11 @@ export class UserController{
     async UploadUserProfileImage(req: Request, res: Response){
         try {
             const file = req.files[0];
+            
+            if(file === undefined){
+                return res.status(200);
+            }
+
             const username = req.body.username;
 
             const folderPath = path.join(__dirname, '..', '/images/', username);

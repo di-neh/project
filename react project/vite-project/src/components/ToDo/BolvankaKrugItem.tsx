@@ -2,15 +2,7 @@ import styled from "styled-components";
 import { useState } from "react";
 import PopUp from "./PopUp";
 import axios from "axios";
-import { IToDoData } from "../../../types/ToDo";
-
-interface IBolvankaKrugItem{
-    textContent:string;
-    id: number;
-    isCheck: boolean;
-    DeleteItem: (id:number) => void;
-    tasks: IToDoData[];
-}
+import { IBolvankaKrugItem } from "../../types/Types";
 
 interface ItemProps {
   isChecked: boolean;
@@ -55,7 +47,6 @@ const BolvankaKrugItem: React.FC<IBolvankaKrugItem> = ( {textContent, id, isChec
       headers: {'Content-Type' : 'application/json'},
       withCredentials: true
     });
-    console.log(id);
   }
   
   const openPopUp = () => {
@@ -83,17 +74,14 @@ const BolvankaKrugItem: React.FC<IBolvankaKrugItem> = ( {textContent, id, isChec
               headers: {'Content-Type' : 'application/json'},
               withCredentials: true
           });
-          
-          console.log('DELETED');
       } catch (e){
-          console.log(e)
+          console.error(e)
           
       }
   }
 
   return (
     <div>
-     
       <Item isChecked={isChecked} onClick={openPopUp}>
           <div style={{padding:"7px"}} >{inputValue} </div>
           <CheckBox type={"checkbox"} checked={isChecked} onChange={handleCheck}></CheckBox>

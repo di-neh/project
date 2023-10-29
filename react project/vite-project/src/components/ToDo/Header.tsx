@@ -1,11 +1,12 @@
 import styled from "styled-components";
-// @ts-ignore
-import logo from  "../ToDo/statics/копик.jpg";
+//@ts-ignore
+import logo from  "../../statics/копик.jpg"; 
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 import {useNavigate} from "react-router-dom";
+import { IUserProfile } from "../../types/Types";
 
 
 const Wrapper = styled.div`
@@ -62,14 +63,9 @@ const Menu = styled.nav<MenuProps>`
   border-radius: 7px;
   color: black;
   opacity: ${(props) => (props.active ? '1' : '0')};;
-  transform: translateY(${(props) => (props.active ? '0' : '-10px')};);
-  visibility: ${(props) => (props.active ? 'visible' : 'hidden')};;
+  transform: translateY(${(props) => (props.active ? '0' : '-10px')});
+  visibility: ${(props) => (props.active ? 'visible' : 'hidden')};
   transition: 0.1s;
-  //&:active{
-  //  opacity: 1;
-  //  transform: translateY(0);
-  //  visibility: visible;
-  //}
 `
 const Menu_list = styled.ul`
   margin: 0;
@@ -88,12 +84,6 @@ const Menu_item = styled.li`
 
 
 const Header:React.FC = () => {
-
-
-  interface IUserProfile{
-    mail: string,
-    nickname: string
-  }
 
   interface IResponseData{
     data: IUserProfile;
@@ -140,10 +130,6 @@ const Header:React.FC = () => {
         }
     }
 
-
-
-
-
     const [active, setActive] = useState(false);
     const offBtn = () =>{
         setActive(!active);
@@ -166,9 +152,6 @@ const Header:React.FC = () => {
             console.log(e)
         }
     }
-
-
-
 
     return (
         <Wrapper>

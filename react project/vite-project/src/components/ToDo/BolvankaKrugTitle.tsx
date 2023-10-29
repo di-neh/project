@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Input from "../auth/Input.tsx";
+import { IBolvankaKrugTitleProps } from "../../types/Types.ts";
 
 
 const DivKrug = styled.div`
@@ -10,12 +11,6 @@ const DivKrug = styled.div`
     padding: 5px;
     
 `
-
-
-interface IBolvankaKrugTitleProps{
-    onInputChange : (value: string) => void;
-    title: string
-}
 
 const BolvankaKrugTitle:React.FC<IBolvankaKrugTitleProps> = ({ onInputChange, title})  => {
 

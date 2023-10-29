@@ -5,6 +5,7 @@ import { useNavigate  } from 'react-router-dom';
 import { useState } from "react";
 import axios from "axios";
 import Input from "./Input.tsx";
+import { ICustomError, IRequestData } from "../../types/Types.ts";
 
 
 const Reg = styled.div`
@@ -19,22 +20,9 @@ const Reg = styled.div`
   margin-top: 100px;
 `;
 
-
-
 interface IRegProps{
     onClick?: () => void; 
 } 
-
-interface IREquestData{
-    nickname: string,
-    password: string,
-    mail:string,
-}
-
-interface ErrorResponse {
-    errors: {message: 'string', path: 'string'}[];
-}
-
 
 const Registration:React.FC<IRegProps> = ({onClick}) => {
     const navigate = useNavigate();
@@ -58,13 +46,9 @@ const Registration:React.FC<IRegProps> = ({onClick}) => {
         setInputPasswordValue(e.target.value);
     }
 
-    // function HandleKeyPress (){
-    //     HandlleButtonClick();
-    // }
-
     const HandlleButtonClick = async () => {
         try {
-            const reqData:IREquestData= {nickname: inputNicknameValue, mail: inputMailValue, password: inputPasswordValue};
+            const reqData:IRequestData= {nickname: inputNicknameValue, mail: inputMailValue, password: inputPasswordValue};
             await axios.post('http://localhost:5661/registration', reqData, {
                 headers : {'Content-Type': 'application/json'},
                 withCredentials: true
@@ -74,7 +58,7 @@ const Registration:React.FC<IRegProps> = ({onClick}) => {
             setInputNameDisp('none');
             setInputPassDisp('none');
             setInputMailDisp('none');
-            const responseData: ErrorResponse =  e.response.data;
+            const responseData =  (e as ICustomError).response.data;
             responseData.errors.forEach((element: { path: string; }) => {
                 switch(element.path) {
                     case 'nickname':
