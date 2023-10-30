@@ -6,6 +6,7 @@ import { useState } from "react";
 import axios from "axios";
 import Input from "./Input.tsx";
 import { ICustomError, IRequestData } from "../../types/Types.ts";
+import { useFormInput } from "../../Hooks/useFormInput.ts";
 
 
 const Reg = styled.div`
@@ -27,28 +28,17 @@ interface IRegProps{
 const Registration:React.FC<IRegProps> = ({onClick}) => {
     const navigate = useNavigate();
 
-    const [inputNicknameValue, setInputNicknameValue] = useState('');
-    const [inputMailValue, setInputMailValue] = useState('');
-    const [inputPasswordValue, setInputPasswordValue] = useState('');
+    const nicknameInputProps = useFormInput("");
+    const mailInputProps = useFormInput("");
+    const passwordInputProps = useFormInput("");
+
     const [inputNameDisp, setInputNameDisp] = useState<string>('none');
     const [inputPassDisp, setInputPassDisp] = useState<string>('none');
     const [inputMailDisp, setInputMailDisp] = useState<string>('none');
 
-    const HandleInputNicknameValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputNicknameValue(e.target.value);
-    }
-
-    const HandleInputMailValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputMailValue(e.target.value);
-    }
-
-    const HandleInputPasswordValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputPasswordValue(e.target.value);
-    }
-
     const HandlleButtonClick = async () => {
         try {
-            const reqData:IRequestData= {nickname: inputNicknameValue, mail: inputMailValue, password: inputPasswordValue};
+            const reqData:IRequestData= {nickname: nicknameInputProps.value, mail: mailInputProps.value, password: passwordInputProps.value};
             await axios.post('http://localhost:5661/registration', reqData, {
                 headers : {'Content-Type': 'application/json'},
                 withCredentials: true
@@ -80,15 +70,15 @@ const Registration:React.FC<IRegProps> = ({onClick}) => {
         <Reg>
             <Button btnText={"У меня уже есть профиль"} onClick={onClick}></Button>
             <div style={{display:"flex", width:'100%', alignItems:'center'}}>
-                <Input  ph={"Логин"} onChange={HandleInputNicknameValue} value={inputNicknameValue} ></Input>
+                <Input  ph={"Логин"} {...nicknameInputProps}></Input>
                 <MySVG display={inputNameDisp}/>
             </div>
            <div style={{display:"flex", width:'100%', alignItems:'center'}}>
-                <Input  type = "password" ph={"Пароль"} onChange = {HandleInputPasswordValue} value={inputPasswordValue}></Input>
+                <Input  type = "password" ph={"Пароль"} {...passwordInputProps}></Input>
                 <MySVG display={inputPassDisp}/>
            </div>
             <div style={{display:"flex", width:'100%', alignItems:'center'}}>
-                <Input  ph={"Почта"} onChange = {HandleInputMailValue} value={inputMailValue}></Input>
+                <Input  ph={"Почта"} {...mailInputProps}></Input>
                 <MySVG display={inputMailDisp}/>
             </div>
             

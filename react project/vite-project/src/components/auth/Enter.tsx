@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Input from "./Input.tsx";
 import MySVG from "../ToDo/SVG/MySVG.tsx";
 import { ICustomError, IRequestData } from "../../types/Types.ts";
+import { useFormInput } from "../../Hooks/useFormInput.ts";
 
 
 
@@ -26,20 +27,13 @@ interface IEnterProps{
 } 
 
 const Enter: React.FC<IEnterProps> = ({onClick}) => {
-
     const navigate = useNavigate();
 
-    const [inputLoginVal, setInputLoginVal] = useState<string>('');
-    const [inputPasswordnVal, setInputPasswordnVal] = useState<string>('');
+    const nicknameInputProps = useFormInput("");
+    const passwordInputProps = useFormInput("");
+
     const [inputNameDisp, setInputNameDisp] = useState<string>('none');
     const [inputPassDisp, setInputPassDisp] = useState<string>('none');
-    const HandlerInputLoginValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputLoginVal(e.target.value);
-    }
-
-    const HandlerInputPasswordValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputPasswordnVal(e.target.value);
-    }
     
     function handleKeyPress(event: React.KeyboardEvent<HTMLInputElement>) {
         if (event.key === 'Enter') {
@@ -50,7 +44,7 @@ const Enter: React.FC<IEnterProps> = ({onClick}) => {
     
     const logIn = async () => { 
         try {  
-            const reqData:IRequestData = {nickname: inputLoginVal, password: inputPasswordnVal}
+            const reqData:IRequestData = {nickname: nicknameInputProps.value, password: passwordInputProps.value}
             await axios.post('http://localhost:5661/login', reqData, {
                 headers : {'Content-Type': 'application/json'},
                 withCredentials: true
@@ -81,11 +75,11 @@ const Enter: React.FC<IEnterProps> = ({onClick}) => {
         <EnterWindow>
             <Button btnText={"У вас нет учетной записи?"} onClick={onClick}></Button>
             <div style={{display:"flex", width:'100%', alignItems:'center'}}>
-                <Input onKeyDown={handleKeyPress} ph={"Логин"}  onChange={HandlerInputLoginValue} value={inputLoginVal}></Input>
+                <Input onKeyDown={handleKeyPress} ph={"Логин"} {...nicknameInputProps} ></Input>
                 <MySVG display={inputNameDisp}/>
             </div>
             <div style={{display:"flex", width:'100%', alignItems:'center'}}>
-                <Input onKeyDown={handleKeyPress} type = "password"  ph={"Пароль"} onChange={HandlerInputPasswordValue} value={inputPasswordnVal}></Input>
+                <Input onKeyDown={handleKeyPress} type = "password"  ph={"Пароль"} {...passwordInputProps}></Input>
                 <MySVG display={inputPassDisp}/>
             </div>
             

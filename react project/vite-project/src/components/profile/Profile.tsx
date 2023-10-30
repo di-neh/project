@@ -7,6 +7,7 @@ import * as React from "react";
 //@ts-ignore
 import logo from "../../statics/копик.jpg";
 import { IUserProfile } from "../../types/Types.ts";
+import { useFormInput } from "../../Hooks/useFormInput.ts";
 
 
 const Box = styled.div`
@@ -79,9 +80,8 @@ interface IResponseData{
 
 const Profile = () => {
 
-    const [inputValue, setInputValue] = useState("");
-    const [inputValue2, setInputValue2] = useState("");
-    const [inputValue3, setInputValue3] = useState("");
+    const nicknameInputProps = useFormInput(""); 
+    const mailInputProps = useFormInput("");
 
     const [profileImgUrl, setProfileImgUrl] = useState<string>(logo);
     const [profileImgFile, setProfileImgFile] = useState<File>(logo);
@@ -106,11 +106,8 @@ const Profile = () => {
                 withCredentials: true
             });
 
-            const nickname = response.data.nickname;
-            const mail = response.data.mail;
-
-            setInputValue(nickname);
-            setInputValue3(mail);
+            nicknameInputProps.setValue(response.data.nickname);
+            mailInputProps.setValue(response.data.mail);
         } catch (e) {
             console.error('Error fetching profile:', e);
         }
@@ -129,14 +126,14 @@ const Profile = () => {
         try {
             const formData = new FormData();
             formData.append('image', profileImgFile);
-            formData.append('username', inputValue);
+            formData.append('username', nicknameInputProps.value);
             
-            await axios.post('http://localhost:5661/upload', formData, {
+                await axios.post('http://localhost:5661/upload', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
                 withCredentials: true,
                 
             });
-
+            setProfileImgUrl(URL.createObjectURL(profileImgFile));
         } catch (e) {
             console.error('Error updating profile:', e);
         }
@@ -145,27 +142,14 @@ const Profile = () => {
     const HandleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e.target.files ? e.target.files[0] : null;
         if(selectedFile){
-            console.log(selectedFile);
-            console.log(selectedFile);
             setProfileImgUrl(URL.createObjectURL(selectedFile));
             setProfileImgFile(selectedFile);
         }
     }
 
-    const InputNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputValue(e.target.value);
-    };
-    const InputFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputValue2(e.target.value);
-    };
-    const InputMailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputValue3(e.target.value);
-    };
-
-
     return (
         <div>
-            <Header  />
+            <Header photo={profileImgUrl} />
             <Box>
                 <h1 style={{textAlign:"center"}}>Профиль</h1>
                 <BoxProfile>
@@ -176,11 +160,11 @@ const Profile = () => {
                     </BoxProfileImage>
                     <BoxProfileInfo>
                         <H2>Имя</H2>
-                        <Input value={inputValue} ph={"Имя"} onChange={InputNameChange}></Input>
+                        <Input  {...nicknameInputProps} ph="Имя"></Input>
                         <H2>Фамилия</H2>
-                        <Input value={inputValue2} ph={"фамилия"} onChange={InputFirstNameChange}></Input>
+                        <Input value="" ph={"фамилия"}></Input>
                         <H2>Почта</H2>
-                        <Input value={inputValue3} ph={"Почта"} onChange={InputMailChange}></Input>
+                        <Input {...mailInputProps} ph={"Почта"}></Input>
                     </BoxProfileInfo>
                 </BoxProfile>
                 <Button__profile__update onClick={updateProfile}>обновить профиль</Button__profile__update>

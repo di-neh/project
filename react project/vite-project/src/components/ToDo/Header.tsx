@@ -1,12 +1,12 @@
 import styled from "styled-components";
-//@ts-ignore
-import logo from  "../../statics/копик.jpg"; 
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 import {useNavigate} from "react-router-dom";
 import { IUserProfile } from "../../types/Types";
+
+//@ts-ignore
+import logo from  "../../statics/копик.jpg"; 
 
 
 const Wrapper = styled.div`
@@ -34,11 +34,6 @@ const AvatarImg = styled.img`
   object-fit: cover;
   
 `
-
-interface AvatarProps {
-  active: boolean;
-}
-
 const Avatar = styled.button<AvatarProps>`
   margin-left: 5px;
   display: inline-block;
@@ -47,11 +42,6 @@ const Avatar = styled.button<AvatarProps>`
   border-radius: 50%;
   overflow: hidden;
 `
-
-interface MenuProps {
-  active: boolean;
-}
-
 const Menu = styled.nav<MenuProps>`
   position: absolute;
   top: 47px;
@@ -81,16 +71,26 @@ const Menu_item = styled.li`
   cursor: pointer;
 `
 
+interface AvatarProps {
+  active: boolean;
+}
 
+interface MenuProps {
+  active: boolean;
+}
 
-const Header:React.FC = () => {
+interface IHeaderProps{
+  photo?: string,
+}
+
+const Header:React.FC<IHeaderProps> = ({photo}) => {
 
   interface IResponseData{
     data: IUserProfile;
 }
 
   const [userProfile, setUserProfile] = useState<IUserProfile>({mail: '',nickname: ''});
-  const [userProfileImage, setUserProfileImage] = useState<string>(logo);
+  const [userProfileImage, setUserProfileImage] = useState<string>(photo? photo : logo);
 
 
   useEffect(()=> {
