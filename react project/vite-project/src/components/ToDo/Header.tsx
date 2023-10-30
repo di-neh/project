@@ -1,12 +1,11 @@
 import styled from "styled-components";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-
 import {useNavigate} from "react-router-dom";
 import { IUserProfile } from "../../types/Types";
 
 //@ts-ignore
 import logo from  "../../statics/копик.jpg"; 
+import { useRequestAPI } from "../../Hooks/useRequestAPI";
 
 
 const Wrapper = styled.div`
@@ -84,11 +83,6 @@ interface IHeaderProps{
 }
 
 const Header:React.FC<IHeaderProps> = ({photo}) => {
-
-  interface IResponseData{
-    data: IUserProfile;
-}
-
   const [userProfile, setUserProfile] = useState<IUserProfile>({mail: '',nickname: ''});
   const [userProfileImage, setUserProfileImage] = useState<string>(photo? photo : logo);
 
@@ -99,25 +93,18 @@ const Header:React.FC<IHeaderProps> = ({photo}) => {
   }, []);
 
   const FetchProfileImage = async () => {
-    const response = await axios.get('http://localhost:5661/userProfileImage', {
-        responseType: 'blob'
-    });
-    const fileBlob = new Blob([response.data]);
-    const imageUrl = URL.createObjectURL(fileBlob);
-    setUserProfileImage(imageUrl);
-}
+    const response = await useRequestAPI().FetchProfileImage();
+    if(response){
+      const fileBlob = new Blob([response.data]);
+      const imageUrl = URL.createObjectURL(fileBlob);
+      setUserProfileImage(imageUrl);
+    }
+  }
 
   const FetchProfile = async () => {
-    try {
-      const response:IResponseData = await axios.get('http://localhost:5661/userProfile', {
-        headers: {'Content-Type': 'application/json'},
-        withCredentials: true
-      });
-
-      setUserProfile({mail: response.data.mail, nickname: response.data.nickname});
-
-    } catch (e) {
-      console.error('Error fetching profile:', e);
+    const userProfile = await useRequestAPI().FetchProfile();
+    if(userProfile){
+      setUserProfile({mail: userProfile.data.mail, nickname: userProfile.data.nickname});
     }
   }
 

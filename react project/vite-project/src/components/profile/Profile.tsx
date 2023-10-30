@@ -6,8 +6,8 @@ import axios from "axios";
 import * as React from "react";
 //@ts-ignore
 import logo from "../../statics/копик.jpg";
-import { IUserProfile } from "../../types/Types.ts";
 import { useFormInput } from "../../Hooks/useFormInput.ts";
+import { useRequestAPI } from "../../Hooks/useRequestAPI.ts";
 
 
 const Box = styled.div`
@@ -74,10 +74,6 @@ const Button__profile__choose = styled.button`
 
 `
 
-interface IResponseData{
-    data: IUserProfile;
-}
-
 const Profile = () => {
 
     const nicknameInputProps = useFormInput(""); 
@@ -97,29 +93,31 @@ const Profile = () => {
         if (fileInputRef.current) {
           fileInputRef.current.click();
         }
-      };
+    }
+
+    const HandleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const selectedFile = e.target.files ? e.target.files[0] : null;
+        if(selectedFile){
+            setProfileImgUrl(URL.createObjectURL(selectedFile));
+            setProfileImgFile(selectedFile);
+        }
+    }
 
     const FetchProfile = async () => {
-        try {
-            const response:IResponseData = await axios.get('http://localhost:5661/userProfile', {
-                headers : {'Content-Type': 'application/json'},
-                withCredentials: true
-            });
-
-            nicknameInputProps.setValue(response.data.nickname);
-            mailInputProps.setValue(response.data.mail);
-        } catch (e) {
-            console.error('Error fetching profile:', e);
+        const userProfile = await useRequestAPI().FetchProfile();
+        if(userProfile){
+            nicknameInputProps.setValue(userProfile.data.nickname);
+            mailInputProps.setValue(userProfile.data.mail);
         }
     }
 
     const FetchProfileImage = async () => {
-        const response = await axios.get('http://localhost:5661/userProfileImage', {
-            responseType: 'blob'
-        });
-        const fileBlob = new Blob([response.data]);
-        const imageUrl = URL.createObjectURL(fileBlob);
-        setProfileImgUrl(imageUrl);
+        const response = await useRequestAPI().FetchProfileImage();
+        if(response){
+            const fileBlob = new Blob([response.data]);
+            const imageUrl = URL.createObjectURL(fileBlob);
+            setProfileImgUrl(imageUrl);
+        }
     }
 
     const updateProfile = async () => {
@@ -139,14 +137,6 @@ const Profile = () => {
         }
     }
 
-    const HandleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const selectedFile = e.target.files ? e.target.files[0] : null;
-        if(selectedFile){
-            setProfileImgUrl(URL.createObjectURL(selectedFile));
-            setProfileImgFile(selectedFile);
-        }
-    }
-
     return (
         <div>
             <Header photo={profileImgUrl} />
@@ -162,7 +152,7 @@ const Profile = () => {
                         <H2>Имя</H2>
                         <Input  {...nicknameInputProps} ph="Имя"></Input>
                         <H2>Фамилия</H2>
-                        <Input value="" ph={"фамилия"}></Input>
+                        <Input value="" ph={"фамилия"} onChange={() => {console.log('da')}}></Input>
                         <H2>Почта</H2>
                         <Input {...mailInputProps} ph={"Почта"}></Input>
                     </BoxProfileInfo>
