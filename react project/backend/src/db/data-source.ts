@@ -5,18 +5,31 @@ import { Group } from "../entities/Group"
 import { Role } from "../entities/Role"
 import { ToDo } from "../entities/ToDo"
 import { Token } from "../entities/Token"
+import { Desk } from "../entities/Desk"
 
+// export const AppDataSource = new DataSource({
+//     type: "postgres",
+//     host: "localhost",
+//     port: 3000,
+//     username: "postgres",
+//     password: "kalabass2299657",
+//     database: "Todo",
+//     synchronize: true,
+//     logging: false,
+//     entities: [User, Group, Role, ToDo, Token],
+//     migrations: [],
+//     subscribers: [],
+// })
 export const AppDataSource = new DataSource({
     type: "postgres",
     host: "localhost",
     port: 3000,
     username: "postgres",
     password: "kalabass2299657",
-    database: "Todo",
+    database: "typeOrmPractice",
     synchronize: true,
     logging: false,
-    entities: [User, Group, Role, ToDo, Token],
+    entities: [User, Group, Role, ToDo, Token, Desk],
     migrations: [],
     subscribers: [],
 })
-

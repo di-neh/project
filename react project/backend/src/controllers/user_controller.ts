@@ -7,6 +7,7 @@ import { Role } from "../entities/Role";
 import { Token } from "../entities/Token";
 import * as fs from 'fs';
 import path = require("path");
+import { Desk } from "../entities/Desk";
 
 export interface IRequestBody{
     nickname?: string,
@@ -30,6 +31,7 @@ export interface IRequestParams{
 const userRepository = AppDataSource.getRepository(User);
 const roleRepository = AppDataSource.getRepository(Role);
 const tokenRepository = AppDataSource.getRepository(Token);
+const deskRepository = AppDataSource.getRepository(Desk);
 
 export class UserController{
     async createUser(req:Request<{}, {}, IRequestBody>, res:Response){
@@ -182,6 +184,10 @@ export class UserController{
 
             const newToken = new Token(token, newUser);
             await tokenRepository.save(newToken);
+
+            const newDesk = new Desk("Новая доска");
+            newDesk.user = newUser;
+            await deskRepository.save(newDesk);
 
             res.status(200).json({newUser: newUser, message: 'Set Cookie'});
         } catch (error) {

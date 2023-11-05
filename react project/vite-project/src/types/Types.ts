@@ -17,7 +17,7 @@ export interface IBolvankaProps{
     id: number;
     tasks: IToDoData[];
     DeleteComponent: (id:number) => void;
-    UpdateComponent: (id:number) => void;
+    UpdateComponent: (id:number, newTitle:string) => void;
     onPopUpOpen?: () => void;
 }
 
@@ -46,16 +46,16 @@ export interface IUserProfile{
     profileImagePath?: string
 }
 
-export interface IBolvankaData{
-    id: number,
-    title: string,
-    tasks: IToDoData[]
-}
-
 export interface IGroupData{
     id: number,
-    name: string,
+    title: string,
     todos: IToDoData[]
+}
+
+export interface IDeskProps{
+    id: number,
+    title: string,
+    groups:IGroupData[],
 }
 
 export interface ICustomError{

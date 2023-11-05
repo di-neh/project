@@ -2,8 +2,6 @@ import * as express from "express";
 import { body} from 'express-validator';
 import { UserController } from "../controllers/user_controller";
 import * as multer from "multer";
-import path = require("path");
-import * as fs from 'fs';
 
 const userController = new UserController();
 

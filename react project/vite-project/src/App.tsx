@@ -1,6 +1,6 @@
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import ToDoConteiner from "./components/ToDo/ToDoConteiner.tsx";
+import ToDoConteiner from "./components/ToDo/ToDoContainer.tsx";
 import Profile from "./components/profile/Profile.tsx";
 import Global from "./components/auth/Global.tsx";
 import AuthPage from "./components/auth/AuthPage.tsx";

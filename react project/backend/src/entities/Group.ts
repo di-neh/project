@@ -1,13 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, OneToMany } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, OneToMany, ManyToOne } from "typeorm"
 import { ToDo } from "./ToDo";
+import { Desk } from "./Desk";
 
 @Entity("groups")
 export class Group {
 
-    constructor(name:string, userId:number, id?:number){
-        this.name = name,
-        this.userId = userId,
-        this.id = id === undefined ? null: id;
+    constructor(title:string){
+        this.title = title
     }
 
     @PrimaryGeneratedColumn()
@@ -16,10 +15,10 @@ export class Group {
     @Column({
         nullable:true
     })
-    name: string
+    title: string
 
-    @Column()
-    userId: number
+    @ManyToOne(() => Desk, (desk) => desk.groups)
+    desk: Desk;
 
     @OneToMany(() => ToDo, (todo) => todo.group) // Отношение One-to-Many с ToDo
     todos: ToDo[]; // Связь с задачами

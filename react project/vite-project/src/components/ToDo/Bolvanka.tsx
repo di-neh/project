@@ -4,25 +4,21 @@ import BolvankaKrugTask from "./BolvankaKrugTask.tsx";
 import { useState } from "react";
 import BolvankaKrugItem from "./BolvankaKrugItem.tsx";
 import axios from "axios";
-import Button from "../auth/Button.tsx";
 import { IBolvankaProps, IToDoData } from "../../types/Types.ts";
 import {Reorder} from "framer-motion";
+import DropDownMenu from "./DropDownMenu.tsx";
 
 const Bulova = styled.div`
-  width: 275px;
-  display: flex;
-  align-items: center;
-  flex-direction: column; 
-`
-
-const ButtonsContainer = styled.div`
-  margin-top: 10px;
+    width: 275px;
     display: flex;
-  justify-content: space-between;
-  width: 200px;
+    align-items: center;
+    flex-direction: column; 
 `
 
-
+const TitleContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+`
 
 const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DeleteComponent, UpdateComponent, tasks}) => {
 
@@ -83,11 +79,11 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DeleteComponent, Update
         try {
             const url:string = 'http://localhost:5661/groups/' + id;
             //const response = 
-            await axios.put(url, { name: inputTitleValue}, {
+            await axios.put(url, { title: inputTitleValue}, {
                 headers: {'Content-Type' : 'application/json'},
                 withCredentials: true
             });
-            UpdateComponent(id);
+            UpdateComponent(id, inputTitleValue);
         } catch (e) {
             console.error(e);
         }
@@ -114,11 +110,10 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DeleteComponent, Update
     return (
         
         <Bulova>
-            <ButtonsContainer>
-                <Button btnText = {"Удалить"}  onClick={DeleteHandler}></Button>
-                <Button btnText = {"Обновить"}  onClick={UpdateHandler}></Button>
-            </ButtonsContainer>
-            <BolvankaKrugTitle  onInputChange={HandleBolvankaTitleChange} title={inputTitleValue} />
+            <TitleContainer>
+                <BolvankaKrugTitle  onInputChange={HandleBolvankaTitleChange} title={inputTitleValue} />
+                <DropDownMenu onDelete={DeleteHandler} onUpdate={UpdateHandler}></DropDownMenu>
+            </TitleContainer>
 
             <BolvankaKrugTask   onTextAreaChange={HandleBolvankaTaskChange}  onKeyDown={ToDoAddHandler} task={textAreaTaskValue}/>
             <Reorder.Group axis="y" values={tasks} onReorder={setToDoArr}>
@@ -127,6 +122,7 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DeleteComponent, Update
                     <BolvankaKrugItem DeleteItem={deleteTask} tasks={toDoArr}  key = {todo.id} textContent={todo.title} id={todo.id? todo.id: 0} isCheck = {todo.isCompleted}/>
                 </Reorder.Item>
             )}
+            
             </Reorder.Group>
         </Bulova>
         
