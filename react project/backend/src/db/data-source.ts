@@ -16,7 +16,7 @@ export const AppDataSource = new DataSource({
     database: "Todo",
     synchronize: true,
     logging: false,
-    entities: [User, Group, Role, ToDo, Token],
+    entities: [User, Group, Role, ToDo, Token, Desk],
     migrations: [],
     subscribers: [],
 })

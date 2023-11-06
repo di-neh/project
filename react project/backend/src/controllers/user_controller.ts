@@ -8,6 +8,8 @@ import { Token } from "../entities/Token";
 import * as fs from 'fs';
 import path = require("path");
 import { Desk } from "../entities/Desk";
+import { Group } from "../entities/Group";
+import { ToDo } from "../entities/ToDo";
 
 export interface IRequestBody{
     nickname?: string,
@@ -28,8 +30,11 @@ export interface IRequestParams{
     id:number
 }
 
-const userRepository = AppDataSource.getRepository(User);
+
 const roleRepository = AppDataSource.getRepository(Role);
+const GroupRepository = AppDataSource.getRepository(Group);
+const TaskRepository = AppDataSource.getRepository(ToDo);
+const userRepository = AppDataSource.getRepository(User);
 const tokenRepository = AppDataSource.getRepository(Token);
 const deskRepository = AppDataSource.getRepository(Desk);
 
@@ -187,6 +192,17 @@ export class UserController{
 
             const newDesk = new Desk("Новая доска");
             newDesk.user = newUser;
+
+            await deskRepository.save(newDesk);
+
+            const new_group1 = new Group("К работе");
+            const new_group2 = new Group("В работе");
+            const new_group3 = new Group("Готово");
+
+            await GroupRepository.save([new_group1, new_group2, new_group3])
+
+            newDesk.groups = [new_group1, new_group2, new_group3];
+
             await deskRepository.save(newDesk);
 
             res.status(200).json({newUser: newUser, message: 'Set Cookie'});
@@ -222,6 +238,23 @@ export class UserController{
             res.cookie('token', token);
             const newToken = new Token(token, pretendent);
             await tokenRepository.save(newToken);
+
+            if(pretendent.desks === undefined){
+                const newDesk = new Desk("Новая доска");
+                newDesk.user = pretendent;
+    
+                await deskRepository.save(newDesk);
+    
+                const new_group1 = new Group("К работе");
+                const new_group2 = new Group("В работе");
+                const new_group3 = new Group("Готово");
+    
+                await GroupRepository.save([new_group1, new_group2, new_group3])
+    
+                newDesk.groups = [new_group1, new_group2, new_group3];
+    
+                await deskRepository.save(newDesk);
+            }
 
             return res.status(200).json({message: 'Set Cookie'});
 
