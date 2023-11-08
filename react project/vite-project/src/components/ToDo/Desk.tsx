@@ -61,6 +61,7 @@ const Desk:React.FC<IDeskProps> = ({id, groups}) => {
                   if (item.id === id) {
                     return { ...item, title: newTitle };
                   }
+
                   return item;
                 });
                 return updatedData;

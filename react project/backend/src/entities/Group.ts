@@ -20,6 +20,8 @@ export class Group {
     @ManyToOne(() => Desk, (desk) => desk.groups)
     desk: Desk;
 
+
     @OneToMany(() => ToDo, (todo) => todo.group,  { cascade: true }) 
     todos: ToDo[]; 
+
 }

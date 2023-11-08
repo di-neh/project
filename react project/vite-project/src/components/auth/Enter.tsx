@@ -1,12 +1,17 @@
 import styled from "styled-components";
 import Button from "./Button.tsx";
-
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Input from "./Input.tsx";
+import MySVG from "../ToDo/SVG/MySVG.tsx";
+import { ICustomError, IRequestData } from "../../types/Types.ts";
+import { useFormInput } from "../../Hooks/useFormInput.ts";
+
+
 
 const EnterWindow = styled.div`
-  background-color: grey;
+  background: #383a3f;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -17,66 +22,69 @@ const EnterWindow = styled.div`
   margin-top: 100px;
 `;
 
-const Input = styled.input`
-  background-color: white;
-  width: 100%;
-  border: 0px;
-  text-align:center;
-  color: black;
-  &:focus{
-    outline: none;
-  }
-`
-
 interface IEnterProps{
     onClick?: () => void; 
 } 
 
-interface IRequestData{
-    nickname: string,
-    password: string,
-}
-
-
-
-
-
 const Enter: React.FC<IEnterProps> = ({onClick}) => {
-
     const navigate = useNavigate();
 
-    const [inputLoginVal, setInputLoginVal] = useState<string>('');
+    const nicknameInputProps = useFormInput("");
+    const passwordInputProps = useFormInput("");
 
-    const HandlerInputLoginValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputLoginVal(e.target.value);
-    }
-
-    const [inputPasswordnVal, setInputPasswordnVal] = useState<string>('');
-
-    const HandlerInputPasswordValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputPasswordnVal(e.target.value);
-    }
-
+    const [inputNameDisp, setInputNameDisp] = useState<string>('none');
+    const [inputPassDisp, setInputPassDisp] = useState<string>('none');
+    
+    function handleKeyPress(event: React.KeyboardEvent<HTMLInputElement>) {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          logIn();
+        }
+      }
+    
     const logIn = async () => { 
         try {  
-            const reqData:IRequestData = {nickname: inputLoginVal, password: inputPasswordnVal}
+            const reqData:IRequestData = {nickname: nicknameInputProps.value, password: passwordInputProps.value}
             await axios.post('http://localhost:5661/login', reqData, {
                 headers : {'Content-Type': 'application/json'},
                 withCredentials: true
             });
             navigate('/main');
-        } catch (e) {
-            console.log(e);
+
+        } catch (err) {
+            const e = err as ICustomError;
+            setInputNameDisp('none');
+            setInputPassDisp('none')
+
+            e.response.data.errors.forEach((element: { path: string; }) => {
+                switch(element.path) {
+                    case 'nickname':
+                        setInputNameDisp('flex');
+                        break  ;
+
+                    case 'password':
+                        setInputPassDisp('flex');
+                        break; 
+                }
+            });
         }
-        
     }
 
     return (
+
         <EnterWindow>
             <Button btnText={"У вас нет учетной записи?"} onClick={onClick}></Button>
-            <Input placeholder={"Логин"}  onChange = {HandlerInputLoginValue} value={inputLoginVal}></Input>
-            <Input type = "password"  placeholder={"Пароль"} onChange = {HandlerInputPasswordValue} value={inputPasswordnVal}></Input>
+            <div style={{display:"flex", width:'100%', alignItems:'center'}}>
+                <Input onKeyDown={handleKeyPress} ph={"Логин"} {...nicknameInputProps} ></Input>
+                <MySVG display={inputNameDisp}/>
+            </div>
+            <div style={{display:"flex", width:'100%', alignItems:'center'}}>
+                <Input onKeyDown={handleKeyPress} type = "password"  ph={"Пароль"} {...passwordInputProps}></Input>
+                <MySVG display={inputPassDisp}/>
+            </div>
+            
             <Button btnText = {"Vhod"} onClick={logIn} ></Button>
+        
         </EnterWindow>
     );
 };

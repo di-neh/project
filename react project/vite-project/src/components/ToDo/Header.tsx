@@ -2,9 +2,11 @@ import styled from "styled-components";
 import React, { useEffect, useState } from "react";
 import {useNavigate} from "react-router-dom";
 import { IUserProfile } from "../../types/Types";
+
 //@ts-ignore
 import logo from  "../../statics/копик.jpg"; 
 import { useRequestAPI } from "../../Hooks/useRequestAPI";
+
 
 
 const Wrapper = styled.div`
@@ -54,6 +56,8 @@ const Menu = styled.nav<MenuProps>`
   transform: translateY(${(props) => (props.active ? '0' : '-10px')});
   visibility: ${(props) => (props.active ? 'visible' : 'hidden')};
   transition: 0.1s;
+  z-index: 100;
+
 `
 const Menu_list = styled.ul`
   margin: 0;

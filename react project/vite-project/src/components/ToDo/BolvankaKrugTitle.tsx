@@ -1,29 +1,19 @@
 import styled from "styled-components";
-
+import Input from "../auth/Input.tsx";
+import { IBolvankaKrugTitleProps } from "../../types/Types.ts";
 
 const DivKrug = styled.div`
-    width: 95%;
+    width: 260px;
     border-radius: 5px;
-    background: black;
+    background: none;
     color: white;
     padding: 5px;
-    
-`
-const Input = styled.input`
-  background-color: black;
-  width: 100%;
-  border: 0px;
-  text-align:center;
-  color: white;
-  &:focus{
-    outline: none;
-  }
-`
+    display: flex;
+    flex-direction: row;
+  margin-left: 40px;
 
-interface IBolvankaKrugTitleProps{
-    onInputChange : (value: string) => void;
-    title: string
-}
+   // border: solid 1px green;
+`
 
 const BolvankaKrugTitle:React.FC<IBolvankaKrugTitleProps> = ({ onInputChange, title})  => {
 
@@ -35,7 +25,7 @@ const BolvankaKrugTitle:React.FC<IBolvankaKrugTitleProps> = ({ onInputChange, ti
     return (
         <>
             <DivKrug>
-                <Input  onChange={handleInputChange} placeholder="Без названия" value = {title}></Input>
+                <Input  backgroundColor={'#383a3f'} onChange={handleInputChange} ph="Без названия" value = {title}></Input>
             </DivKrug>
         </>
     );

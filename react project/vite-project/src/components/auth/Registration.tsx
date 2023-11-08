@@ -1,13 +1,16 @@
 import styled from "styled-components";
-
+import MySVG from "../ToDo/SVG/MySVG.tsx";
 import Button from "./Button.tsx";
 import { useNavigate  } from 'react-router-dom';
 import { useState } from "react";
 import axios from "axios";
+import Input from "./Input.tsx";
+import { ICustomError, IRequestData } from "../../types/Types.ts";
+import { useFormInput } from "../../Hooks/useFormInput.ts";
 
 
 const Reg = styled.div`
-  background-color: grey;
+  background: #383a3f;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -18,66 +21,67 @@ const Reg = styled.div`
   margin-top: 100px;
 `;
 
-const Input = styled.input`
-  background-color: white;
-  width: 100%;
-  border: 0px;
-  text-align:center;
-  color: black;
-  &:focus{
-    outline: none;
-  }
-`
-
 interface IRegProps{
     onClick?: () => void; 
 } 
 
-interface IREquestData{
-    nickname: string,
-    password: string,
-    mail:string,
-}
-
 const Registration:React.FC<IRegProps> = ({onClick}) => {
     const navigate = useNavigate();
 
-    const [inputNicknameValue, setInputNicknameValue] = useState('');
-    const [inputMailValue, setInputMailValue] = useState('');
-    const [inputPasswordValue, setInputPasswordValue] = useState('');
+    const nicknameInputProps = useFormInput("");
+    const mailInputProps = useFormInput("");
+    const passwordInputProps = useFormInput("");
 
-    const HandleInputNicknameValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputNicknameValue(e.target.value);
-    }
-
-    const HandleInputMailValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputMailValue(e.target.value);
-    }
-
-    const HandleInputPasswordValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputPasswordValue(e.target.value);
-    }
+    const [inputNameDisp, setInputNameDisp] = useState<string>('none');
+    const [inputPassDisp, setInputPassDisp] = useState<string>('none');
+    const [inputMailDisp, setInputMailDisp] = useState<string>('none');
 
     const HandlleButtonClick = async () => {
         try {
-            const reqData:IREquestData= {nickname: inputNicknameValue, mail: inputMailValue, password: inputPasswordValue};
+            const reqData:IRequestData= {nickname: nicknameInputProps.value, mail: mailInputProps.value, password: passwordInputProps.value};
             await axios.post('http://localhost:5661/registration', reqData, {
                 headers : {'Content-Type': 'application/json'},
                 withCredentials: true
             });
             navigate('/main');
-        
-        } catch (e) {
-            console.log(e);
+        } catch (e) { 
+            setInputNameDisp('none');
+            setInputPassDisp('none');
+            setInputMailDisp('none');
+            const responseData =  (e as ICustomError).response.data;
+            responseData.errors.forEach((element: { path: string; }) => {
+                switch(element.path) {
+                    case 'nickname':
+                        setInputNameDisp('flex');
+
+                        break  ;
+                    case 'password':
+                        setInputPassDisp('flex');
+                        break;
+                    case 'mail':
+                        setInputMailDisp('flex');
+                        break;
+                }
+            });  
         }   
     }
 
     return (
         <Reg>
             <Button btnText={"У меня уже есть профиль"} onClick={onClick}></Button>
-            <Input placeholder={"Логин"} onChange={HandleInputNicknameValue} value={inputNicknameValue} ></Input>
-            <Input type = "password" placeholder={"Пароль"} onChange = {HandleInputPasswordValue} value={inputPasswordValue}></Input>
-            <Input placeholder={"Почта"} onChange = {HandleInputMailValue} value={inputMailValue}></Input>
+            <div style={{display:"flex", width:'100%', alignItems:'center'}}>
+                <Input  ph={"Логин"} {...nicknameInputProps}></Input>
+                <MySVG display={inputNameDisp}/>
+            </div>
+           <div style={{display:"flex", width:'100%', alignItems:'center'}}>
+                <Input  type = "password" ph={"Пароль"} {...passwordInputProps}></Input>
+                <MySVG display={inputPassDisp}/>
+           </div>
+            <div style={{display:"flex", width:'100%', alignItems:'center'}}>
+                <Input  ph={"Почта"} {...mailInputProps}></Input>
+                <MySVG display={inputMailDisp}/>
+            </div>
+            
             <Button btnText = {"Регистрация"} onClick={HandlleButtonClick} ></Button>
         </Reg>
     );

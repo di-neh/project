@@ -48,7 +48,7 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DeleteComponent, Update
                 withCredentials: true
             });
             const todo:IToDoData = responce.data;
-            console.log(toDoArr);
+          
             setToDoArr(prevData => [
                 ...prevData,
                 {description:todo.description, isCompleted:todo.isCompleted , title:todo.title, id: todo.id}
@@ -67,10 +67,12 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DeleteComponent, Update
         setTestAreaTaskValue(value); 
     }
 
+
     const UpdateBracket = async (id:number) => {
         try {
             const url:string = 'http://localhost:5661/groups/' + id;
             //const response = 
+
             await axios.put(url, { title: inputTitleValue}, {
                 headers: {'Content-Type' : 'application/json'},
                 withCredentials: true
@@ -84,7 +86,6 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DeleteComponent, Update
     const DeleteBracket = async (id:number) => {
         try {
             const url:string = 'http://localhost:5661/groups/' + id;
-            //const response = 
             await axios.delete(url, {
                 headers: {'Content-Type' : 'application/json'},
                 withCredentials: true
@@ -100,6 +101,7 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DeleteComponent, Update
     };
 
     return (
+        
         <Bulova>
             <TitleContainer>
                 <BolvankaKrugTitle  onInputChange={HandleBolvankaTitleChange} title={inputTitleValue} />
@@ -110,7 +112,10 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DeleteComponent, Update
             {toDoArr?.map((todo) => 
                     <BolvankaKrugItem DeleteItem={deleteTask} tasks={toDoArr}  key = {todo.id} textContent={todo.title} id={todo.id? todo.id: 0} isCheck = {todo.isCompleted}/>
             )}   
+
         </Bulova>
+        
+        
     );
 };
 

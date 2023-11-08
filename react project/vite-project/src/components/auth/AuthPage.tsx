@@ -2,7 +2,7 @@ import { useState } from "react";
 import Enter from "./Enter";
 import Registration from "./Registration";
 
-const Testicula:React.FC = () => {
+const AuthPage:React.FC = () => {
     const [IsFirstComponent, SetIsFirstComponent] = useState<boolean>(true);
 
     const toggleComponents = () =>{
@@ -16,4 +16,4 @@ const Testicula:React.FC = () => {
     );
 };
 
-export default Testicula;
+export default AuthPage;

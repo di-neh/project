@@ -1,12 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from "typeorm"
+import { Group } from "./Group";
 
 @Entity("todos")
 export class ToDo {
 
-    constructor(title:string, description:string, group_id:number, isCompleted?:boolean){
+    constructor(title:string, description:string, group:Group, isCompleted?:boolean){
         this.title = title;
         this.description = description;
-        this.group_id = group_id;
+        this.group = group;
         this.isCompleted = isCompleted === undefined? this.isCompleted: isCompleted;
     }
 
@@ -26,6 +27,12 @@ export class ToDo {
     })
     isCompleted: boolean
 
-    @Column()
-    group_id: number
+    @CreateDateColumn()
+    created_at: Date;
+
+    @UpdateDateColumn()
+    updated_at: Date;
+
+    @ManyToOne(() => Group, (group) => group.todos) 
+    group: Group; 
 }

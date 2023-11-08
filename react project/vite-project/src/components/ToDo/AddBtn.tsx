@@ -1,25 +1,20 @@
 import styled from "styled-components";
+import Button from "../auth/Button.tsx";
 
-const Add = styled.button`
-  height: 50%;
-  width: 150px;
-  border-radius: 5px;
-  border: solid 0px;
-  background-color: black;
-  color: grey;
-  margin-top: 20px;
-  cursor: grab;
+const Add = styled.div`
+  margin-top: 30px;
   
 `
 interface IAddBtnProps{
-    onClick: ()=> void; 
+    onClick: ()=> void;
 }
 
 const AddBtn: React.FC<IAddBtnProps> = ({onClick}) => {
     return (
-        <Add onClick={onClick}>
-            Добавить колонку
+        <Add>
+            <Button btnText={"Добавить колонку"} onClick={onClick}></Button>
         </Add>
+
     );
 };
 

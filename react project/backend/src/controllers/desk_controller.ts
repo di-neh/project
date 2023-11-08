@@ -9,15 +9,18 @@ import { Desk } from "../entities/Desk";
 export interface IRequestParams{
     id:number
 }
+
 export interface IRequestBody{
     title?:string,
 }
+
 
 const GroupRepository = AppDataSource.getRepository(Group);
 const TaskRepository = AppDataSource.getRepository(ToDo);
 const UserRepository = AppDataSource.getRepository(User);
 const tokenRepository = AppDataSource.getRepository(Token);
 const deskRepository = AppDataSource.getRepository(Desk);
+
 
 
 export class DeskController{
@@ -48,6 +51,7 @@ export class DeskController{
     }
 
     async AddDesk(req:Request<{}, {}, IRequestBody>, res:Response){
+
         try {
             () => {
                 res.send('Get Cookie');
@@ -82,6 +86,7 @@ export class DeskController{
         }
     }
 
+
     async DeleteDesk(req:Request<IRequestParams>, res: Response){
         try {
             const deskForDelete = await deskRepository.findOne({
@@ -103,4 +108,5 @@ export class DeskController{
             res.status(400).json({message: "error during deleting desks"});
         }
     }
+
 }

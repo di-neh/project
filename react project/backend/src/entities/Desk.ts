@@ -16,7 +16,9 @@ export class Desk{
     })
     title: string;
 
+
     @OneToMany(() => Group, (group) => group.desk,  { cascade: true })
+
     groups: Group[]
 
     @ManyToOne(() => User, (user) => user.desks)
