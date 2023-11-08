@@ -3,9 +3,11 @@ import { Entity,
     Column, ManyToMany, 
     JoinTable, 
     OneToOne,
-    JoinColumn} from "typeorm"
+    JoinColumn,
+    OneToMany} from "typeorm"
 import { Role } from "./Role"
 import { Token } from "./Token";
+import { Desk } from "./Desk";
 
 @Entity('users')
 export class User {
@@ -33,11 +35,18 @@ export class User {
     @Column()
     password: string
 
+    @Column({
+        default: null
+    })
+    profileImagePath: string
+
     @ManyToMany(
         () => Role
     )
 
     @JoinTable()
-
     roles: Role[]
+
+    @OneToMany(() => Desk, (desk) => desk.user,  { cascade: true })
+    desks: Desk[]
 }

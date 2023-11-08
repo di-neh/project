@@ -1,14 +1,16 @@
 import styled from "styled-components";
+import React, { useEffect, useState } from "react";
+import {useNavigate} from "react-router-dom";
+import { IUserProfile } from "../../types/Types";
+//@ts-ignore
+import logo from  "../../statics/копик.jpg"; 
+import { useRequestAPI } from "../../Hooks/useRequestAPI";
 
-import logo from  "../ToDo/statics/копик.jpg";
-
-import { useEffect, useState } from "react";
-import axios from "axios";
 
 const Wrapper = styled.div`
   width: 100%;
   height: 45px;
-  background: black;
+  background: #383a3f;
   color: white;
   display: flex;
   justify-content: space-between;
@@ -20,8 +22,9 @@ const Box2 = styled.div`
 `
 const Box1 = styled.div`
   margin-top: 8px;
-  margin-left: 400px;
+  margin-left: 700px;
   font-size: 24px;
+  cursor: pointer;
 `
 const AvatarImg = styled.img`
   width: 100%;
@@ -29,8 +32,7 @@ const AvatarImg = styled.img`
   object-fit: cover;
   
 `
-
-const Avatar = styled.button`
+const Avatar = styled.button<AvatarProps>`
   margin-left: 5px;
   display: inline-block;
   width: 45px;
@@ -38,7 +40,7 @@ const Avatar = styled.button`
   border-radius: 50%;
   overflow: hidden;
 `
-const Menu = styled.nav`
+const Menu = styled.nav<MenuProps>`
   position: absolute;
   top: 47px;
   right: 5px;
@@ -49,14 +51,9 @@ const Menu = styled.nav`
   border-radius: 7px;
   color: black;
   opacity: ${(props) => (props.active ? '1' : '0')};;
-  transform: translateY(${(props) => (props.active ? '0' : '-10px')};);
-  visibility: ${(props) => (props.active ? 'visible' : 'hidden')};;
+  transform: translateY(${(props) => (props.active ? '0' : '-10px')});
+  visibility: ${(props) => (props.active ? 'visible' : 'hidden')};
   transition: 0.1s;
-  //&:active{
-  //  opacity: 1;
-  //  transform: translateY(0);
-  //  visibility: visible;
-  //}
 `
 const Menu_list = styled.ul`
   margin: 0;
@@ -72,48 +69,80 @@ const Menu_item = styled.li`
   cursor: pointer;
 `
 
-const Header = () => {
-
-
-  interface IUserProfile{
-    mail: string,
-    nickname: string
-  }
-
-  interface IResponseData{
-    data: IUserProfile;
+interface AvatarProps {
+  active: boolean;
 }
 
+interface MenuProps {
+  active: boolean;
+}
+
+interface IHeaderProps{
+  photo?: string,
+}
+
+const Header:React.FC<IHeaderProps> = ({photo}) => {
   const [userProfile, setUserProfile] = useState<IUserProfile>({mail: '',nickname: ''});
+  const [userProfileImage, setUserProfileImage] = useState<string>(photo? photo : logo);
+
 
   useEffect(()=> {
     FetchProfile();
-
+    FetchProfileImage();
   }, []);
 
-  const FetchProfile = async () => {
-    try {
-      const response:IResponseData = await axios.get('http://localhost:5661/userProfile', {
-        headers: {'Content-Type': 'application/json'},
-        withCredentials: true
-      });
-
-      setUserProfile({mail: response.data.mail, nickname: response.data.nickname});
-
-    } catch (e) {
-      console.error('Error fetching profile:', e);
+  const FetchProfileImage = async () => {
+    const response = await useRequestAPI().FetchProfileImage();
+    if(response){
+      const fileBlob = new Blob([response.data]);
+      const imageUrl = URL.createObjectURL(fileBlob);
+      setUserProfileImage(imageUrl);
     }
   }
 
+  const FetchProfile = async () => {
+    const userProfile = await useRequestAPI().FetchProfile();
+    if(userProfile){
+      setUserProfile({mail: userProfile.data.mail, nickname: userProfile.data.nickname});
+    }
+  }
+
+    const MainLink = async () =>{
+        try {
+            navigate('/main')
+        }
+        catch (e){
+            console.log(e)
+        }
+    }
 
     const [active, setActive] = useState(false);
     const offBtn = () =>{
         setActive(!active);
     }
 
+    const navigate = useNavigate();
+    const HandlleButtonClick = async () =>{
+        try {
+            navigate('/auth')
+        }
+        catch (e){
+            console.log(e)
+        }
+    }
+    const ProfileLink = async () =>{
+        try {
+            navigate('/profile')
+        }
+        catch (e){
+            console.log(e)
+        }
+    }
+
     return (
         <Wrapper>
-            <Box1>Хуй</Box1>
+            <Box1 onClick={MainLink}>Shlyapiki</Box1>
+
             <Box2>
                 <div>
                     <div style={{fontSize:10}}> {userProfile.mail} </div>
@@ -121,14 +150,14 @@ const Header = () => {
                 </div>
                 <Avatar onClick={offBtn} active={active}>
 
-                    <AvatarImg src={logo}></AvatarImg>
+                    <AvatarImg src={userProfileImage}></AvatarImg>
                 </Avatar>
                 <Menu active={active}>
                     <Menu_list>
-                        <Menu_item>Профиль</Menu_item>
+                        <Menu_item onClick={ProfileLink}>Профиль</Menu_item>
                         <Menu_item>Настройки</Menu_item>
                         <Menu_item>Ночной режим</Menu_item>
-                        <Menu_item>Выход</Menu_item>
+                        <Menu_item onClick={HandlleButtonClick}>Выход</Menu_item>
 
                     </Menu_list>
                 </Menu>
