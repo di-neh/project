@@ -1,3 +1,6 @@
+
+import {ReactNode} from "react";
+
 export interface IToDoData{
     id?: number,
     title: string, 
@@ -38,6 +41,7 @@ export interface IBolvankaKrugTaskProps{
 export interface IBolvankaKrugTitleProps{
     onInputChange : (value: string) => void;
     title: string
+    children?: ReactNode;
 }
 
 export interface IUserProfile{

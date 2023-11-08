@@ -55,6 +55,7 @@ const Menu = styled.nav<MenuProps>`
   transform: translateY(${(props) => (props.active ? '0' : '-10px')});
   visibility: ${(props) => (props.active ? 'visible' : 'hidden')};
   transition: 0.1s;
+  z-index: 100;
 `
 const Menu_list = styled.ul`
   margin: 0;

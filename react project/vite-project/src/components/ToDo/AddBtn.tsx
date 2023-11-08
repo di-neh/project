@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Button from "../auth/Button.tsx";
 
 const Add = styled.div`
-  margin-top: 90px;
+  margin-top: 30px;
   
 `
 interface IAddBtnProps{
