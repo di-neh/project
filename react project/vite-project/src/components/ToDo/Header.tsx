@@ -8,6 +8,7 @@ import logo from  "../../statics/копик.jpg";
 import { useRequestAPI } from "../../Hooks/useRequestAPI";
 
 
+
 const Wrapper = styled.div`
   width: 100%;
   height: 45px;
@@ -56,6 +57,7 @@ const Menu = styled.nav<MenuProps>`
   visibility: ${(props) => (props.active ? 'visible' : 'hidden')};
   transition: 0.1s;
   z-index: 100;
+
 `
 const Menu_list = styled.ul`
   margin: 0;

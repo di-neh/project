@@ -47,6 +47,8 @@ export class User {
     @JoinTable()
     roles: Role[]
 
-    @OneToMany(() => Desk, (desk) => desk.user)
+
+    @OneToMany(() => Desk, (desk) => desk.user,  { cascade: true })
+
     desks: Desk[]
 }

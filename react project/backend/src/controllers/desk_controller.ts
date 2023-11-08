@@ -10,15 +10,18 @@ export interface IRequestParams{
     id:number
 }
 
+export interface IRequestBody{
+    title?:string,
+}
+
+
 const GroupRepository = AppDataSource.getRepository(Group);
 const TaskRepository = AppDataSource.getRepository(ToDo);
 const UserRepository = AppDataSource.getRepository(User);
 const tokenRepository = AppDataSource.getRepository(Token);
 const deskRepository = AppDataSource.getRepository(Desk);
 
-export interface IRequestBody{
-    title?:string,
-}
+
 
 export class DeskController{
     async GetDesks(req: Request, res: Response){
@@ -47,7 +50,8 @@ export class DeskController{
         }
     }
 
-    async AddDesk(req:Request<{},{},IRequestBody>, res:Response){
+    async AddDesk(req:Request<{}, {}, IRequestBody>, res:Response){
+
         try {
             () => {
                 res.send('Get Cookie');
@@ -81,4 +85,28 @@ export class DeskController{
             res.status(400).json({message: "error during getting desks"});
         }
     }
+
+
+    async DeleteDesk(req:Request<IRequestParams>, res: Response){
+        try {
+            const deskForDelete = await deskRepository.findOne({
+                relations: ['groups', 'groups.todos'],
+                where: {id: req.params.id}
+            });
+            if(deskForDelete == null)
+                res.status(400).json({message: "no desk given"});
+            
+            deskForDelete.groups.forEach(async (group) =>  {
+                await TaskRepository.remove(group.todos);
+            })
+            await GroupRepository.remove(deskForDelete.groups);
+            
+            await deskRepository.remove(deskForDelete);
+            res.status(200).json(deskForDelete);
+        } catch (e) {
+            console.log(e);
+            res.status(400).json({message: "error during deleting desks"});
+        }
+    }
+
 }

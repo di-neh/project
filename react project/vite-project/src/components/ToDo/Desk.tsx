@@ -57,13 +57,11 @@ const Desk:React.FC<IDeskProps> = ({id, groups}) => {
     const UpdateComponent = (id:number, newTitle: string) => {
         try {
             setBolvankaData(prevData => {
-                // Создаем новый массив на основе предыдущих данных
                 const updatedData = prevData.map(item => {
                   if (item.id === id) {
-                    // Обновляем поле только для элемента с id равным 33
                     return { ...item, title: newTitle };
                   }
-                  // В остальных случаях возвращаем элемент без изменений
+
                   return item;
                 });
                 return updatedData;

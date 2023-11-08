@@ -3,17 +3,16 @@ import styled from "styled-components";
 import SVGDotsMenu from "./SVG/SVGDotsMenu.tsx";
 
 interface DropdownMenuProps {
-    onDelete: () => void;
-    onUpdate: () => void;
+
+    onDelete: (id:number) => void;
+    onUpdate: (id:number) => void;
+    id: number;
 }
 
 const SVGcontainer = styled.div`
-  position: relative;
-  right: 40px;
-  top: 4px;
     width: 40px;
     height: 40px;
-    z-index: 10;
+
 `
 
 const MenuContainer = styled.div`
@@ -21,43 +20,41 @@ const MenuContainer = styled.div`
     background-color: #2b2b2b;
 
     position: absolute;
-    
+
     z-index: 3;
 
-    border: solid 0px black;
+    border: solid 1px black;
     border-radius: 7px;
 
     display: flex;
     flex-direction: column;
     gap: 3px;
     padding: 3px;
-  
 `
 
 const MenuItem = styled.div`
     background-color: #2b2b2b;
-
     border-radius: 7px;
-
     height: 20px;
     width:100%;
-    color: #d3d0c8;
     text-align: center;
-    
-
     cursor: pointer;
 `
 
-const DropDownMenu:React.FC<DropdownMenuProps> = ({onDelete, onUpdate}) => {
+
+const DropDownMenu:React.FC<DropdownMenuProps> = ({onDelete, onUpdate, id}) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const handleDelete = () => {
-        onDelete();
+        onDelete(id);
+
         setIsOpen(false);
       };
     
       const handleUpdate = () => {
-        onUpdate();
+
+        onUpdate(id);
+
         setIsOpen(false);
       };
       

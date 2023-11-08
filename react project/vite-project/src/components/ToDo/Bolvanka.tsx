@@ -48,6 +48,7 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DeleteComponent, Update
                 withCredentials: true
             });
             const todo:IToDoData = responce.data;
+          
             setToDoArr(prevData => [
                 ...prevData,
                 {description:todo.description, isCompleted:todo.isCompleted , title:todo.title, id: todo.id}
@@ -66,18 +67,12 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DeleteComponent, Update
         setTestAreaTaskValue(value); 
     }
 
-    const DeleteHandler = () => {
-        DeleteBracket(id);
-    }
-
-    const UpdateHandler = () => {
-        UpdateBracket(id);
-    }
 
     const UpdateBracket = async (id:number) => {
         try {
             const url:string = 'http://localhost:5661/groups/' + id;
-            //const response =
+            //const response = 
+
             await axios.put(url, { title: inputTitleValue}, {
                 headers: {'Content-Type' : 'application/json'},
                 withCredentials: true
@@ -91,7 +86,6 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DeleteComponent, Update
     const DeleteBracket = async (id:number) => {
         try {
             const url:string = 'http://localhost:5661/groups/' + id;
-            //const response =
             await axios.delete(url, {
                 headers: {'Content-Type' : 'application/json'},
                 withCredentials: true
@@ -110,21 +104,15 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DeleteComponent, Update
         
         <Bulova>
             <TitleContainer>
-                <BolvankaKrugTitle  onInputChange={HandleBolvankaTitleChange} title={inputTitleValue}/>
-                <DropDownMenu onDelete={DeleteHandler} onUpdate={UpdateHandler}></DropDownMenu>
-
-
+                <BolvankaKrugTitle  onInputChange={HandleBolvankaTitleChange} title={inputTitleValue} />
+                <DropDownMenu onDelete={DeleteBracket} onUpdate={UpdateBracket} id={id}></DropDownMenu>
             </TitleContainer>
 
             <BolvankaKrugTask   onTextAreaChange={HandleBolvankaTaskChange}  onKeyDown={ToDoAddHandler} task={textAreaTaskValue}/>
-            <div>
-            {toDoArr.map((todo) => 
-                <div>
+            {toDoArr?.map((todo) => 
                     <BolvankaKrugItem DeleteItem={deleteTask} tasks={toDoArr}  key = {todo.id} textContent={todo.title} id={todo.id? todo.id: 0} isCheck = {todo.isCompleted}/>
-                </div>
-            )}
-            
-            </div>
+            )}   
+
         </Bulova>
         
         

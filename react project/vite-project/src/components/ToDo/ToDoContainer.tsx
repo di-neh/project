@@ -6,9 +6,13 @@ import ButtonDesk from "./ButtonDesk";
 import { IDeskProps } from "../../types/Types";
 import styled from "styled-components";
 
+import DropDownMenu from "./DropDownMenu";
+import Modal from "./Modal";
+
 const ButtonsDeskContainer = styled.div`
     height: 97%;
-    width: 90px;
+    width: 180px;
+
     //border: solid 1px red;
     display: flex;
     flex-direction: column;
@@ -28,6 +32,12 @@ const Wrapper = styled.div`
     //border: solid 1px green;
 `
 
+
+const ButtonDropDownContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+`
+
 const ToDoContainer:React.FC = () => {
     useEffect(() => {
         FetchDesks();
@@ -35,6 +45,9 @@ const ToDoContainer:React.FC = () => {
 
     const [currentDesk, setCurrenDesk] = useState<IDeskProps>({groups: [], id: 1, title: '45'});
     const [deskButtons, setDeskButtons] = useState<IDeskProps[]>([]);
+
+    const [isModalShow, setIsModalShow] = useState<boolean>(false);
+
 
     const FetchDesks = async () => {
         try {
@@ -52,19 +65,51 @@ const ToDoContainer:React.FC = () => {
 
     const AddDesk = async () => {
         try {
-            const response:{data:IDeskProps} = await axios.post('http://localhost:5661/desks', {title: "Новая Доска"}, {
+            await axios.post('http://localhost:5661/desks', {title: "Новая Доска"}, {
+
                 headers: {'Content-Type' : 'application/json'},
                 withCredentials: true
             }) 
 
-            setDeskButtons(prevData => [
-                ...prevData,
-                {...response.data}
-            ])
+
+            FetchDesks();
         } catch (e) {
             console.log(e);
         }
     }
+
+    const DeleteDesk = async (id:number) => {
+        try {
+            await axios.delete(`http://localhost:5661/desks/${id}`, {
+                headers: {'Content-Type' : 'application/json'},
+                withCredentials: true
+            })
+
+            FetchDesks();
+
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+
+    const UpdateTask = async (id:number) => {
+        try {
+            // await axios.put(`http://localhost:5661/desks/${id}`, {
+            //     headers: {'Content-Type' : 'application/json'},
+            //     withCredentials: true
+            // })
+
+            // FetchDesks();
+            setIsModalShow(true);
+            console.log(id);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    
+
 
     const ButtonHandler = (desk:IDeskProps) =>{
         setCurrenDesk(desk);
@@ -76,9 +121,15 @@ const ToDoContainer:React.FC = () => {
             <Wrapper>
                 <ButtonsDeskContainer>
                     {deskButtons.map((deskButton) => 
-                        <ButtonDesk desk={deskButton} onClick={ButtonHandler} key={deskButton.id}/>
+
+                        <ButtonDropDownContainer>
+                            <ButtonDesk desk={deskButton} onClick={ButtonHandler} key={deskButton.id}/>
+                            <DropDownMenu onDelete={DeleteDesk} onUpdate={UpdateTask} key={deskButton.id} id={deskButton.id}/>
+                        </ButtonDropDownContainer>
                     )}
                     <ButtonDesk  title="Добавить доску" addButton={AddDesk}/>
+                    <Modal isShown = {isModalShow} title="TEST" closeModal={() => {setIsModalShow(false)}}></Modal>
+
                 </ButtonsDeskContainer>
                 
                 <Desk id={currentDesk.id} key={currentDesk.id} groups={currentDesk.groups} title={currentDesk.title}></Desk>
