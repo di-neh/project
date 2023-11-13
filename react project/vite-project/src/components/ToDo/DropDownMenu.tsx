@@ -1,29 +1,34 @@
-import { useState } from "react";
+import {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
 import SVGDotsMenu from "./SVG/SVGDotsMenu.tsx";
 
-interface DropdownMenuProps {
+export interface DropdownMenuProps {
 
     onDelete: (id:number) => void;
     onUpdate: (id:number) => void;
     id: number;
+
 }
 
-const SVGcontainer = styled.div`
-    width: 40px;
-    height: 40px;
 
+const SVGcontainer = styled.div`
+  position: relative;
+  top: 4px;
+  width: 40px;
+  height: 40px;
+  z-index: 10;
+  right: 40px;
 `
 
 const MenuContainer = styled.div`
     width: 200px;
     background-color: #2b2b2b;
-
+    color: #d3d0c8;
     position: absolute;
 
     z-index: 3;
 
-    border: solid 1px black;
+    border: none;
     border-radius: 7px;
 
     display: flex;
@@ -39,11 +44,15 @@ const MenuItem = styled.div`
     width:100%;
     text-align: center;
     cursor: pointer;
+  
 `
 
 
 const DropDownMenu:React.FC<DropdownMenuProps> = ({onDelete, onUpdate, id}) => {
     const [isOpen, setIsOpen] = useState(false);
+    const modalRef = useRef<HTMLDivElement>(null);
+
+
 
     const handleDelete = () => {
         onDelete(id);
@@ -57,6 +66,18 @@ const DropDownMenu:React.FC<DropdownMenuProps> = ({onDelete, onUpdate, id}) => {
 
         setIsOpen(false);
       };
+    const handleClickOutside = (event: MouseEvent) => {
+        if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+            setIsOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener("click", handleClickOutside, true);
+        return () => {
+            document.removeEventListener("click", handleClickOutside, true);
+        };
+    }, []);
       
     return (
         <div>
@@ -64,12 +85,12 @@ const DropDownMenu:React.FC<DropdownMenuProps> = ({onDelete, onUpdate, id}) => {
                 <SVGDotsMenu onClick={() => {setIsOpen(!isOpen)}}/>
             </SVGcontainer>
             {isOpen && (     
-                <MenuContainer>
+                <MenuContainer ref={modalRef}>
                     <MenuItem onClick={handleUpdate}>Обновить</MenuItem>
                     <MenuItem onClick={handleDelete}>Удалить</MenuItem>
                 </MenuContainer>
             )}
-      </div>
+        </div>
     );
 };
 

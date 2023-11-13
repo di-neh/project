@@ -124,7 +124,10 @@ const ToDoContainer:React.FC = () => {
 
                         <ButtonDropDownContainer>
                             <ButtonDesk desk={deskButton} onClick={ButtonHandler} key={deskButton.id}/>
-                            <DropDownMenu onDelete={DeleteDesk} onUpdate={UpdateTask} key={deskButton.id} id={deskButton.id}/>
+                            <div style={{position:"relative", left:"40px"}}>
+                                <DropDownMenu  onDelete={DeleteDesk} onUpdate={UpdateTask} key={deskButton.id} id={deskButton.id}/>
+                            </div>
+
                         </ButtonDropDownContainer>
                     )}
                     <ButtonDesk  title="Добавить доску" addButton={AddDesk}/>
