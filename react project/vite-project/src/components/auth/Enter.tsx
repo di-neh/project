@@ -83,7 +83,7 @@ const Enter: React.FC<IEnterProps> = ({onClick}) => {
                 <MySVG display={inputPassDisp}/>
             </div>
             
-            <Button btnText = {"Vhod"} onClick={logIn} ></Button>
+            <Button btnText = {"Вход"} onClick={logIn} ></Button>
         
         </EnterWindow>
     );

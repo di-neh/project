@@ -9,11 +9,11 @@ interface IButtonProps{
 }
 
 const Button = styled.button`
-    background-color: #b9b9ae;
+    background-color: #6C78F4;
     height: 40px;
     margin-bottom: 10px;
     border-radius: 7px;
-    color: black;
+    color: white;
     width: 100%;
     //padding: 10px;
     cursor: pointer;
