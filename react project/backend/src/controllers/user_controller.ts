@@ -77,7 +77,12 @@ export class UserController{
 
     async getUsers(req:Request<{}, {}, IRequestBody>, res:Response){
         try {
-            const usersWithRoles = await userRepository.find({ relations: ["roles"] });
+            const usersWithRoles = await userRepository.find({
+                relations: ["roles"],
+                order: {
+                  id: "ASC",
+                },
+              });
             res.status(200).json(usersWithRoles);
         } catch (error) {
             console.log(error);
@@ -347,8 +352,13 @@ export class UserController{
                 res.end;
             }
             const cookies: IRequestCookies = req.cookies;
-            const token = await tokenRepository.findOne({where:{token: cookies.token}, relations: ['user']});
+            const token = await tokenRepository.findOne({
+                where: { token: cookies.token },
+                relations: ['user', 'user.roles'],
+              });
+              
             
+            console.log(token.user);
             res.status(200).json(token.user);
         } catch (error) {
             console.log(error);

@@ -88,7 +88,7 @@ interface IHeaderProps{
 const Header:React.FC<IHeaderProps> = ({photo}) => {
   const [userProfile, setUserProfile] = useState<IUserProfile>({mail: '',nickname: ''});
   const [userProfileImage, setUserProfileImage] = useState<string>(photo? photo : logo);
-
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   useEffect(()=> {
     FetchProfile();
@@ -108,6 +108,8 @@ const Header:React.FC<IHeaderProps> = ({photo}) => {
     const userProfile = await useRequestAPI().FetchProfile();
     if(userProfile){
       setUserProfile({mail: userProfile.data.mail, nickname: userProfile.data.nickname});
+      if(userProfile.data.roles[0].id == 0)
+        setIsAdmin(true);
     }
   }
 
@@ -143,6 +145,15 @@ const Header:React.FC<IHeaderProps> = ({photo}) => {
         }
     }
 
+    const AdminLink = async () =>{
+      try {
+          navigate('/admin')
+      }
+      catch (e){
+          console.log(e)
+      }
+  }
+
     return (
         <Wrapper>
             <Box1 onClick={MainLink}>Shlyapiki</Box1>
@@ -160,7 +171,7 @@ const Header:React.FC<IHeaderProps> = ({photo}) => {
                     <Menu_list>
                         <Menu_item onClick={ProfileLink}>Профиль</Menu_item>
                         <Menu_item>Настройки</Menu_item>
-                        <Menu_item onClick={" "}>Панель админа</Menu_item>
+                        {isAdmin && <Menu_item onClick={AdminLink}>Админ</Menu_item>}
                         <Menu_item onClick={HandlleButtonClick}>Выход</Menu_item>
 
                     </Menu_list>

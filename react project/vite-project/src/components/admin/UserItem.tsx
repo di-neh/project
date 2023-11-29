@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import Input from "../auth/Input.tsx";
 import styled from "styled-components";
 import Button from "../auth/Button.tsx";
-import {useUsers} from "../../Hooks/useUsers.ts";
 import {IRequestBody, IUser} from "../../types/Types.ts";
 import {useFormInput} from "../../Hooks/useFormInput.ts";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
@@ -14,9 +13,9 @@ const Wrapper = styled.div`
   
   height: 50px;
   margin-top: 15px;
-  width: 50%;
+  width: 90%;
   padding: 5px;
-  margin-left: 25%;
+  margin-left: 5%;
   gap: 10px;
   
   
@@ -30,9 +29,9 @@ const Select = styled.select`
 `
 
 const UserItem:React.FC<IUser> = ({ id, nickname, mail, roles}) => {
-    const {data} = useUsers()
-    const nicknameInputProps = useFormInput("");
-    const mailInputProps = useFormInput("");
+    
+    const nicknameInputProps = useFormInput(nickname);
+    const mailInputProps = useFormInput(mail);
 
     const [selectValue, setSelectValue] = useState<number>(roles[0].id)
     const queryClient = useQueryClient();
@@ -60,6 +59,7 @@ const UserItem:React.FC<IUser> = ({ id, nickname, mail, roles}) => {
             mail: mailInputProps.value,
             roles: [selectValue]
         }
+        console.log(user.roles);
         UserUpdateMut.mutate(user)
     }
     const onDelete = () => {
@@ -70,15 +70,18 @@ const UserItem:React.FC<IUser> = ({ id, nickname, mail, roles}) => {
     }
     return (
         <Wrapper>
-            <h1 style={{color:'#ddd'}}>{id}</h1>
+            <div style={{color:'#ddd', width: '10%', fontSize: "30px"}}>{id}</div>
             <Input ph={'имя'} {...nicknameInputProps}/>
             <Input ph={'почта'} {...mailInputProps}/>
-            <Select id={'role'} name={'role'} value={selectValue}>
-                <option value={2}>Админ</option>
+            <Select id={'role'} name={'role'} value={selectValue} onChange={ (e: React.ChangeEvent<HTMLSelectElement>) => setSelectValue(+e.target.value)}>
+                <option value={0}>Админ</option>
                 <option value={1}>Пользователь</option>
             </Select>
-            <Button btnText={'Обновить'} onClick={onUpdate}></Button>
-            <Button btnText={'Удалить'} onClick={onDelete}></Button>
+            <div style={{width: "100%", display: "flex"}}>
+                <Button btnText={'Обновить'} onClick={onUpdate}></Button>
+                <Button btnText={'Удалить'} onClick={onDelete}></Button>
+            </div>
+            
             
         </Wrapper>
     );

@@ -56,7 +56,8 @@ export interface IUser{
 export interface IUserProfile{
     mail: string,
     nickname: string,
-    profileImagePath?: string
+    profileImagePath?: string,
+    roles?: {id:number, name:string}[]
 }
 
 export interface IRequestBody{
