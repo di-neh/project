@@ -71,8 +71,8 @@ const UserItem:React.FC<IUser> = ({ id, nickname, mail, roles}) => {
     return (
         <Wrapper>
             <div style={{color:'#ddd', width: '10%', fontSize: "30px"}}>{id}</div>
-            <Input ph={'имя'} {...nicknameInputProps}/>
-            <Input ph={'почта'} {...mailInputProps}/>
+            <Input backgroundColor={'#383a3f'} ph={'имя'} {...nicknameInputProps}/>
+            <Input backgroundColor={'#383a3f'} ph={'почта'} {...mailInputProps}/>
             <Select id={'role'} name={'role'} value={selectValue} onChange={ (e: React.ChangeEvent<HTMLSelectElement>) => setSelectValue(+e.target.value)}>
                 <option value={0}>Админ</option>
                 <option value={1}>Пользователь</option>

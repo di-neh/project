@@ -170,7 +170,6 @@ const Header:React.FC<IHeaderProps> = ({photo}) => {
                 <Menu active={active}>
                     <Menu_list>
                         <Menu_item onClick={ProfileLink}>Профиль</Menu_item>
-                        <Menu_item>Настройки</Menu_item>
                         {isAdmin && <Menu_item onClick={AdminLink}>Админ</Menu_item>}
                         <Menu_item onClick={HandlleButtonClick}>Выход</Menu_item>
 
