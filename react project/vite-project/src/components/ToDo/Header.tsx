@@ -160,7 +160,7 @@ const Header:React.FC<IHeaderProps> = ({photo}) => {
                     <Menu_list>
                         <Menu_item onClick={ProfileLink}>Профиль</Menu_item>
                         <Menu_item>Настройки</Menu_item>
-                        <Menu_item>Ночной режим</Menu_item>
+                        <Menu_item onClick={" "}>Панель админа</Menu_item>
                         <Menu_item onClick={HandlleButtonClick}>Выход</Menu_item>
 
                     </Menu_list>
