@@ -3,6 +3,7 @@ import { useState } from "react";
 import PopUp from "./PopUp";
 import axios from "axios";
 import { IBolvankaKrugItem } from "../../types/Types";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ItemProps {
   isChecked: boolean;
@@ -35,7 +36,7 @@ const BolvankaKrugItem: React.FC<IBolvankaKrugItem> = ( {textContent, id, isChec
   const [isChecked, setIsChecked] = useState(isCheck);
   const [inputValue, setInputValue] = useState(textContent);
   const [isPopUpOpen, setPopUpOpen] = useState(false);
-  
+  const queryClient = useQueryClient();
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(e.target.value);
   };
@@ -47,6 +48,8 @@ const BolvankaKrugItem: React.FC<IBolvankaKrugItem> = ( {textContent, id, isChec
       headers: {'Content-Type' : 'application/json'},
       withCredentials: true
     });
+    queryClient.invalidateQueries({queryKey: ['desks']});
+
   }
   
   const openPopUp = () => {

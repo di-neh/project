@@ -69,6 +69,7 @@ const Modal:React.FC<IModalProps> = ({isShown, title, closeModal}) => {
             document.removeEventListener("click", handleClickOutside, true);
         };
     }, []);
+    
     return (
         isShown &&
         <>
@@ -76,10 +77,7 @@ const Modal:React.FC<IModalProps> = ({isShown, title, closeModal}) => {
             <Wrapper ref={modalRef}>
                 <UpperBracket>
                     {title}
-
-                        <CloseSVG onClick={closeModal}></CloseSVG>
-
-
+                    <CloseSVG onClick={closeModal}></CloseSVG>
                 </UpperBracket>
                 <LowerBracket>
                     <H>Название доски</H>

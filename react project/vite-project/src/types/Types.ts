@@ -44,10 +44,29 @@ export interface IBolvankaKrugTitleProps{
     children?: ReactNode;
 }
 
+export interface IUser{
+    nickname?: string
+    mail?: string
+    password?: string
+    roles?: {name: string, id: number}[]
+    id?: number
+    profileImagePath?: string
+}
+
 export interface IUserProfile{
     mail: string,
     nickname: string,
     profileImagePath?: string
+}
+
+export interface IRequestBody{
+    nickname?: string,
+    password?: string,
+    passwordOld?: string,
+    passwordNew?: string,
+    mail?: string,
+    roles?: number[],
+    id?: number
 }
 
 export interface IGroupData{
@@ -61,6 +80,8 @@ export interface IDeskProps{
     title: string,
     groups:IGroupData[],
 }
+
+
 
 export interface ICustomError{
     response : {

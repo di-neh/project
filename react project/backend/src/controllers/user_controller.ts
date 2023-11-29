@@ -205,7 +205,7 @@ export class UserController{
 
             await deskRepository.save(newDesk);
 
-            res.status(200).json({newUser: newUser, message: 'Set Cookie'});
+            res.status(200).json(newUser);
         } catch (error) {
             console.log(error);
             res.status(400).json({message:'Registration error'});

@@ -4,6 +4,7 @@ import styled from "styled-components";
 import {  useState } from "react";
 import axios from "axios";
 import {IDeskProps, IGroupData} from "../../types/Types.ts"
+import { useQueryClient } from "@tanstack/react-query";
 const Conteiner = styled.div`
   display: inline-flex;
 
@@ -21,6 +22,7 @@ const Wrapper = styled.div`
 const Desk:React.FC<IDeskProps> = ({id, groups}) => {
     
     const [bolvankaData, setBolvankaData] = useState<IGroupData[]>(groups);
+    const queryClient = useQueryClient();
 
     const AddBracket = async () => {
         try {
@@ -38,6 +40,7 @@ const Desk:React.FC<IDeskProps> = ({id, groups}) => {
                 ...prevData,
                 {id: response.data.id, title: response.data.title, todos: []}
             ]);
+            await queryClient.invalidateQueries({queryKey: ['desks']});
         } catch (e) {
             console.log(e)
         }

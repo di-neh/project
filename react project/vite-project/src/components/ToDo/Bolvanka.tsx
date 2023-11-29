@@ -6,6 +6,7 @@ import BolvankaKrugItem from "./BolvankaKrugItem.tsx";
 import axios from "axios";
 import { IBolvankaProps, IToDoData } from "../../types/Types.ts";
 import DropDownMenu from "./DropDownMenu.tsx";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Bulova = styled.div`
     width: 275px;
@@ -24,7 +25,7 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DeleteComponent, Update
     const [inputTitleValue, setInputTitleValue] = useState<string>(title);
     const [textAreaTaskValue, setTestAreaTaskValue] = useState<string>("");
     const [toDoArr, setToDoArr] = useState<IToDoData[]>(tasks);
-
+    const queryClient = useQueryClient();
 
 
     const ToDoAddHandler = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -54,6 +55,7 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DeleteComponent, Update
                 {description:todo.description, isCompleted:todo.isCompleted , title:todo.title, id: todo.id}
             ])
             setTestAreaTaskValue("");
+            queryClient.invalidateQueries({queryKey: ['desks']});
         } catch (e) {
             console.error(e);
         }
@@ -78,9 +80,11 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DeleteComponent, Update
                 withCredentials: true
             });
             UpdateComponent(id, inputTitleValue);
+            queryClient.invalidateQueries({queryKey: ['desks']});
         } catch (e) {
             console.error(e);
         }
+        
     }
 
     const DeleteBracket = async (id:number) => {
@@ -91,6 +95,7 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DeleteComponent, Update
                 withCredentials: true
             });
             DeleteComponent(id);
+            queryClient.invalidateQueries({queryKey: ['desks']});
         } catch (e) {
             console.error(e);
         }
@@ -98,6 +103,7 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DeleteComponent, Update
 
     const deleteTask = (id: number) => {
         setToDoArr((prevData) => prevData.filter((todo) => todo.id !== id));
+        queryClient.invalidateQueries({queryKey: ['desks']});
     };
 
     return (
@@ -105,7 +111,7 @@ const Bolvanka: React.FC<IBolvankaProps> = ({title,  id, DeleteComponent, Update
         <Bulova>
             <TitleContainer>
                 <BolvankaKrugTitle  onInputChange={HandleBolvankaTitleChange} title={inputTitleValue} />
-                <DropDownMenu onDelete={DeleteBracket} onUpdate={UpdateBracket} id={id}></DropDownMenu>
+                <DropDownMenu onDelte={DeleteBracket} onUpdate={UpdateBracket} id={id}></DropDownMenu>
             </TitleContainer>
 
             <BolvankaKrugTask   onTextAreaChange={HandleBolvankaTaskChange}  onKeyDown={ToDoAddHandler} task={textAreaTaskValue}/>

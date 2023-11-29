@@ -9,10 +9,20 @@ interface IAddBtnProps{
     onClick: ()=> void;
 }
 
+
+
 const AddBtn: React.FC<IAddBtnProps> = ({onClick}) => {
+
+
+
+    const OnclickHandler = async () => {
+        onClick();
+
+    }
+
     return (
         <Add>
-            <Button btnText={"Добавить колонку"} onClick={onClick}></Button>
+            <Button btnText={"Добавить колонку"} onClick={OnclickHandler}></Button>
         </Add>
 
     );

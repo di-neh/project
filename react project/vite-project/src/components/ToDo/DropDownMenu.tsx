@@ -3,11 +3,9 @@ import styled from "styled-components";
 import SVGDotsMenu from "./SVG/SVGDotsMenu.tsx";
 
 export interface DropdownMenuProps {
-
-    onDelete: (id:number) => void;
-    onUpdate: (id:number) => void;
     id: number;
-
+    onDelte: (id:number) => void;
+    onUpdate: (id:number) => void;
 }
 
 
@@ -48,22 +46,19 @@ const MenuItem = styled.div`
 `
 
 
-const DropDownMenu:React.FC<DropdownMenuProps> = ({onDelete, onUpdate, id}) => {
+
+const DropDownMenu:React.FC<DropdownMenuProps> = ({id, onDelte, onUpdate}) => {
     const [isOpen, setIsOpen] = useState(false);
     const modalRef = useRef<HTMLDivElement>(null);
 
 
-
     const handleDelete = () => {
-        onDelete(id);
-
+        onDelte(id);
         setIsOpen(false);
       };
     
       const handleUpdate = () => {
-
         onUpdate(id);
-
         setIsOpen(false);
       };
     const handleClickOutside = (event: MouseEvent) => {

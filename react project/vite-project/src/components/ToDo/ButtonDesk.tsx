@@ -1,11 +1,13 @@
 import styled from "styled-components";
 import { IDeskProps } from "../../types/Types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import deskService from "../../services/desk.service";
 
 interface IButtonProps{
     desk?: IDeskProps,
     title?: string,
     onClick?: (desk: IDeskProps) => void,
-    addButton?: () => void,
+    isAddBtn: boolean
 }
 
 const Button = styled.button`
@@ -19,14 +21,23 @@ const Button = styled.button`
     cursor: pointer;
 `
 
-const ButtonDesk:React.FC<IButtonProps> = ({desk, onClick, title, addButton}) => {
+const ButtonDesk:React.FC<IButtonProps> = ({desk, onClick, title, isAddBtn}) => {
+
+    const queryClient = useQueryClient();
+
+    const createMutation = useMutation({
+        mutationFn: () => deskService.Create(),
+        mutationKey: ['update desk'],
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ['desks']});
+        }
+    })
 
     const OnClickHandler = () => {
         if(desk && onClick)
             onClick(desk);
-        if(addButton)
-            addButton();
-        console.log( addButton === undefined)
+        if(isAddBtn)
+            createMutation.mutate();
     }
 
     return (

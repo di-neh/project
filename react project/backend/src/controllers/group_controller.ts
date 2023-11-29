@@ -74,8 +74,7 @@ export class GroupController{
                 where:{token: req.cookies.token},
                 relations: ['user']
             });
-            
-            //const groups = await GroupRepository.find({where:{userId: token.user.id}, relations:['todos']});
+
             const groups = await GroupRepository.createQueryBuilder("group")
                 .where("group.userId = :userId", { userId: token.user.id })
                 .leftJoinAndSelect("group.todos", "todos")

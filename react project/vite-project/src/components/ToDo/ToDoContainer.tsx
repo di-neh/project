@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import Header from "./Header";
-import axios from "axios";
 import Desk from "./Desk";
 import ButtonDesk from "./ButtonDesk";
 import { IDeskProps } from "../../types/Types";
 import styled from "styled-components";
-
 import DropDownMenu from "./DropDownMenu";
 import Modal from "./Modal";
+import { useDesks } from "../../Hooks/useDesks";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import deskService from "../../services/desk.service";
 
 const ButtonsDeskContainer = styled.div`
     height: 97%;
@@ -39,98 +40,60 @@ const ButtonDropDownContainer = styled.div`
 `
 
 const ToDoContainer:React.FC = () => {
-    useEffect(() => {
-        FetchDesks();
-    }, []);
+
+
+
+    const {data} = useDesks();
+
+    const queryClient = useQueryClient();
+
+    const deleteMutation = useMutation({
+        mutationFn: (id: number) => deskService.Delete(id),
+        mutationKey: ['delete desk'],
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({queryKey: ['desks']});
+            if(data != undefined)
+                setCurrenDesk(data[0]);
+        }
+    })
 
     const [currentDesk, setCurrenDesk] = useState<IDeskProps>({groups: [], id: 1, title: '45'});
-    const [deskButtons, setDeskButtons] = useState<IDeskProps[]>([]);
-
+    const [pageLoaded, setPageLoaded] = useState(false);
     const [isModalShow, setIsModalShow] = useState<boolean>(false);
-
-
-    const FetchDesks = async () => {
-        try {
-            const responce: {data: IDeskProps[]} = await axios.get('http://localhost:5661/desks', {
-                headers: {'Content-Type': 'application/json'},
-                withCredentials: true
-            })
-            console.log(responce.data);
-            setCurrenDesk(responce.data[0]);
-            setDeskButtons(responce.data);
-        } catch (e) {
-            console.log(e);
-        }
-    }
-
-    const AddDesk = async () => {
-        try {
-            await axios.post('http://localhost:5661/desks', {title: "Новая Доска"}, {
-
-                headers: {'Content-Type' : 'application/json'},
-                withCredentials: true
-            }) 
-
-
-            FetchDesks();
-        } catch (e) {
-            console.log(e);
-        }
-    }
-
-    const DeleteDesk = async (id:number) => {
-        try {
-            await axios.delete(`http://localhost:5661/desks/${id}`, {
-                headers: {'Content-Type' : 'application/json'},
-                withCredentials: true
-            })
-
-            FetchDesks();
-
-        } catch (e) {
-            console.log(e);
-        }
-    }
-
-
-    const UpdateTask = async (id:number) => {
-        try {
-            // await axios.put(`http://localhost:5661/desks/${id}`, {
-            //     headers: {'Content-Type' : 'application/json'},
-            //     withCredentials: true
-            // })
-
-            // FetchDesks();
-            setIsModalShow(true);
-            console.log(id);
-        } catch (e) {
-            console.log(e);
-        }
-    }
-
     
-
+    useEffect(() => {
+        if (data && data.length > 0 && !pageLoaded) {
+          setCurrenDesk(data[0]);
+          setPageLoaded(true);
+        }
+    }, [data, pageLoaded]);
 
     const ButtonHandler = (desk:IDeskProps) =>{
         setCurrenDesk(desk);
     }
+
+
+    const onDelete = (id: number) => {
+        deleteMutation.mutate(id);
+    }
+
 
     return (
         <div>
             <Header/>
             <Wrapper>
                 <ButtonsDeskContainer>
-                    {deskButtons.map((deskButton) => 
+                    {data?.length && data.map((deskButton) => 
 
                         <ButtonDropDownContainer>
-                            <ButtonDesk desk={deskButton} onClick={ButtonHandler} key={deskButton.id}/>
+                            <ButtonDesk desk={deskButton} onClick={ButtonHandler} key={deskButton.id} isAddBtn = {false}/>
                             <div style={{position:"relative", left:"40px"}}>
-                                <DropDownMenu  onDelete={DeleteDesk} onUpdate={UpdateTask} key={deskButton.id} id={deskButton.id}/>
+                                <DropDownMenu onDelte={onDelete} onUpdate={() => console.log('net')} key={deskButton.id} id={deskButton.id}/>
                             </div>
 
                         </ButtonDropDownContainer>
                     )}
-                    <ButtonDesk  title="Добавить доску" addButton={AddDesk}/>
+                    <ButtonDesk  title="Добавить доску" isAddBtn = {true}/>
                     <Modal isShown = {isModalShow} title="TEST" closeModal={() => {setIsModalShow(false)}}></Modal>
 
                 </ButtonsDeskContainer>

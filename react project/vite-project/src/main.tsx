@@ -2,6 +2,7 @@
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import {createGlobalStyle} from "styled-components";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const Global = createGlobalStyle`
 *{
@@ -11,10 +12,20 @@ const Global = createGlobalStyle`
 }
 `
 
+const queryClient = new QueryClient({
+  defaultOptions : {
+    queries: {
+      refetchOnWindowFocus: false,
+    }
+  }
+})
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <>
-        <Global/>
-        <App />
+        <QueryClientProvider client={queryClient}>
+          <Global/>
+          <App />
+        </QueryClientProvider>
     </>
 
 
