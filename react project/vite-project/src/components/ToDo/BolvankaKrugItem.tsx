@@ -4,6 +4,7 @@ import PopUp from "./PopUp";
 import axios from "axios";
 import { IBolvankaKrugItem } from "../../types/Types";
 import { useQueryClient } from "@tanstack/react-query";
+import Trash from "./SVG/Trash";
 
 interface ItemProps {
   isChecked: boolean;
@@ -17,7 +18,7 @@ const Item = styled.div<ItemProps>`
   padding: 5px;
   margin-top: 2px;
   display: flex;
-  justify-content: space-between;
+  gap: 5px;
   word-break: break-all;
   text-decoration: ${(props) => (props.isChecked ? 'line-through' : 'none')};
   text-decoration-color: red;
@@ -30,66 +31,63 @@ const CheckBox = styled.input`
   right: 1%;
 `
 
-
-
-const BolvankaKrugItem: React.FC<IBolvankaKrugItem> = ( {textContent, id, isCheck, DeleteItem} ) => {
+const BolvankaKrugItem: React.FC<IBolvankaKrugItem> = ({ textContent, id, isCheck, DeleteItem }) => {
   const [isChecked, setIsChecked] = useState(isCheck);
   const [inputValue, setInputValue] = useState(textContent);
   const [isPopUpOpen, setPopUpOpen] = useState(false);
   const queryClient = useQueryClient();
+
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(e.target.value);
   };
 
-  const UpdateTask = async() => {
+  const UpdateTask = async () => {
     const url = `http://localhost:5661/tasks/${id}`;
-    //const response = 
-    await axios.put(url, {isCompleted: !isChecked}, {
-      headers: {'Content-Type' : 'application/json'},
-      withCredentials: true
-    });
-    queryClient.invalidateQueries({queryKey: ['desks']});
-
-  }
-  
-  const openPopUp = () => {
-    setPopUpOpen(!isPopUpOpen);
+    await axios.put(
+      url,
+      { isCompleted: !isChecked },
+      {
+        headers: { 'Content-Type': 'application/json' },
+        withCredentials: true,
+      }
+    );
+    queryClient.invalidateQueries({ queryKey: ['desks'] });
   };
-  
+
+  const openPopUp = () => {
+    setPopUpOpen(true);
+  };
+
   const handleCheck = async () => {
     setIsChecked(!isChecked);
     UpdateTask();
-
   };
 
   const HandleDeleteItem = () => {
     DeleteToDo(id);
     DeleteItem(id);
-  }
+  };
 
-  
-
-  const DeleteToDo = async (id:number) => {
-      try{
-          const url: string = `http://localhost:5661/tasks/${id}`;
-
-          await axios.delete(url, {
-              headers: {'Content-Type' : 'application/json'},
-              withCredentials: true
-          });
-      } catch (e){
-          console.error(e)
-          
-      }
-  }
+  const DeleteToDo = async (id: number) => {
+    try {
+      const url: string = `http://localhost:5661/tasks/${id}`;
+      await axios.delete(url, {
+        headers: { 'Content-Type': 'application/json' },
+        withCredentials: true,
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   return (
     <div>
       <Item isChecked={isChecked} onClick={openPopUp}>
-          <div style={{padding:"7px"}} >{inputValue} </div>
-          <CheckBox type={"checkbox"} checked={isChecked} onChange={handleCheck}></CheckBox>
+        <div style={{ padding: '7px', width: "80%" }}>{inputValue} </div>
+        <CheckBox type={'checkbox'} checked={isChecked} onChange={handleCheck}></CheckBox>
+        <Trash onClick = {HandleDeleteItem}></Trash>
       </Item>
-      {isPopUpOpen && <PopUp value={inputValue} onChange={handleInputChange} onClick={HandleDeleteItem}/>}
+      {/* {isPopUpOpen && <PopUp value={inputValue} onChange={handleInputChange} onClick={HandleDeleteItem} onClose={() => setPopUpOpen(false)} />} */}
     </div>
   );
 };

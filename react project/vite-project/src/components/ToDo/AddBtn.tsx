@@ -22,7 +22,7 @@ const AddBtn: React.FC<IAddBtnProps> = ({onClick}) => {
 
     return (
         <Add>
-            <Button btnText={"Добавить колонку"} onClick={OnclickHandler}></Button>
+            <Button btnText={"Добавить"} onClick={OnclickHandler}></Button>
         </Add>
 
     );

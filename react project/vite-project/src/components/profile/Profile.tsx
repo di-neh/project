@@ -54,7 +54,7 @@ const H2 = styled.h2`
 `
 
 const Button__profile__update = styled.button`
-    background-color: #b9b9ae;
+    background-color: #6C78F4;
     height: 40px;
     width: 40%;
     border-radius: 7px;
@@ -63,7 +63,7 @@ const Button__profile__update = styled.button`
     margin-top: 10px;
 `
 const Button__profile__choose = styled.button`
-    background-color: #b9b9ae;
+    background-color: #6C78F4;
     height: 30px;
     width: 95%;
     border-radius: 7px;
@@ -151,8 +151,8 @@ const Profile = () => {
                     <BoxProfileInfo>
                         <H2>Имя</H2>
                         <Input  {...nicknameInputProps} ph="Имя"></Input>
-                        <H2>Фамилия</H2>
-                        <Input value="" ph={"фамилия"} onChange={() => {console.log('da')}}></Input>
+                        {/* <H2>Фамилия</H2> */}
+                        {/* <Input value="" ph={"фамилия"} onChange={() => {console.log('da')}}></Input> */}
                         <H2>Почта</H2>
                         <Input {...mailInputProps} ph={"Почта"}></Input>
                     </BoxProfileInfo>

@@ -19,13 +19,13 @@ app.use(express.json());
 app.use(express.static('../front'));
 app.use(router);
 
-// app.get('/registration', (req, res) => {
-//     res.sendFile(path.resolve(__dirname, '../front/pages/Auth_page.html'));
-// });
+app.get('/registration', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../front/pages/Auth_page.html'));
+});
 
-// app.get('/main', (req, res) => {
-//     res.sendFile(path.resolve(__dirname, '../front/pages/main.html'));
-// });
+app.get('/main', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../front/pages/main.html'));
+});
 
 
 const AddMnager = async (id) =>{
